@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}Derivation of the Squire-Long equation}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Homogeneous ODE}{5}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Lamb-Oseen Vortex}{7}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Numerics}{8}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Rankine Body}{9}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Outer vortex breakdown}{14}{subsection.2.5}
+\contentsline {section}{\numberline {3}Appendix}{15}{section.3}
+\contentsline {subsection}{\numberline {3.1}Supplementary Materials}{15}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Resources}{15}{subsection.3.2}

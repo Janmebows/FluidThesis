@@ -1,0 +1,32 @@
+\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+\title{Fluid Thesis}
+
+\begin{document}
+
+\[\omega_z = \frac1r \dd{rv}{r}, \quad \omega_r = -\dd{rv}{z},\quad \omega_\theta = \dd{u}{z} - \dd{w}{r}\]
+\[w =\frac1r \dd\Psi{r} , \quad u=-\frac1r \dd\Psi{z}\]
+\begin{align*}
+    \omega_\theta &= \dd uz - \dd wr\\
+    &= -\frac1r \ddn\Psi z2 - \frac1r \ddn \Psi r2 + \frac{1}{r^2} \dd\Psi r\\
+    &= -\frac1r\left(\ddn\Psi z2 + \ddn \Psi r2 - \frac1r\dd\Psi r\right)
+\end{align*}
+\[w \times v - \dd wt = \nabla H\]
+\[H = \frac12 (w^2 + u^2 + v^2) + \frac p\rho \]
+\begin{align*}
+    u\omega_\theta - v\omega_r - \dd wt = \dd Hx\\
+    v \omega_z - w \omega_\theta - \dd ut = \dd Hr\\
+    w\omega_r - u \omega_z - \dd vt = 0
+\end{align*}
+\[\DD{(rv)}{t} = 0\]
+
+\[rv = C(\Psi)\]
+\[\dd{\Psi}{t} + \frac12 |\vec w|^2 + \frac{p}{\rho} = H(\Psi)\]
+
+\[\omega_z = w \frac{dC}{d\Psi}, \quad \omega_r = u \frac{dC}{d\Psi}\]
+
+
+\[\frac{\omega_\theta}{r} = \frac{v\omega_r}{ru} + \frac1{ru}\frac{dH}{d\Psi} \dd\Psi x = \frac{C}{r^2} \frac{dC}{d\Psi} - \frac{dH}{d\Psi}\]
+\[\ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd\Psi r= r^2 \frac{dH}{d\Psi} - C\frac{dC}{d\Psi}\]
+
+
+\end{document}
