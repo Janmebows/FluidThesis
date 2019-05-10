@@ -22,7 +22,7 @@ C =@(rhat) 0.5 * W * (R^2 - r0^2)/(R^2 - rhat^2 );
 D =@(rhat) 0.5 * W * R^2 * (r0^2 - rhat^2)/(R^2 - rhat^2);
 psiouter = @(r,rhat) C(rhat)*r.^2 + D(rhat);
 
-rhat = fsolve(@(r) psiouter(r,r) - 0.5*W*r0^2,0.2);
+rhat = lsqnonlin(@(r) psiouter(r,r) - 0.5*W*r0^2,0.2,0,1);
 
 r = linspace(0,R);  
 plot(r,psiouter(r,rhat))
@@ -45,14 +45,6 @@ A = matlabFunction(A);
 B = matlabFunction(B);
 wout =2*C(rhat);
 
-%    [rstar,fval,exitflag,output,jacobian] =fsolve(wout,0.5);
-
-if rhat < rstar || exitflag <1
-    win = @(r) W + k.*(A(rhat).*besselj(0,k.*r) + B(rhat).*bessely(0,k.*r));
-    [rhat,fval,exitflag,output,jacobian] =fsolve(win,0.1);
-    if exitflag < 1
-        error("Doesn't work")
-    end
-
-end
+rstar=lsqnonlin(@wout,0.5,0,1);
+win = @(r) W + k.*(A(rhat).*besselj(0,k.*r) + B(rhat).*bessely(0,k.*r));
 

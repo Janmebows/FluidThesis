@@ -84,7 +84,7 @@ Where $H(\Psi)$ and $C(\Psi)$ are arbitrary functions.
 
 Rewriting $\omega$:
 \[\omega_z = w \frac{dC}{d\Psi}, \quad \omega_r = u \frac{dC}{d\Psi}\]
-
+ 
 
 Giving
 \[\frac{\omega_\theta}{r} = \frac{v\omega_r}{ru} + \frac1{ru}\frac{dH}{d\Psi} \dd\Psi z = \frac{C}{r^2} \frac{dC}{d\Psi} - \frac{dH}{d\Psi}\]
@@ -508,10 +508,10 @@ And using the same for $w$
 And lastly the wall condition
 \[\Psi(R) = \frac12 W R^2 = C\hat{r}^2 +D\]
 
-Still have 
+With
 \[w(r_*) = 0\]
 \[\frac{\Gamma}{2\pi r_0} = \Omega r_0 \implies \Omega = \frac{\Gamma}{2\pi r_0^2} \]
-\[k = \frac{2\Gamma}{2\pi W r_0^2} = \frac{\Gamma}{\pi W r_0^2}  \]
+\[k_{outer} = \frac{2\Gamma}{2\pi W r_0^2} = \frac{\Gamma}{\pi W r_0^2}  \]
 Noting that the values for $A$ and $B$ are obtained from the $r_*$ condition.
 
 
@@ -539,7 +539,91 @@ Impose:
 \end{enumerate}
 
 
+Redo the problem instead getting $A,B$ from~\ref{rankine::2} and~\ref{rankine::3}
 
+\[\Psi_{inner}(r_*) = 0\]
+\[\Psi_{inner}(\hat{r}) = \frac12 W r_0^2\]
+
+
+
+
+Use this for $A,B$
+\begin{align*}
+    \Psi_{inner}(r_*) &= \frac12 Wr_*^2 +r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
+    &=AJ_1(kr_*) + BY_1(kr_*) =-\frac12 Wr_*\\
+    \Psi_{inner}(\hat{r}) &= \frac12 W\hat{r}^2  +\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W r_0^2\\
+    &=\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W (r_0^2 - \hat{r}^2)
+\end{align*}
+
+This gives the matrix system for $A,B$ below. Note that the system relies on the unknowns $r_*$ and $\hat{r}$.
+\[\begin{pmatrix}
+    J_1(kr_*) & Y_1(kr_*)\\
+    \hat{r} J_1(k\hat{r}) & \hat{r} Y_1(k\hat{r})
+\end{pmatrix}
+\begin{pmatrix}
+    A\\B
+\end{pmatrix} = \begin{pmatrix}
+    - \frac12 Wr_*\\
+    \frac12 W (r_0^2 - \hat{r}^2)
+\end{pmatrix}\]
+
+
+\[
+\begin{pmatrix}
+    A\\B
+\end{pmatrix} = \frac{1}{det}\begin{pmatrix}
+     \hat{r} Y_1(k\hat{r})& -Y_1(kr_*)\\
+    -\hat{r} J_1(k\hat{r}) & J_1(kr_*)\\
+\end{pmatrix}\begin{pmatrix}
+    - \frac12 Wr_*\\
+    \frac12 W (r_0^2 - \hat{r}^2)
+\end{pmatrix}\]
+Where
+
+\begin{align*}
+\det &= \hat{r} Y_1(k\hat{r})J_1(kr_*) - \hat{r} J_1(k\hat{r}) Y_1(kr_*)\\
+&= \hat{r}\left(Y_1(k\hat{r})J_1(kr_*) -  J_1(k\hat{r}) Y_1(kr_*)\right)
+\end{align*}
+
+This for $r_*$
+\begin{align*}
+    w_{inner}(r_*) = W + k(AJ_0(kr_*) + BY_0(kr_*)) =0
+\end{align*}
+
+Get $C$ from:
+\begin{align*}
+    w_{outer}(\hat{r}) = w_{inner}(\hat{r})\\
+    2C = W + k(AJ_0(k\hat{r}) + BY_0(k\hat{r}))\\
+    C = \frac12\left(W + k(AJ_0(k\hat{r}) + BY_0(k\hat{r}))\right)
+\end{align*}
+
+Get $D$ here:
+\begin{align*}
+    \Psi_{outer}(R) = CR^2 + D = \frac12 WR^2\\
+    D = \frac12 WR^2 - C
+\end{align*}
+
+%this for \hat{r}
+Hence get $\hat{r}$ from 
+\begin{align*}
+    \Psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 Wr_0^2\\
+    C\hat{r}^2 + \frac12 WR^2 -C = \frac12 Wr_0^2\\
+    \left(\frac12\left(W + k(AJ_0(k\hat{r}) + BY_0(k\hat{r}))\right)\right) (\hat{r}^2 - 1) = \frac12W(r_0^2 - R^2)\\
+    \left(AJ_0(k\hat{r}) + BY_0(k\hat{r})\right)(\hat{r}^2 - 1) =\frac1{k}W(r_0^2 - R^2 -1)\\
+\end{align*}
+
+
+
+
+
+
+
+
+\clearpage
+
+
+
+Original Approach
 
 Should be able to solve C and D by subtracting~\ref{rankine::6} from~\ref{rankine::4}:
 \[\Psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 W r_0^2\]
