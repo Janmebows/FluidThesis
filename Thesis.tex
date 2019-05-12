@@ -578,6 +578,12 @@ This gives the matrix system for $A,B$ below. Note that the system relies on the
     - \frac12 Wr_*\\
     \frac12 W (r_0^2 - \hat{r}^2)
 \end{pmatrix}\]
+
+\begin{align*}
+    A &= \frac{1}{\det} \left(\hat{r} Y_1(k\hat{r})\left(-\frac12 Wr_*\right) - Y_1(kr_*) \left(\frac12 W(r_0^2 - \hat{r}^2)\right)\right)\\
+    B &= \frac{1}{\det} \left(-\hat{r}J_1\left(-\frac12 Wr_*\right) + J_1(kr_*) \left(\frac12 W(r_0^2 - \hat{r}^2)\right)\right)
+\end{align*}
+
 Where
 
 \begin{align*}
@@ -623,94 +629,94 @@ Hence get $\hat{r}$ from
 
 
 
-Original Approach
+% Original Approach
 
-Should be able to solve C and D by subtracting~\ref{rankine::6} from~\ref{rankine::4}:
-\[\Psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 W r_0^2\]
-\[\Psi_{outer}(R) = CR^2 + D = \frac12 W R^2\]
+% Should be able to solve C and D by subtracting~\ref{rankine::6} from~\ref{rankine::4}:
+% \[\Psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 W r_0^2\]
+% \[\Psi_{outer}(R) = CR^2 + D = \frac12 W R^2\]
 
-\begin{align*}
-    CR^2 - C\hat{r}^2 &= \frac12 W R^2 - \frac12 W r_0^2\\
-    C(R^2 - \hat{r}^2) &= \frac12 W (R^2 - r_0^2)\\
-    C &= \frac{W(R^2 - r_0^2)}{2 (R^2 - \hat{r}^2)}
-\end{align*}
+% \begin{align*}
+%     CR^2 - C\hat{r}^2 &= \frac12 W R^2 - \frac12 W r_0^2\\
+%     C(R^2 - \hat{r}^2) &= \frac12 W (R^2 - r_0^2)\\
+%     C &= \frac{W(R^2 - r_0^2)}{2 (R^2 - \hat{r}^2)}
+% \end{align*}
 
-Now just using~\ref{rankine::6}:
-\begin{align*}
-    \Psi_{outer}(R) = \frac12 WR^2\\
-    \frac12 \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} R^2 + D = \frac12 WR^2\\
-    D = \frac12 WR^2 - \frac12 \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} R^2\\
-    D = \frac12 WR^2 (1 - \frac{R^2 - r_0^2}{R^2 - \hat{r}^2})\\
-    D = \frac12 WR^2 (\frac{R^2 - \hat{r}^2}{R^2 - \hat{r}^2} - \frac{R^2 - r_0^2}{R^2 - \hat{r}^2})\\
-    D = \frac12 WR^2 \left[\frac{r_0^2 - \hat{r}^2}{R^2 - \hat{r}^2}\right]
-\end{align*}
-
-
-Hence giving:
-\begin{align*}
-    \Psi_{outer}(r) &= C r^2 + D\\
-    &= \frac{W(R^2 - r_0^2)}{2 (R^2 - \hat{r}^2)} r^2 + \frac12 WR^2 \left[\frac{r_0^2 - \hat{r}^2}{R^2 - \hat{r}^2}\right]\\
-    &=\frac{W\left((R^2 - r_0^2)r^2 + (r_0^2 - \hat{r}^2)R^2\right)}{2(R^2 - \hat{r}^2)} \\
-    w_{outer}(r) &= 2C\\
-    &= \frac{W(R^2 - r_0^2)}{(R^2 - \hat{r}^2)} 
-\end{align*}
+% Now just using~\ref{rankine::6}:
+% \begin{align*}
+%     \Psi_{outer}(R) = \frac12 WR^2\\
+%     \frac12 \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} R^2 + D = \frac12 WR^2\\
+%     D = \frac12 WR^2 - \frac12 \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} R^2\\
+%     D = \frac12 WR^2 (1 - \frac{R^2 - r_0^2}{R^2 - \hat{r}^2})\\
+%     D = \frac12 WR^2 (\frac{R^2 - \hat{r}^2}{R^2 - \hat{r}^2} - \frac{R^2 - r_0^2}{R^2 - \hat{r}^2})\\
+%     D = \frac12 WR^2 \left[\frac{r_0^2 - \hat{r}^2}{R^2 - \hat{r}^2}\right]
+% \end{align*}
 
 
-$A$ and $B$ can be obtained using~\ref{rankine::5} and \ref{rankine::2}.
-\begin{align*}
-W\left[\frac{R^2 - r_0^2}{R^2 - \hat{r}^2}\right] &= W + k(A(J_0(k\hat{r}) + BY_0(k\hat{r}))) 
-\end{align*}
-
-And
-\begin{align*}
-   \frac12 W r_*^2 + r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
-   Ar_*J_1(kr_*) + Br_*Y_1(kr_*) = -\frac12 W r_*^2
-\end{align*}
-Which can be written as the system
-\[
-\begin{pmatrix}kJ_0(k\hat r)&kY_0(k \hat{r})\\r_* J_1(kr_*) & r_* Y_1(kr_*)\end{pmatrix} 
-\begin{pmatrix}A\\B\end{pmatrix}
- = 
- \begin{pmatrix}2C-W\\-\frac12 Wr_*^2\end{pmatrix}
-\]
-\[\begin{pmatrix}A\\B\end{pmatrix} 
-= 
-\frac{1}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} 
-\begin{pmatrix}
-    r_* Y_1(kr_*)&-kY_0(k \hat{r})\\
-    -r_* J_1(kr_*)&kJ_0(k\hat r)
-\end{pmatrix}\begin{pmatrix}2 C-W\\-\frac12 Wr_*^2\end{pmatrix}\]
-
-Giving
-\begin{align*}
-    A = \frac{r_* Y_1(kr_*)(2C-W) + kY_0(k\hat{r})\frac12 W r_*^2}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-    = \frac{Y_1(kr_*)(2C-W) + \frac12 W r_*kY_0(k\hat{r})}{k\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-\end{align*}
-And
-\begin{align*}
-    B = \frac{-r_* J_1(kr_*)(2C-W) -\frac12 Wr_*^2 kJ_0(k\hat{r})}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-    \frac{-J_1(kr_*)(2C-W) -\frac12 Wr_* kJ_0(k\hat{r})}{k\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-\end{align*}
+% Hence giving:
+% \begin{align*}
+%     \Psi_{outer}(r) &= C r^2 + D\\
+%     &= \frac{W(R^2 - r_0^2)}{2 (R^2 - \hat{r}^2)} r^2 + \frac12 WR^2 \left[\frac{r_0^2 - \hat{r}^2}{R^2 - \hat{r}^2}\right]\\
+%     &=\frac{W\left((R^2 - r_0^2)r^2 + (r_0^2 - \hat{r}^2)R^2\right)}{2(R^2 - \hat{r}^2)} \\
+%     w_{outer}(r) &= 2C\\
+%     &= \frac{W(R^2 - r_0^2)}{(R^2 - \hat{r}^2)} 
+% \end{align*}
 
 
-To obtain $r_*$ and $\hat{r}$, solve ~\ref{rankine::3} and ~\ref{rankine::1}. 
-Since both equations implicitly contain $r_*$ and $\hat{r}$, solve using numerics.
-Note the solution of~\ref{rankine::1} would depend on whether $r_*$ was in the inner or outer region.
-Solving the outer region will only give trivial solutions as:
-\begin{align*}
-    w(r_*) = 2C &= 0\\
-        \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} &= 0 \\
-\end{align*}
-only has solutions $W=0$ and $R=r_0$
+% $A$ and $B$ can be obtained using~\ref{rankine::5} and \ref{rankine::2}.
+% \begin{align*}
+% W\left[\frac{R^2 - r_0^2}{R^2 - \hat{r}^2}\right] &= W + k(A(J_0(k\hat{r}) + BY_0(k\hat{r}))) 
+% \end{align*}
+
+% And
+% \begin{align*}
+%    \frac12 W r_*^2 + r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
+%    Ar_*J_1(kr_*) + Br_*Y_1(kr_*) = -\frac12 W r_*^2
+% \end{align*}
+% Which can be written as the system
+% \[
+% \begin{pmatrix}kJ_0(k\hat r)&kY_0(k \hat{r})\\r_* J_1(kr_*) & r_* Y_1(kr_*)\end{pmatrix} 
+% \begin{pmatrix}A\\B\end{pmatrix}
+%  = 
+%  \begin{pmatrix}2C-W\\-\frac12 Wr_*^2\end{pmatrix}
+% \]
+% \[\begin{pmatrix}A\\B\end{pmatrix} 
+% = 
+% \frac{1}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} 
+% \begin{pmatrix}
+%     r_* Y_1(kr_*)&-kY_0(k \hat{r})\\
+%     -r_* J_1(kr_*)&kJ_0(k\hat r)
+% \end{pmatrix}\begin{pmatrix}2 C-W\\-\frac12 Wr_*^2\end{pmatrix}\]
+
+% Giving
+% \begin{align*}
+%     A = \frac{r_* Y_1(kr_*)(2C-W) + kY_0(k\hat{r})\frac12 W r_*^2}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
+%     = \frac{Y_1(kr_*)(2C-W) + \frac12 W r_*kY_0(k\hat{r})}{k\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
+% \end{align*}
+% And
+% \begin{align*}
+%     B = \frac{-r_* J_1(kr_*)(2C-W) -\frac12 Wr_*^2 kJ_0(k\hat{r})}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
+%     \frac{-J_1(kr_*)(2C-W) -\frac12 Wr_* kJ_0(k\hat{r})}{k\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
+% \end{align*}
 
 
-This gives the implicit system of equations that has to be solved for $\hat{r}$ and $r_*$:
-\[\Psi_{inner}(\hat{r}) =\frac12 W\hat{r}^2 + \hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) = \frac12 Wr_0^2\]
-\[    w(r_*) = W + k\left(A J_0(kr_*) + B Y_0(kr_*)\right) = 0\\
-\]
+% To obtain $r_*$ and $\hat{r}$, solve ~\ref{rankine::3} and ~\ref{rankine::1}. 
+% Since both equations implicitly contain $r_*$ and $\hat{r}$, solve using numerics.
+% Note the solution of~\ref{rankine::1} would depend on whether $r_*$ was in the inner or outer region.
+% Solving the outer region will only give trivial solutions as:
+% \begin{align*}
+%     w(r_*) = 2C &= 0\\
+%         \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} &= 0 \\
+% \end{align*}
+% only has solutions $W=0$ and $R=r_0$
 
-Where $r_* < \hat{r}$.
-%use fsolve a bit to check for some solutions
+
+% This gives the implicit system of equations that has to be solved for $\hat{r}$ and $r_*$:
+% \[\Psi_{inner}(\hat{r}) =\frac12 W\hat{r}^2 + \hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) = \frac12 Wr_0^2\]
+% \[    w(r_*) = W + k\left(A J_0(kr_*) + B Y_0(kr_*)\right) = 0\\
+% \]
+
+% Where $r_* < \hat{r}$.
+% %use fsolve a bit to check for some solutions
 
 
 \clearpage

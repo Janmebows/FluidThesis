@@ -4,7 +4,7 @@
 \contentsline {subsection}{\numberline {2.2}Lamb-Oseen Vortex}{7}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Numerics}{8}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Rankine Body}{9}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Outer vortex breakdown}{15}{subsection.2.5}
-\contentsline {section}{\numberline {3}Appendix}{16}{section.3}
-\contentsline {subsection}{\numberline {3.1}Supplementary Materials}{16}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Resources}{16}{subsection.3.2}
+\contentsline {subsection}{\numberline {2.5}Outer vortex breakdown}{13}{subsection.2.5}
+\contentsline {section}{\numberline {3}Appendix}{14}{section.3}
+\contentsline {subsection}{\numberline {3.1}Supplementary Materials}{14}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Resources}{14}{subsection.3.2}
