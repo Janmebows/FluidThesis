@@ -1,30 +1,28 @@
-%Obtain solution regions to the rankine body problem
-%
-%
 
-close all
-clear all
 W = 1;
 r0 = 1;
 R = 1;
 npts = 100;
-[rstar,rhat,k] = meshgrid(linspace(0,R,npts),linspace(0,R,npts),linspace(0,20,npts));
-C = 0.5 * W * (R.^2 - r0.^2)/(R.^2 - rhat.^2 ) ;
-Ad = (rstar.*bessely(1,k.*rstar)).*(2*C -W) +k.*bessely(0,k.*rhat).*(0.5*W*rstar.^2);
-Bd = -rstar.*besselj(1,k.*rstar).*(2*C-W)-k.*besselj(0,k.*rhat).*(0.5*W*rstar.^2);
-deter = k.*rstar.*(besselj(0,k.*rhat).*bessely(1,k.*rstar) - bessely(0,k.*rhat).*besselj(1,k.*rstar));
+det =@(rhat,rstar,k) rhat.*(bessely(1,k.*rhat).*besselj(1,k.*rstar) - besselj(1,k.*rhat).*bessely(1,k.*rstar));
+A =@(rhat,rstar,k) 1/det(rhat,rstar,k) .* (rhat.*bessely(1,k.*rhat).*(-0.5.*W.*rstar) -bessely(1,k.*rstar).*(0.5.*W.*(r0.^2-rhat.^2)));
+B =@(rhat,rstar,k) 1/det(rhat,rstar,k) .* (-rhat.*besselj(1,k.*rhat).*(-0.5.*W.*rstar) +besselj(1,k.*rstar).*(0.5.*W.*(r0.^2-rhat.^2)));
+C =@(rhat,rstar,k) 0.5.*(W + k.*(A(rhat,rstar,k).*besselj(0,k.*rhat) + B(rhat,rstar,k).*bessely(0,k.*rhat)));
+D =@(rhat,rstar,k) 0.5.*W.*R.^2 -C(rhat,rstar,k);
+rhateqn =@(rhat,rstar,k) (A(rhat,rstar,k).*besselj(0,k.*rhat) + B(rhat,rstar,k).*bessely(0,k.*rhat)).*(rhat.^2 -1) - W/k .* (r0.^2 - R.^2 -1);
+rstareqn =@(rhat,rstar,k) W + k.*(A(rhat,rstar,k).*besselj(0,k.*rstar) + B(rhat,rstar,k).*bessely(0,k.*rstar));
 
-wind = W*deter + k.*(Ad.*besselj(0,k.*rstar) + Bd.*bessely(0,k.*rstar));
-psid = 0.5*W*deter.*(rhat.^2-r0^2) + rhat.*(Ad.*besselj(1,k.*rhat) + Bd.*bessely(1,k.*rhat));
+
+[rstar,rhat,k] = meshgrid(linspace(0,R,npts),linspace(0,R,npts),linspace(0,20,npts));
+
 %p = patch(isosurface(rstar,rhat,k,wind,0));
 %p.FaceColor = 'red';
 %p.EdgeColor = 'none';
-isosurface(rstar,rhat,k,wind,0)
+%isosurface(rstar,rhat,k,rhateqn(rhat,rstar,k),0)
 camlight
 hold on
-%isosurface(rstar,rhat,k,psid,0)
+%isosurface(rstar,rhat,k,rstareqn(rhat,rstar,k),0)
 
-%isosurface(rstar,rhat,k,wind.^2 + psid.^2,0.01)
+isosurface(rstar,rhat,k,rhateqn(rhat,rstar,k).^2 + rstareqn(rhat,rstar,k).^2,0.1)
 hold off
 legend
 view([30,60])

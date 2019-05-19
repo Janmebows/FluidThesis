@@ -1,2 +1,11 @@
 
 *.m~
+*converted-to.pdf
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.fdb_latexmk
+*.fls
+*.gz

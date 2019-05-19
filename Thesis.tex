@@ -1,11 +1,11 @@
-\documentclass{/home/janmebows/Documents/LatexTemplates/myassignment}
+\documentclass{X:/Documents/Coding/Latex/myassignment}
 \title{Fluid Thesis}
 
 \begin{document}
 
 \maketitle
 \begin{abstract}
-    Just so i don't forget that theres an abstract environment...
+    Just so I don't forget that there is an abstract environment...
 \end{abstract}
 \clearpage
 \tableofcontents
@@ -33,23 +33,6 @@ $C$ is conserved on stream surfaces \\
 vorticity
 \[w = w_re_r + w_\theta e_\theta + w_ze_z\]
 where $w_r, w_\theta, w_z$ can be written in terms of the velocity
-
-% flow falling down a vertical pipe
-% slip condition on the wall of the pipe with no penetration
-% no slip is a big nono
-
-% This means $\Psi$ is a constant along a straight line
-
-% rearrange the  sl/bh equation to get u v w 
-
-% solid body rotation
-% \[w = W = const\]
-% \[v = \Omega r, \Omega \ const\]
-
-% Q (batchelor) vortex
-% \[w = W_0 + W_1 e^{-r^2/\delta^2}\]
-
-
 
 \newpage
 
@@ -97,7 +80,6 @@ Taken from Batchelor's An Introduction to Fluid Dynamics
 
 
 %ALL THE $w$s and $u$s and $v$s are WRONG
-%\[w = \frac 1r \dd\Psi r,\quad u = -\frac1r \dd\Psi z\]
 Considering the flow far upstream where there is constant uniform axial velocity and rotates with angular velocity $\Omega$ 
 \[\Psi_{\text{upstream}} = \frac12 W r^2\]
 \[v = \Omega r, w =W\]
@@ -206,7 +188,7 @@ And hence
     A&= \frac{-\frac12 W r_*Y_1(kR)}{\left(J_1(kr_*)Y_1(kR) - Y_1(kr_*)J_1(kR)\right)}\\
 B&=\frac{\frac12 W r_* J_1(kR)}{\left(J_1(kr_*)Y_1(kR) - Y_1(kr_*)J_1(kR)\right)}
 \end{align*}
-
+With the requirement that $r_* \neq R$ so as to not divide by zero.
 
 
 %solutions to A,B should end up with units which non-dimensionalise
@@ -215,11 +197,6 @@ Using
 \[w = \frac1r \dd\Psi r\] 
 Gives
 \[w = W + k(AJ_0(kr) + BY_0(kr))\]
-
-%do the rearranging
-%
-% After some rearranging:
-% \[k= \frac{J_1(kR)  Y_1(kr) - J_1(kr)*Y_1(kR)}{(Y_1(kr)J_0(kr) - J_1(kr)Y_0(kr))}\]
 
 
 
@@ -299,6 +276,30 @@ Gives
 
 Solving this for a given $k$ (or alternatively a desired $r_*$) is done numerically using $\verb|MATLAB|$.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{exampleKRstar}
+    \caption{An example solution plot}
+    \label{fig:exampleKRstar}
+\end{figure}
+
+
+The set of valid solutions to this problem are those which satisfy the constraint
+\[w(r_*) = W + k(AJ_0(kr_*) + BY_0(kr_*)) = 0\]
+The plot figure~\ref{fig:contourSolutions} shows the $k,r_*$ combinations which satisfy the constraint. 
+
+Clearly this can only occur for values of $kR > 3.8$. 
+
+The first branch of this (extending from $kR\approx 3.8$) corresponds to natural solutions, whereas further branches give unwanted behaviour, which introduce reversed flow.
+
+
+
+\begin{figure}[h]
+    \centering
+    \label{fig:contourSolutions}
+    \includegraphics[width=\linewidth]{kRstarContour}
+    \caption{Solution set for the simplified problem}
+\end{figure}
 \newpage
 
 
@@ -317,13 +318,6 @@ same $w=W$.
     C = rv &= r\left(\frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\right)\\
      &=2\pi \Gamma (1-e^{-r^2/\delta^2})
 \end{align*}
-
-
-%
-%
-%solve numerically
-%Q'(since we're making it easier) vortex
-%read through the Q vortex paper in detail
 
 
 
@@ -621,14 +615,18 @@ Hence get $\hat{r}$ from
 
 
 
+For physically valid solutions, we must impose the condition of no net change on the momentum from upstream to downstream  on the momentum (Escudier, Keller). The momentum is defined as
+\[s = 2\pi \int_0^{r_t} \left(\rho w^2 + p\right) rdr\]
+%$r_a = r_*$, $r_b = \hat{r}$, $r_c = r_0$, and $r_t = R$.
+Which comes to:
+\[\delta s = \frac{\pi}{4} \rho U^2 k^2 r_c^2 \left[-r_b^2 + \frac14 \left(\frac{r_b^4 - r_a^4}{r_c^2}\right) + \frac34 r_c^2 + \frac12 r_c^2 \log \left(\frac{r_b^2}{r_c^2}\right)\right] = 0\]
 
-
-
-
-\clearpage
-
-
-
+Apparently we expect
+\[kr_c = \sqrt{2}\]
+%i think these are wrong
+%r_b := R
+%r_c := rstar
+%r_a := rhat
 % Original Approach
 
 % Should be able to solve C and D by subtracting~\ref{rankine::6} from~\ref{rankine::4}:

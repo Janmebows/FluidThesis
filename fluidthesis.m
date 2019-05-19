@@ -20,8 +20,7 @@ B = matlabFunction(symx(2));
 R = 1;
 W = 1;
 rstar = 0.4* R;
-kguess = 1;
-
+kguess = 5;
 deter = @(r,k,R)besselj(1,k.*r).*bessely(1,k.*R) - besselj(1,k.*R).*bessely(1,k.*r);
 [r,k] = meshgrid(linspace(0.01,R),linspace(0.01,10));
 Atimesdet =@(r,k,R) -0.5*W*r.*bessely(1,k*R) ;
@@ -32,8 +31,8 @@ wrstartimesdet = @(r,k,R) W*deter(r,k,R) + k.*(Atimesdet(r,k,R).*besselj(0,k.*r)
 contour(k*R,r/R,wrstartimesdet(r,k,R),[0,0],'k')
 xlabel('kR')
 ylabel('r^*/R')
-legend('$$W(r^*) =0$$','interpreter','latex')
-
+legend('$$w(r^*) =0$$','interpreter','latex')
+saveas(gcf,'kRstarContour.eps','epsc')
     
 %solve wrstar = 0
 %for various r,k combinations
@@ -65,7 +64,7 @@ grid on
 %just a line through w= zero
 plot([0,r(end)],[0,0],'-k')
 legend(legendentries,'interpreter','latex')
-
+saveas(gcf,'exampleKRstar.eps','epsc')
 
 function out = wrstar(k,r,W,R)
 deter = @(r,k,R)(besselj(1,k.*r).*bessely(1,k.*R) - besselj(1,k.*R).*bessely(1,k.*r));
