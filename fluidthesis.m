@@ -1,8 +1,8 @@
 %% Plot solutions to the steady axisymmetric flow in cylindrical coordinates
 
 
-close all
-clear all
+%close all
+%clear all
 
 syms r R k W
 
