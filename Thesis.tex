@@ -1,4 +1,4 @@
-\documentclass{X:/Documents/Coding/Latex/myassignment}
+\documentclass{X:/Documents/Coding/Latex/myreport}
 \title{Fluid Thesis}
 
 \begin{document}
@@ -303,21 +303,22 @@ The first branch of this (extending from $kR\approx 3.8$) corresponds to natural
 \newpage
 
 
+\clearpage
 
 
 
 %Tasks:
-\subsection{Lamb-Oseen Vortex}
-The Lamb-Oseen vortex (or Q' vortex)
-\[\ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= r^2 \frac{dH}{d\psi} - C\frac{dC}{d\psi}\]
+% \subsection{Lamb-Oseen Vortex}
+% The Lamb-Oseen vortex (or Q' vortex)
+% \[\ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= r^2 \frac{dH}{d\psi} - C\frac{dC}{d\psi}\]
 
-Q' vortex 
-\[v = \frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\]
-same $w=W$.
-\begin{align*}
-    C = rv &= r\left(\frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\right)\\
-     &=2\pi \Gamma (1-e^{-r^2/\delta^2})
-\end{align*}
+% Q' vortex 
+% \[v = \frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\]
+% same $w=W$.
+% \begin{align*}
+%     C = rv &= r\left(\frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\right)\\
+%      &=2\pi \Gamma (1-e^{-r^2/\delta^2})
+% \end{align*}
 
 
 
@@ -544,20 +545,20 @@ Redo the problem instead getting $A,B$ from~\ref{rankine::2} and~\ref{rankine::3
 Use this for $A,B$
 \begin{align*}
     \Psi_{inner}(r_*) &= \frac12 Wr_*^2 +r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
-    &=AJ_1(kr_*) + BY_1(kr_*) =-\frac12 Wr_*\\
+    &=r_*(AJ_1(kr_*) + BY_1(kr_*)) =-\frac12 Wr_*^2\\
     \Psi_{inner}(\hat{r}) &= \frac12 W\hat{r}^2  +\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W r_0^2\\
     &=\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W (r_0^2 - \hat{r}^2)
 \end{align*}
 
 This gives the matrix system for $A,B$ below. Note that the system relies on the unknowns $r_*$ and $\hat{r}$.
 \[\begin{pmatrix}
-    J_1(kr_*) & Y_1(kr_*)\\
+    r_*J_1(kr_*) & r_*Y_1(kr_*)\\
     \hat{r} J_1(k\hat{r}) & \hat{r} Y_1(k\hat{r})
 \end{pmatrix}
 \begin{pmatrix}
     A\\B
 \end{pmatrix} = \begin{pmatrix}
-    - \frac12 Wr_*\\
+    - \frac12 Wr_*^2\\
     \frac12 W (r_0^2 - \hat{r}^2)
 \end{pmatrix}\]
 
@@ -566,23 +567,23 @@ This gives the matrix system for $A,B$ below. Note that the system relies on the
 \begin{pmatrix}
     A\\B
 \end{pmatrix} = \frac{1}{det}\begin{pmatrix}
-     \hat{r} Y_1(k\hat{r})& -Y_1(kr_*)\\
-    -\hat{r} J_1(k\hat{r}) & J_1(kr_*)\\
+     \hat{r} Y_1(k\hat{r})& -r_*Y_1(kr_*)\\
+    -\hat{r} J_1(k\hat{r}) & r_*J_1(kr_*)\\
 \end{pmatrix}\begin{pmatrix}
-    - \frac12 Wr_*\\
+    - \frac12 Wr_*^2\\
     \frac12 W (r_0^2 - \hat{r}^2)
 \end{pmatrix}\]
 
 \begin{align*}
-    A &= \frac{1}{\det} \left(\hat{r} Y_1(k\hat{r})\left(-\frac12 Wr_*\right) - Y_1(kr_*) \left(\frac12 W(r_0^2 - \hat{r}^2)\right)\right)\\
-    B &= \frac{1}{\det} \left(-\hat{r}J_1\left(-\frac12 Wr_*\right) + J_1(kr_*) \left(\frac12 W(r_0^2 - \hat{r}^2)\right)\right)
+    A &= \frac{1}{\det} \left(\hat{r} Y_1(k\hat{r})\left(-\frac12 Wr_*^2\right) - r_*Y_1(kr_*) \left(\frac12 W(r_0^2 - \hat{r}^2)\right)\right)\\
+    B &= \frac{1}{\det} \left(-\hat{r}J_1\left(-\frac12 Wr_*^2\right) + r_*J_1(kr_*) \left(\frac12 W(r_0^2 - \hat{r}^2)\right)\right)
 \end{align*}
 
 Where
 
 \begin{align*}
-\det &= \hat{r} Y_1(k\hat{r})J_1(kr_*) - \hat{r} J_1(k\hat{r}) Y_1(kr_*)\\
-&= \hat{r}\left(Y_1(k\hat{r})J_1(kr_*) -  J_1(k\hat{r}) Y_1(kr_*)\right)
+\det &= \hat{r}r_* Y_1(k\hat{r})J_1(kr_*) - \hat{r}r_* J_1(k\hat{r}) Y_1(kr_*)\\
+&= \hat{r}r_*\left(Y_1(k\hat{r})J_1(kr_*) -  J_1(k\hat{r}) Y_1(kr_*)\right)
 \end{align*}
 
 This for $r_*$
@@ -619,107 +620,194 @@ For physically valid solutions, we must impose the condition of no net change on
 \[s = 2\pi \int_0^{r_t} \left(\rho w^2 + p\right) rdr\]
 %$r_a = r_*$, $r_b = \hat{r}$, $r_c = r_0$, and $r_t = R$.
 Which comes to:
-\[\delta s = \frac{\pi}{4} \rho U^2 k^2 r_c^2 \left[-r_b^2 + \frac14 \left(\frac{r_b^4 - r_a^4}{r_c^2}\right) + \frac34 r_c^2 + \frac12 r_c^2 \log \left(\frac{r_b^2}{r_c^2}\right)\right] = 0\]
-
-Apparently we expect
-\[kr_c = \sqrt{2}\]
-%i think these are wrong
-%r_b := R
-%r_c := rstar
-%r_a := rhat
-% Original Approach
-
-% Should be able to solve C and D by subtracting~\ref{rankine::6} from~\ref{rankine::4}:
-% \[\Psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 W r_0^2\]
-% \[\Psi_{outer}(R) = CR^2 + D = \frac12 W R^2\]
-
-% \begin{align*}
-%     CR^2 - C\hat{r}^2 &= \frac12 W R^2 - \frac12 W r_0^2\\
-%     C(R^2 - \hat{r}^2) &= \frac12 W (R^2 - r_0^2)\\
-%     C &= \frac{W(R^2 - r_0^2)}{2 (R^2 - \hat{r}^2)}
-% \end{align*}
-
-% Now just using~\ref{rankine::6}:
-% \begin{align*}
-%     \Psi_{outer}(R) = \frac12 WR^2\\
-%     \frac12 \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} R^2 + D = \frac12 WR^2\\
-%     D = \frac12 WR^2 - \frac12 \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} R^2\\
-%     D = \frac12 WR^2 (1 - \frac{R^2 - r_0^2}{R^2 - \hat{r}^2})\\
-%     D = \frac12 WR^2 (\frac{R^2 - \hat{r}^2}{R^2 - \hat{r}^2} - \frac{R^2 - r_0^2}{R^2 - \hat{r}^2})\\
-%     D = \frac12 WR^2 \left[\frac{r_0^2 - \hat{r}^2}{R^2 - \hat{r}^2}\right]
-% \end{align*}
+\[\Delta s = \frac{\pi}{4} \rho U^2 k^2 r_c^2 \left[-r_b^2 + \frac14 \left(\frac{r_b^4 - r_a^4}{r_c^2}\right) + \frac34 r_c^2 + \frac12 r_c^2 \log \left(\frac{r_b^2}{r_c^2}\right)\right] = 0\]
 
 
-% Hence giving:
-% \begin{align*}
-%     \Psi_{outer}(r) &= C r^2 + D\\
-%     &= \frac{W(R^2 - r_0^2)}{2 (R^2 - \hat{r}^2)} r^2 + \frac12 WR^2 \left[\frac{r_0^2 - \hat{r}^2}{R^2 - \hat{r}^2}\right]\\
-%     &=\frac{W\left((R^2 - r_0^2)r^2 + (r_0^2 - \hat{r}^2)R^2\right)}{2(R^2 - \hat{r}^2)} \\
-%     w_{outer}(r) &= 2C\\
-%     &= \frac{W(R^2 - r_0^2)}{(R^2 - \hat{r}^2)} 
-% \end{align*}
+%%%
+%put the plot on the document 
+%summarise the papers that connect these and show relationships between them with this work (even just some paragraphs and plots)
+%
+
+%start on Burgers vortex
+%
+
+%%%
+\section{Burger's Vortex}
+%pretty sure this is the Lamb-Oseen vortex but trent called it burgers
+Q-vortex without a Jet.
+Start with 
+\[w = W\]
+\[v = \frac{\Gamma}{2\pi r} \left(1 - e^{-r^2/\delta^2}\right)\]
+\[\frac{d^2\Psi}{dr^2} - \frac1r \odd \Psi r = r^2 \odd H\Psi - C \odd C\Psi \]
+Solve from $r_*$ to $R$ numerically.
+
+Generate grid from $r_*$ to $R$.
+
+Boundary conditions as normal
+\[\Psi(R) = \frac12 WR^2\]
+\[\Psi(r_*) = 0\]
+\[w(r_*) = 0\]
+Non-dimensional parameter may be something like $\frac{\Gamma}{WR}$ (we can probs relate this to $kr_0$ for the rankine problem)
 
 
-% $A$ and $B$ can be obtained using~\ref{rankine::5} and \ref{rankine::2}.
-% \begin{align*}
-% W\left[\frac{R^2 - r_0^2}{R^2 - \hat{r}^2}\right] &= W + k(A(J_0(k\hat{r}) + BY_0(k\hat{r}))) 
-% \end{align*}
 
-% And
-% \begin{align*}
-%    \frac12 W r_*^2 + r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
-%    Ar_*J_1(kr_*) + Br_*Y_1(kr_*) = -\frac12 W r_*^2
-% \end{align*}
-% Which can be written as the system
-% \[
-% \begin{pmatrix}kJ_0(k\hat r)&kY_0(k \hat{r})\\r_* J_1(kr_*) & r_* Y_1(kr_*)\end{pmatrix} 
-% \begin{pmatrix}A\\B\end{pmatrix}
-%  = 
-%  \begin{pmatrix}2C-W\\-\frac12 Wr_*^2\end{pmatrix}
-% \]
-% \[\begin{pmatrix}A\\B\end{pmatrix} 
-% = 
-% \frac{1}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} 
-% \begin{pmatrix}
-%     r_* Y_1(kr_*)&-kY_0(k \hat{r})\\
-%     -r_* J_1(kr_*)&kJ_0(k\hat r)
-% \end{pmatrix}\begin{pmatrix}2 C-W\\-\frac12 Wr_*^2\end{pmatrix}\]
-
-% Giving
-% \begin{align*}
-%     A = \frac{r_* Y_1(kr_*)(2C-W) + kY_0(k\hat{r})\frac12 W r_*^2}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-%     = \frac{Y_1(kr_*)(2C-W) + \frac12 W r_*kY_0(k\hat{r})}{k\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-% \end{align*}
-% And
-% \begin{align*}
-%     B = \frac{-r_* J_1(kr_*)(2C-W) -\frac12 Wr_*^2 kJ_0(k\hat{r})}{kr_*\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-%     \frac{-J_1(kr_*)(2C-W) -\frac12 Wr_* kJ_0(k\hat{r})}{k\left(J_0(k\hat{r})Y_1(kr_*) - Y_0(k\hat{r}) J_1(kr_*)\right)} \\
-% \end{align*}
+Eventually do the same thing as before with $s$ and $\Delta s$.
+\[s = \int_0^R \left(\rho w^2 + p\right) rdr = \int_0^{r_*} p(r_*) rdr + \int_{r_*}^R \left(\rho w^2 + p\right) rdr\]
+Use
+\[\frac1\rho \dd p r = \frac{v^2}{r} = \frac{\Gamma^2}{4\pi^2r^3+}\left(1-e^{-r^2/\delta^2}\right)^2\]
+\[\Psi = \frac12 W r^2 \implies r = \sqrt{\frac{2\Psi}{W}}\]
+\begin{align*}
+    C &= rv = \frac{\Gamma}{2\pi} \left(1-e^{-r^2/\delta^2}\right)\\
+    \dd C\Psi &=\frac{\Gamma}{2\pi} \dd{}\Psi \left(1-e^{-r^2/\delta^2}\right)\\
+    \dd C\Psi &=\frac{-\Gamma}{2\pi} \dd{}\Psi \left(e^{-r^2/\delta^2}\right)\\
+    \dd C\Psi &=\frac{-\Gamma}{2\pi} \dd{}\Psi \left(e^{-2\Psi/W\delta^2}\right)\\
+    \dd C\Psi &=\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\Psi/W\delta^2}\right)\\
+\end{align*}
 
 
-% To obtain $r_*$ and $\hat{r}$, solve ~\ref{rankine::3} and ~\ref{rankine::1}. 
-% Since both equations implicitly contain $r_*$ and $\hat{r}$, solve using numerics.
-% Note the solution of~\ref{rankine::1} would depend on whether $r_*$ was in the inner or outer region.
-% Solving the outer region will only give trivial solutions as:
-% \begin{align*}
-%     w(r_*) = 2C &= 0\\
-%         \frac{W(R^2 - r_0^2)}{R^2 - \hat{r}^2} &= 0 \\
-% \end{align*}
-% only has solutions $W=0$ and $R=r_0$
+\begin{align*}
+    H &= \frac12 \left(u^2+v^2 + w^2\right) + \frac{p}{\rho}\\
+    &=\frac12 \left(u^2+v^2 + w^2\right) + \int \frac1\rho \dd pr dr\\
+    &=\frac12 \left(\left(\frac{\Gamma}{2\pi r} \left(1 - e^{-r^2/\delta^2}\right)\right)^2 + W^2\right) + \int \frac{v^2}{r}dr\\
+    &=\frac12 \left(\left(\frac{\Gamma}{2\pi r} \left(1 - e^{-r^2/\delta^2}\right)\right)^2 + W^2\right) + \int \frac{ \frac{\Gamma^2}{4\pi^2r^2} \left(1-e^{-r^2/\delta^2}\right)^2}{r} dr\\
+    &=\frac12W^2 + \frac{\Gamma^2}{4\pi^2} \left(\frac{1}{r^2} \left(1 - e^{-r^2/\delta^2}\right)^2 + \int \frac{ \left(1-e^{-r^2/\delta^2}\right)^2}{r^3} dr\right) \\
+    &=\frac12W^2 + \frac{\Gamma^2}{4\pi^2} \left(\frac{1}{r^2} \left(1 - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}\right) + \int \frac{1}{r^3} dr +\int \frac{e^{-2r^2/\delta^2}}{r^3} dr - \int \frac{2e^{-r^2/\delta^2}}{r^3} dr\right) \\
+    &=\frac12W^2 + \frac{\Gamma^2}{4\pi^2} \left(\frac{1}{r^2} \left(1 - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}\right) -\frac{1}{2r^2} +\int \frac{e^{-2r^2/\delta^2}}{r^3} dr - 2\int \frac{e^{-r^2/\delta^2}}{r^3} dr\right) \\
+\end{align*}
+
+Focus on the two integrals:
+\begin{align*}
+    1: & \int \frac{e^{-2r^2/\delta^2}}{r^3} dr\\
+    &\text{integrate by parts} & \left(u = e^{-2r^2/\delta^2}, \ v' = \frac{1}{r^3}\right)\\
+    &= -\frac{e^{-2r^2/\delta^2}}{2r^2} - \int \frac{2e^{-2r^2}}{\delta^2r} dr&\left(let \ u = \frac{2r^2}{\delta^2} \implies dr = \frac{\delta^2}{4r}du\right)\\
+    &=-\frac{e^{-2r^2/\delta^2}}{2r^2} - \frac{1}{\delta^2}\int \frac{e^{-u}}{u} du\\
+    &=-\frac{e^{-2r^2/\delta^2}}{2r^2} - \frac{-E_1(u)}{\delta^2}\\
+    &=\frac{E_1(\frac{2r^2}{\delta^2})}{\delta^2} -\frac{e^{-2r^2/\delta^2}}{2r^2} 
+\end{align*}
+\[= -E_i\left(-2r^2/\delta^2\right)/\delta^2 - \frac{e^{-2r^2/\delta^2}}{2r^2} \]
+% using integration by parts 
+% \[u = e^{-r^2/\delta^2} \implies u' = \frac{2re^{-r^2/\delta^2}}{\delta^2}\]
+% \[v' = \frac{1}{r^3} \implies v = \frac{-1}{2r^2}\]
+% \[\int uv' = uv - \int u'v\]
+Same process for the second: 
+\begin{align*}
+    2: &\int\frac{2e^{-r^2/\delta^2}}{r^3} dr\\
+     &= -\frac{e^{-r^2/\delta^2}}{r^2} - 2\int \frac{e^{-r^2/\delta^2}}{\delta^2 r} dr\\
+    &= -\frac{e^{-r^2/\delta^2}}{r^2} - \frac{1}{\delta^2}\int \frac{-e^{-u}}{u} dr, \quad  u = \frac{r^2}{\delta^2}, \ dr = \frac{\delta^2}{2r}du\\
+    &= -\frac{e^{-r^2/\delta^2}}{r^2} - \frac{-E_1\left(r^2/\delta^2\right)}{ \delta^2}\\
+    &= \frac{E_1(r^2/\delta^2)}{\delta^2} - \frac{e^{-r^2/\delta^2}}{r^2}
+\end{align*}
+
+\[= -E_i\left(-r^2/\delta^2\right)/\delta^2 - \frac{e^{-r^2/\delta^2}}{r^2} \]
+
+Giving
+
+\begin{align*}
+    H &= \frac12W^2 + \frac{\Gamma^2}{4\pi^2} \left(\frac{1}{r^2} \left(1 - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}\right) -\frac{1}{2r^2} +\int \frac{e^{-2r^2/\delta^2}}{r^3} dr - \int \frac{2e^{-r^2/\delta^2}}{r^3} dr\right) \\
+    &= \frac12W^2 + \frac{\Gamma^2}{4\pi^2} \left(\frac{1}{r^2} \left(1 - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}\right) -\frac{1}{2r^2} + \frac{E_1(\frac{2r^2}{\delta^2})}{\delta^2} -\frac{e^{-2r^2/\delta^2}}{2r^2}  - \frac{E_1(r^2/\delta^2)}{\delta^2} + \frac{e^{-r^2/\delta^2}}{r^2}\right) \\
+    &= \frac12W^2 + \frac{\Gamma^2}{4\pi^2} \left(\frac{1}{2r^2} + \frac{E_1(\frac{2r^2}{\delta^2})}{\delta^2} +\frac{e^{-2r^2/\delta^2}}{2r^2}  - \frac{E_1(r^2/\delta^2)}{\delta^2} - \frac{e^{-r^2/\delta^2}}{r^2}\right) \\
+    &\text{Or in terms of }\Psi\\
+    &=\frac12 W^2 + \frac{\Gamma^2}{4\pi^2}\left(\frac{W}{4\Psi} + \frac{E_1(4\Psi/W\delta^2)}{\delta^2} +\frac{We^{-4\Psi/W\delta^2}}{4\Psi}  - \frac{E_1(2\Psi/W\delta^2)}{\delta^2} - \frac{We^{-2\Psi/W\delta^2}}{2\Psi}\right)\\
+\end{align*}
+
+Hence using $r^2 = \frac{2\Psi}{W}$
+\begin{align*}
+    \dd H\Psi &=  \dd{}\Psi\left(\frac12 W^2 + \frac{\Gamma^2}{4\pi^2}\left(\frac{W}{4\Psi} + \frac{E_1(4\Psi/W\delta^2)}{\delta^2} +\frac{We^{-4\Psi/W\delta^2}}{4\Psi}  - \frac{E_1(2\Psi/W\delta^2)}{\delta^2} - \frac{We^{-2\Psi/W\delta^2}}{2\Psi}\right)\right)\\
+    &=\frac{\Gamma^2}{4\pi^2}\dd{}\Psi \left(\frac{W}{4\Psi} + \frac{E_1(4\Psi/W\delta^2)}{\delta^2} +\frac{We^{-4\Psi/W\delta^2}}{4\Psi}  - \frac{E_1(2\Psi/W\delta^2)}{\delta^2} - \frac{We^{-2\Psi/W\delta^2}}{2\Psi}\right)\\
+    &=\frac{\Gamma^2}{4\pi^2}\left(-\frac{W}{4\Psi^2} + \frac{e^{4\Psi/ W\delta^2}}{\Psi\delta^2} 
+    -\frac{e^{-4\Psi/W\delta^2}}{\Psi\delta^2}  
+    - \frac{e^{2\Psi/W\delta^2}}{\Psi\delta^2} 
+    - \frac{We^{-2\Psi/W\delta^2}}{2\Psi}\right)\\
+\end{align*}
+
+\begin{align*}
+    \dd H\Psi &=  \dd{}\Psi\left(\frac12 W^2 + \frac{\Gamma^2}{4\pi^2}\left(\frac{W}{4\Psi} - \frac{E_i(-4\Psi/W\delta^2)}{\delta^2} +\frac{We^{-4\Psi/W\delta^2}}{4\Psi}  + \frac{E_i(-2\Psi/W\delta^2)}{\delta^2} - \frac{We^{-2\Psi/W\delta^2}}{2\Psi}\right)\right)\\
+    &=\frac{\Gamma^2}{4\pi^2}\dd{}\Psi \left(\frac{W}{4\Psi} - \frac{E_i(-4\Psi/W\delta^2)}{\delta^2} +\frac{We^{-4\Psi/W\delta^2}}{4\Psi}  + \frac{E_i(-2\Psi/W\delta^2)}{\delta^2} - \frac{We^{-2\Psi/W\delta^2}}{2\Psi}\right)\\
+    &=\frac{\Gamma^2}{4\pi^2}\left(-\frac{W}{4\Psi^2} - \frac{e^{-4\Psi/W\delta^2}}{\delta^2\Psi} +\frac{-4e^{-4\Psi/W\delta^2}}{4 \delta\Psi}  + \frac{e^{-2\Psi/W\delta^2}}{\delta^2\Psi} - \frac{-2We^{-2\Psi/W\delta^2}}{2\delta^2\Psi}\right)\\
+\end{align*}
+
+Not sure where I have gone wrong but I should get:
+\[H = \frac{1}{2} W^2 + \frac{\Gamma^2}{4 \delta^2\pi ^2} \left(E_i\left(\frac{4\psi }{\delta^2W}\right)-E_i\left(\frac{2\psi }{ \delta ^2W}\right)\right)  \]
+
+\[\odd H \Psi = \frac{\Gamma^2}{4 \delta^2 \Psi  \pi ^2} \left(e^{-\frac{4 \Psi }{\delta^2 W}} -e^{-\frac{2 \Psi }{\delta^2 W}}\right)\]
+
+\[\ddn\Psi r2 - \frac1r \dd\Psi r = r^2 \odd H\Psi - C \odd C\Psi\]
+\[\ddn{\Psi}r2  -\frac{1}{r}\dd\Psi r =\frac{\Gamma^2}{2\delta^2 W \pi^2} \left(e^{-\frac{r^2}{\delta^2}} \left(e^{-\frac{r^2}{\delta^2}}-1\right)+ e^{-\frac{2 r^2}{\delta^2}} \left(e^{\frac{r^2}{\delta^2}}-1\right)\right)\]
+
+\verb|dsolve()| gives
+\[\Psi(r) = ar^2 + b\]
+
+%apparently its `quasilinear'
 
 
-% This gives the implicit system of equations that has to be solved for $\hat{r}$ and $r_*$:
-% \[\Psi_{inner}(\hat{r}) =\frac12 W\hat{r}^2 + \hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) = \frac12 Wr_0^2\]
-% \[    w(r_*) = W + k\left(A J_0(kr_*) + B Y_0(kr_*)\right) = 0\\
-% \]
+When we do finite differences, grab a computational variable (call it $\eta$ for now)
+\[ \eta = \frac{r - r_*}{R-r_*}\]
+So now we are computing in $0<\eta<1$.
+So try plugging it into the ODE:
+\[d\eta = \frac{dr}{R-r_*}\]
+\[\dd\Psi r = \dd\Psi\eta \dd\eta r = \frac{1}{R-r_*} \dd\Psi\eta\]
 
-% Where $r_* < \hat{r}$.
-% %use fsolve a bit to check for some solutions
+If we don't know $r_*$ the eta vector becomes
+\[\begin{pmatrix}
+    \eta_0\\
+    \vdots\\
+    \eta_{N-1}\\
+    r_*
+\end{pmatrix}\]
+This will be a non-linear problem so we will need to solve using fsolve.
+
+To get guesses could use rankine vortex stuff - 
+
+For a linear flow we could use
+We know that $\psi(r_*) = 0$ and $\psi(R) = \frac12 WR^2$. We could guess that $\psi$ is constant, $\psi = Ar^2 + B$.
+
+Try plotting $w(r_*)$ for various $r_*$ to help find guesses (require it to be $0$)
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+The equation for $s$ comes from the Euler equations
+(Don't need to use this / know this - we did it with tensors)
+gives
+\[\dd{u_iu_j}{x_i} = -\frac1\rho \dd p{x_i}\]
+\[\int_v \dd{u_iu_j}{x_i} +\frac1\rho \dd p{x_i} dv\]
+Use divergence theorem 
+\[\int \nabla \cdot v dv = \int v\cdot \hat{n} ds\]
+\[\int_v \dd{u_iu_j}{x_i} +\frac1\rho \dd p{x_i} dv = \int_s \dd{u_iu_j n_i}{x_i} +\frac1\rho \dd p{x_i} ds\]
+
+\[v_i = p \delta_{ij}, \quad p\delta_{ij}n_i = pn_j\]
+\[=\int_s u_iu_j n_i + \frac p \rho n_j ds\]
+Since we are considering a cylinder, we get $0$ along the boundary of the cylinder, and so we only care about the inlet and outlet.
+At the inlet the normal faces in the negative $w$
+\[u_in_i = -w\]
+\[u_in_i = w\]
+\[\int_{(1)} -w^2 -\frac{p}{\rho} dS + \int_{(2)} \int w^2  +\frac{p}{\rho} dS =0 \]
+Which is literally in flux = out flux. 
+
+
+
+
+
+
+
+
+
+
+
 
 
 \clearpage
 \subsection{Outer vortex breakdown}
-Considering the initial problem ffor vortex breakdown, except perhaps the breakdown is a pocket expanding from $R$ rather than $0$. I.e. the breakdown occurs about the wall rather than the center.
+Considering the initial problem for vortex breakdown, except perhaps the breakdown is a pocket expanding from $R$ rather than $0$. I.e. the breakdown occurs about the wall rather than the center.
 So assuming $r^\dagger $ is our outer vortex breakdown radius
 
 
@@ -751,10 +839,13 @@ And obtain $k$ using
 %%%summary of project
 %%%Vortex breakdown states
 %Columnar flows
-%- rotating flows
-% - analytics
-% - numerics
-%- rankine vortex
+%- rotating flows DONE
+% - analytics DONE
+% - numerics DONE
+%- rankine vortex DONE
+%   analytics DONE
+%   numerics DONE
+%- Burgers vortex
 %   analytics
 %   numerics
 %- Q' vortex

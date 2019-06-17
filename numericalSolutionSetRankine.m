@@ -1,39 +1,64 @@
 close all
 clear all
+%Make plots less repulsive
+set(groot, 'DefaultLineLineWidth', 1, ...
+    'DefaultAxesLineWidth', 1, ...
+    'DefaultAxesFontSize', 12, ...
+    'DefaultTextFontSize', 12, ...
+    'DefaultTextInterpreter', 'latex', ...
+    'DefaultLegendInterpreter', 'latex', ...
+    'DefaultColorbarTickLabelInterpreter', 'latex', ...
+    'DefaultAxesTickLabelInterpreter','latex');
+
+step = 0.001;
 R = 1;
-r0= 0.3;
-rstar=0.01;
+r0= 0.99;
 W = 1;
-guess = [0.6,10];
-options = optimoptions('fsolve','MaxFunctionEvaluations',1e3);
-[sol,fval,exitflag]  = fsolve(@(x) wAndPsi(x,rstar,R,r0,W),guess,options);
+%guess = [rstar,rhat,k]
+guess = [0.3 0.65 5];
+options = optimoptions('fsolve','MaxFunctionEvaluations',1e5);
+[sol,fval,exitflag]  = fsolve(@(x) wAndPsi(x,R,r0,W),guess,options);
 workingVals=[];
 
-while(exitflag > 0 && isreal(sol))
-workingVals = [workingVals ;sol(2),rstar,sol(1)];
-[sol,fval,exitflag]  = fsolve(@(x) wAndPsi(x,rstar,R,r0,W),guess,options);
-rstar=rstar+0.01;
+while(r0 > 0)%&& isreal(sol))
+    if(exitflag > 0 && isreal(sol))
+        workingVals = [workingVals ;sol,r0];
+        fval
+    end
+    
+    r0=r0-step;
+    [sol,fval,exitflag]  = fsolve(@(x) wAndPsi(x,R,r0,W),guess,options);
 
-%rhat= sol(1);
-%k= sol(2);
+
+% rstar = x(1);
+% rhat = x(2);
+% k =x(3);
 end
-plot(workingVals(:,1),workingVals(:,2))
+%plot(r0,kr0)
 
-
-
-function out = wAndPsi(x,rstar,R,r0,W)
-%rstar = x(1);
-rhat = x(1);
-k = x(2);
-C = 0.5 * W * (R.^2 - r0.^2)/(R.^2 - rhat.^2 ) ;
-Ad =  rstar*bessely(1,k*rstar)*(2*C-W)+k*bessely(0,k*rhat)*(0.5*W*rstar^2);
-Bd = -rstar*besselj(1,k*rstar).*(2*C-W)-k*besselj(0,k*rhat).*(0.5*W*rstar^2);
-deter = k*rstar*(besselj(0,k*rhat)*bessely(1,k*rstar) - bessely(0,k*rhat)*besselj(1,k.*rstar));
+plot(workingVals(:,4),workingVals(:,3).*workingVals(:,4))
+xlabel('$$r_0$$')
+ylabel('$$kr_0$$')
+%mimic the axes from Escudier/Keller
+axis([0,1,0,3.832])
+function out = wAndPsi(x,R,r0,W)
+rstar = x(1);
+rhat = x(2);
+k =x(3);
+Wh = W * (R.^2 - r0.^2)/(R.^2 - rhat.^2 );
+psi_s = -0.5*W*rstar.^2;
+psi_h = 0.5*W*(r0.^2 - rhat.^2);
+%Ad,Bc ->psi_inner_rstar = 0 ,
+%      ->psi_inner_rhat = 0.5*W*r0^2
+Ad =  rhat*bessely(1,k*rhat).*psi_s - rstar*bessely(1,k*rstar).*psi_h;
+Bd = -rhat*besselj(1,k*rhat).*psi_s + rstar*besselj(1,k*rstar).*psi_h;
+deter = rhat*rstar*(besselj(1,k*rstar)*bessely(1,k*rhat) - bessely(1,k*rstar)*besselj(1,k.*rhat));
 
 %%%out(1) -> w(rstar)*det = 0
-%%%out(2) -> psi(rhat)*det = 0.5*W*r0^2*det
-out(1) =  W*deter + k*(Ad*besselj(0,k*rstar) + Bd*bessely(0,k*rstar));
-out(2) = 0.5*W*deter*(rhat.^2-r0^2) + rhat*(Ad.*besselj(1,k*rhat) + Bd*bessely(1,k*rhat))- (0.5*deter*W*r0^2);
-
+%%%out(2) -> w_outer(rhat) = w_inner(rhat)
+%%%out(3) -> net momentum = 0
+out(1) =  W + k*(Ad*besselj(0,k*rstar) + Bd*bessely(0,k*rstar))./deter;
+out(2) =  W + k*(Ad*besselj(0,k*rhat)  + Bd*bessely(0,k*rhat) )./deter - Wh;
+out(3) = -rhat^2 + 0.25*((rhat^4 - rstar^4)/(r0^2)) + (0.75* r0^2) + (0.5*r0^2*log(rhat^2/r0^2));
 end
 
