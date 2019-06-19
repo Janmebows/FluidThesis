@@ -21,3 +21,5 @@ dC = subs(dC,psi,0.5*w*r^2)
 syms psi(r)
 ode = diff(psi,r,2) - 1/r * diff(psi,r) == r^2 * dH - C* dC
 dsolve(ode)
+expand(ode)
+%it comes out as d2psidr^2 - 1/r dpsidr ==0
