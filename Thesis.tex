@@ -690,15 +690,8 @@ How I got the middle term:
     &= 0
 \end{align*}
 
-
-
-\[\ddn\Psi r2 - \frac1r \dd\Psi r = r^2 \odd H\Psi - C \odd C\Psi\]
-\[\ddn{\Psi}r2  -\frac{1}{r}\dd\Psi r =\frac{\Gamma^2}{2\delta^2 W \pi^2} \left(e^{-\frac{r^2}{\delta^2}} \left(e^{-\frac{r^2}{\delta^2}}-1\right)+ e^{-\frac{2 r^2}{\delta^2}} \left(e^{\frac{r^2}{\delta^2}}-1\right)\right)\]
-
-\verb|dsolve()| gives
+Hence
 \[\Psi(r) = ar^2 + b\]
-
-%apparently its `quasilinear'
 
 
 When we do finite differences, grab a computational variable (call it $\eta$ for now)
@@ -733,7 +726,8 @@ $\psi(\eta = 0) = 0$ and $\psi(\eta=1) = \frac12 wR^2$
 \[\ddn\Psi r 2 = \frac{1}{(R-r_*)^2}\ddn\Psi\eta 2\]
 \[r = \eta(R-r_*)) +r_*\]
 DE becomes
-\[\frac{1}{(R-r_*)^2}\ddn{\Psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*} \frac1{R-r_*}\dd\Psi \eta =\frac{\Gamma^2}{2\delta^2 W \pi^2} \left(e^{-\frac{(\eta(R-r_*)) +r_*)^2}{\delta^2}} \left(e^{-\frac{(\eta(R-r_*)) +r_*)^2}{\delta^2}}-1\right)+ e^{-\frac{2 (\eta(R-r_*)) +r_*)^2}{\delta^2}} \left(e^{\frac{(\eta(R-r_*)) +r_*)^2}{\delta^2}}-1\right)\right)\]
+\[\frac{1}{(R-r_*)^2}\ddn{\Psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*} \frac1{R-r_*}\dd\Psi \eta =0\]
+\[\frac{1}{R-r_*}\ddn{\Psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*}\dd\Psi \eta =0\]
 
 
 
