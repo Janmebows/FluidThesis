@@ -647,6 +647,8 @@ Boundary conditions as normal
 \[\Psi(R) = \frac12 WR^2\]
 \[\Psi(r_*) = 0\]
 \[w(r_*) = 0\]
+And the standard upstream flow 
+\[\Psi(r)  =\frac12 Wr^2\]
 Non-dimensional parameter may be something like $\frac{\Gamma}{WR}$ (we can probably relate this to $kr_0$ for the rankine problem)
 
 
@@ -671,7 +673,8 @@ Use
     &=\frac{1}{Wr} \left(\frac12 \odd{v^2}r + \frac{v^2}{r} \right)\\
     &=\frac{1}{Wr} \left(\frac{\Gamma^2}{4r\pi^2} \left(\frac{-1}{r^2} +2e^{-r^2/\delta^2}\left(\frac{1}{r^2} + \frac{1}{\delta^2}\right) -e^{-2r^2/\delta^2} \left(\frac{1}{r^2} + \frac{2}{ \delta^2}\right)\right) +  \frac{\Gamma^2}{4r\pi^2}\left(\frac{1 - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}}{r^2}\right) \right)\\
     &=\frac{\Gamma^2}{4Wr^2 \pi^2} \left(2e^{-r^2/\delta^2}\left(\frac{1}{r^2} + \frac{1}{\delta^2}\right) -e^{-2r^2/\delta^2} \left(\frac{1}{r^2} + \frac{2}{ \delta^2}\right) +\frac{ - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}}{r^2}\right)\\
-    &= \frac{\Gamma^2}{2Wr^2\delta^2\pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2}\right)
+    &= \frac{\Gamma^2}{2Wr^2\delta^2\pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2}\right)\\
+    &= \frac{\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right)\\
 \end{align*}
 
 How I got the middle term:
@@ -683,15 +686,25 @@ How I got the middle term:
 \end{align*}
 
 
+% \begin{align*}
+%     \ddn\Psi r2 - \frac1r \dd\Psi r &=  r^2 \odd H\Psi - C \odd C\Psi\\
+%     &=\frac{\Gamma^2}{2W\delta^2\pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2}\right) - \frac{\Gamma}{2\pi} \left(1-e^{-r^2/\delta^2}\right)\frac{\Gamma}{W\pi\delta^2} e^{-r^2/\delta^2}\\
+%     &= \frac{\Gamma^2}{2W \delta^2 \pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2} - \left(e^{-r^2/\delta^2}-e^{-2r^2/\delta^2}\right)\right) \\
+%     &= 0
+% \end{align*}
 \begin{align*}
     \ddn\Psi r2 - \frac1r \dd\Psi r &=  r^2 \odd H\Psi - C \odd C\Psi\\
-    &=\frac{\Gamma^2}{2W\delta^2\pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2}\right) - \frac{\Gamma}{2\pi} \left(1-e^{-r^2/\delta^2}\right)\frac{\Gamma}{W\pi\delta^2} e^{-r^2/\delta^2}\\
-    &= \frac{\Gamma^2}{2W \delta^2 \pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2} - \left(e^{-r^2/\delta^2}-e^{-2r^2/\delta^2}\right)\right) \\
-    &= 0
+    &=\frac{r^2\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) - \left(\frac{\Gamma}{2\pi} \left(1-e^{-2\Psi/W\delta^2}\right)\right)\left(\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\Psi/W\delta^2}\right)\right)\\
+    &=\frac{r^2\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) - \frac{\Gamma^2}{2W\delta^2\pi^2}\left(1-e^{-2\Psi/W\delta^2}\right) \left(e^{-2\Psi/W\delta^2}\right)\\
+    &= \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\frac{r^2W}{2\Psi} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) -\left(e^{-2\Psi/W\delta^2}-e^{-4\Psi/W\delta^2}\right)\right)
 \end{align*}
 
 Hence
 \[\Psi(r) = ar^2 + b\]
+
+
+
+
 
 
 When we do finite differences, grab a computational variable (call it $\eta$ for now)
@@ -720,7 +733,7 @@ Try plotting $w(r_*)$ for various $r_*$ to help find guesses (require it to be $
 
 
 If using $\eta$, the ODE becomes
-$\psi(\eta = 0) = 0$ and $\psi(\eta=1) = \frac12 wR^2$
+$\psi(\eta = 0) = 0$ and $\psi(\eta=1) = \frac12 WR^2$
 
 \[\dd \Psi r = \frac{1}{R-r_*} \dd\Psi\eta \]
 \[\ddn\Psi r 2 = \frac{1}{(R-r_*)^2}\ddn\Psi\eta 2\]
@@ -734,30 +747,41 @@ DE becomes
 
 
 
-
-
-
-
-
-
 \clearpage
-The equation for $s$ comes from the Euler equations
-(Don't need to use this / know this - we did it with tensors)
-gives
-\[\dd{u_iu_j}{x_i} = -\frac1\rho \dd p{x_i}\]
-\[\int_v \dd{u_iu_j}{x_i} +\frac1\rho \dd p{x_i} dv\]
-Use divergence theorem 
-\[\int \nabla \cdot v dv = \int v\cdot \hat{n} ds\]
-\[\int_v \dd{u_iu_j}{x_i} +\frac1\rho \dd p{x_i} dv = \int_s \dd{u_iu_j n_i}{x_i} +\frac1\rho \dd p{x_i} ds\]
+%trent said - 
+% Not sure what I was thinking here. For vector f divergence theorem is
 
-\[v_i = p \delta_{ij}, \quad p\delta_{ij}n_i = pn_j\]
-\[=\int_s u_iu_j n_i + \frac p \rho n_j ds\]
-Since we are considering a cylinder, we get $0$ along the boundary of the cylinder, and so we only care about the inlet and outlet.
-At the inlet the normal faces in the negative $w$
-\[u_in_i = -w\]
-\[u_in_i = w\]
-\[\int_{(1)} -w^2 -\frac{p}{\rho} dS + \int_{(2)} \int w^2  +\frac{p}{\rho} dS =0 \]
-Which is literally in flux = out flux. 
+% int d f_i/ d x_i dV = int f_i n_i dS
+
+% Put f_i = p c_i, where c_i is a component of constant vector. Then
+
+% int c_i (d p / d x_i) dV = int c_i p n_i dS
+
+% => c_i (int d p / d x_i dV - int p n_i dS) = 0 for any c_i
+
+% => int d p / d x_i dV = int p n_i dS
+
+% I think that's better.
+
+
+
+% The equation for $s$ comes from the Euler equations
+% (Don't need to use this / know this - we did it with tensors)
+% gives
+% \[\dd{u_iu_j}{x_i} = -\frac1\rho \dd p{x_i}\]
+% \[\int_v \dd{u_iu_j}{x_i} +\frac1\rho \dd p{x_i} dv\]
+% Use divergence theorem 
+% \[\int \nabla \cdot v dv = \int v\cdot \hat{n} ds\]
+% \[\int_v \dd{u_iu_j}{x_i} +\frac1\rho \dd p{x_i} dv = \int_s \dd{u_iu_j n_i}{x_i} +\frac1\rho \dd p{x_i} ds\]
+
+% \[v_i = p \delta_{ij}, \quad p\delta_{ij}n_i = pn_j\]
+% \[=\int_s u_iu_j n_i + \frac p \rho n_j ds\]
+% Since we are considering a cylinder, we get $0$ along the boundary of the cylinder, and so we only care about the inlet and outlet.
+% At the inlet the normal faces in the negative $w$
+% \[u_in_i = -w\]
+% \[u_in_i = w\]
+% \[\int_{(1)} -w^2 -\frac{p}{\rho} dS + \int_{(2)} \int w^2  +\frac{p}{\rho} dS =0 \]
+% Which is literally in flux = out flux. 
 
 
 

@@ -1,4 +1,4 @@
-
+%plot rstar rhat solution space
 W = 1;
 r0 = 1;
 R = 1;
