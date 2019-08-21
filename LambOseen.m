@@ -6,8 +6,7 @@ w = W
 [psiEq,rhs] = SymSquireLong1D(u,v,w,psi)
 
 dPsi = diff(Psi(r))
-cond = [Psi(0) == 0, Psi(R) == 0, dPsi(0) ==0];
-dsolve(psiEq,Psi,cond)
+
 %dsolve(psiEq)
 
 
