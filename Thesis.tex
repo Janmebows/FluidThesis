@@ -79,7 +79,6 @@ Now, combining this last statement with the equation for $\omega_\theta$:
 Taken from Batchelor's An Introduction to Fluid Dynamics
 
 
-%ALL THE $w$s and $u$s and $v$s are WRONG
 Considering the flow far upstream where there is constant uniform axial velocity and rotates with angular velocity $\Omega$ 
 \[\Psi_{\text{upstream}} = \frac12 W r^2\]
 \[v = \Omega r, w =W\]
@@ -292,6 +291,7 @@ Clearly this can only occur for values of $kR > 3.8$.
 
 The first branch of this (extending from $kR\approx 3.8$) corresponds to natural solutions, whereas further branches give unwanted behaviour, which introduce reversed flow.
 
+Code - homogeneousODE.m
 
 
 \begin{figure}[h]
@@ -623,6 +623,25 @@ Which comes to:
 \[\Delta s = \frac{\pi}{4} \rho U^2 k^2 r_c^2 \left[-r_b^2 + \frac14 \left(\frac{r_b^4 - r_a^4}{r_c^2}\right) + \frac34 r_c^2 + \frac12 r_c^2 \log \left(\frac{r_b^2}{r_c^2}\right)\right] = 0\]
 
 
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{rankineExample.eps}
+    \caption{A solution of $w$ and $\Psi$ for the Rankine problem with $0$ net momentum, $k = 3.8961, r_0 = 0.8619, r_* = 0.1784$. Obtained using }
+    \label{fig:rankineExample}
+\end{figure}
+
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{rankineSolutionSet.eps}
+    \caption{Solution space for the Rankine body problem}
+    \label{fig:rankineSolutions}
+\end{figure}
+
+Figure~\ref{fig:rankineSolutions} shows the solution set for the problem. It displays the same results as those found in (Escudier, Keller), with the same asymptote $kr_0 \to \sqrt{2}$ as $r_0 \to 0$. The results in the two figures come from \verb|rhatrstarmomentum.m| and \verb|numericalSolutionSetRankine.m| respectively
 %%%
 %put the plot on the document 
 %summarise the papers that connect these and show relationships between them with this work (even just some paragraphs and plots)
@@ -632,7 +651,7 @@ Which comes to:
 %
 
 %%%
-\section{Burger's Vortex}
+\subsection{Lamb-Oseen Vortex}
 %pretty sure this is the Lamb-Oseen vortex but trent called it burgers
 Q-vortex without a Jet.
 Start with 
@@ -696,11 +715,90 @@ How I got the middle term:
     \ddn\Psi r2 - \frac1r \dd\Psi r &=  r^2 \odd H\Psi - C \odd C\Psi\\
     &=\frac{r^2\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) - \left(\frac{\Gamma}{2\pi} \left(1-e^{-2\Psi/W\delta^2}\right)\right)\left(\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\Psi/W\delta^2}\right)\right)\\
     &=\frac{r^2\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) - \frac{\Gamma^2}{2W\delta^2\pi^2}\left(1-e^{-2\Psi/W\delta^2}\right) \left(e^{-2\Psi/W\delta^2}\right)\\
-    &= \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\frac{r^2W}{2\Psi} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) -\left(e^{-2\Psi/W\delta^2}-e^{-4\Psi/W\delta^2}\right)\right)
+    &= \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\frac{r^2W}{2\Psi} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) -\left(e^{-2\Psi/W\delta^2}-e^{-4\Psi/W\delta^2}\right)\right)\\
+    \ddn\Psi r2 - \frac1r \dd\Psi r &=  \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\left(\frac{r^2W}{2\Psi} - 1\right) \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) \right)\\
 \end{align*}
 
-Hence
-\[\Psi(r) = ar^2 + b\]
+Could use bvp5c and break it into a system of first order odes.
+
+
+So if we change the boundaries - using a `Linear Lagrange interpolating polynomial'
+So that the end points are fixed.
+\[\eta = \frac{r-r_*}{R-r_*}\]
+\begin{align*}
+    r-r_* = \eta(R-r_*)\\
+    r = \eta(R-r_*) + r_*   
+\end{align*}
+
+
+Such that $\eta \in [0,1]$.
+In the function we can get $r$ from $\eta$ 
+
+For finite differences we can just use a newton iteration, or use something like fsolve.
+
+
+
+I SHOULD PLOT DOWNSTREAM $v$ for all our equations also
+
+
+
+To use the $r_*$ and $w$ parts, we can use $w = \frac1r\dd\Psi r $
+
+
+Try putting in the homogeneous solution to the solver to see if it works (i.e. the one with $v = \Omega r$ and $w=W$).
+
+We should expect that the Lamb-Oseen vortex should be a more smooth version of the Rankine problem - so we should be able to compare the two.
+
+May want to find $v_{max} = r_0$ to compare to the previous problem.
+Should expect the circulation goes to $\Gamma / 2 \pi$ as $r\to \infty$.
+
+
+
+
+Of course we have to have
+\[\lim_{r\to 0} \frac1r \dd\Psi r < \infty\]
+So use l'hopital's rule
+\[\lim_{r\to 0} \frac1r \dd\Psi r = \ddn\Psi r2\]
+But we know $\psi = 0$ at $r=0$ ( so we can ignore this )
+
+
+
+So we will just use
+\[\ddn \Psi r2 |_i - \frac1r \dd\Psi r|_i = f(r_i,\Psi_i)\]
+With 
+\[\Psi_1 = 0\]
+And
+\[\Psi_n = \frac12 WR^2\]
+
+We will have 1 based indexing 
+Alternatively 
+get the derivatives at the mid points
+\[\dd\Psi r\pipe_{i+1/2} = \frac{\Psi_{i+1} - \Psi_i}{h_r}\]
+Where $h_r$ is the step.
+
+
+
+
+
+Alternatively
+
+
+Can rewrite the left hand side as
+
+\[r\left(\dd{}r \left(\frac1r \dd\Psi r\right)\right)\]
+And plug in the last thing
+\[\]
+
+
+
+
+
+
+
+
+
+% Hence
+% \[\Psi(r) = ar^2 + b\]
 
 
 

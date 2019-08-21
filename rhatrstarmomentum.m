@@ -55,6 +55,9 @@ wfull(r<rstar) = 0;
 % psiinner = 0.5*W*r.^2 + r.^(A.*besselj(1,k*r) + B.*bessely(1,k*r));
 % D = 0.5*W*R^2 * (r0^2-rhat^2)/(R^2-rhat^2);
 % psiouter = C.*r.^2 + D;
+figure
+%title("Plot of $\Psi$ and $w$ for Rankine with 0 net momentum")
+subplot(2,1,1)
 plot(r,wfull)
 
 grid on
@@ -65,13 +68,14 @@ psiinner = 0.5*W*r.^2 + r.*(Ad.*besselj(1,k*r) + Bd.*bessely(1,k*r))./deter;
 psiouter = 0.5*Wh*r.^2 + 0.5*(W - Wh)*R^2;
 psifull = [psiinner(r<rhat), psiouter(r>=rhat)];
 psifull(r<rstar) = 0;
-figure
+%figure
+subplot(2,1,2)
 plot(r,psifull)
 
 grid on
 xlabel('$r$')
 ylabel('$\psi$')
-
+saveas(gcf,'rankineExample.eps','epsc')
 kr0 = k*r0
 
 

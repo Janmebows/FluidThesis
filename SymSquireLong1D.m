@@ -14,5 +14,4 @@ rhs = simplify(r^2*dH - C*dC);
 %syms Psi(r)
 psiEq = diff(Psi,r,2) - diff(Psi,r)/r ==  rhs;
 
-
 end

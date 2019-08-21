@@ -39,8 +39,12 @@ end
 plot(workingVals(:,4),workingVals(:,3).*workingVals(:,4))
 xlabel('$$r_0$$')
 ylabel('$$kr_0$$')
+grid on
+
+title("Rankine body solution space")
 %mimic the axes from Escudier/Keller
 axis([0,1,0,3.832])
+saveas(gcf,'rankineSolutionSet.eps','epsc')
 function out = wAndPsi(x,R,r0,W)
 rstar = x(1);
 rhat = x(2);
