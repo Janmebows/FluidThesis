@@ -58,6 +58,9 @@ R = 1;
 psi = @(r) 0.5*W*r.^2 + r.*(A(R,W,k,rstar).*besselj(1,k.*r) + B(R,W,k,rstar).*bessely(1,k.*r));
 w =@(r) W + k.*(A(R,W,k,rstar).*besselj(0,k.*r) + B(R,W,k,rstar).*bessely(0,k.*r));
 legendentries = "$$r^*$$ = " + num2str(rstar) + ", k = " +num2str(k);
+
+
+plot(r,psi(r))
 figure
 hold on
 
