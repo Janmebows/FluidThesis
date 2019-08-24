@@ -5,8 +5,8 @@
 close all
 R = 1;
 W = 1;
-G = 5;
-d = 0.05;
+G = 4.2;
+d = 1;
 rstarguess = 0.1;
 
 %Make plots less repulsive
@@ -27,7 +27,7 @@ initguess = @(eta) [0.5*W*eta^2,W*eta]%[1.5*eta.^2+1,1.5*eta.^2];
 numPts = 100;
 solinit=bvpinit(linspace(0,1,numPts),initguess,rstarguess);
 %options =bvpset('RelTol',1e-5,'AbsTol',1e-8,'Nmax',1e6,'Vectorized','on');%,'SingularTerm',[0,0;0,1]);
-options =bvpset('RelTol',1e-5,'AbsTol',1e-8,'Nmax',1e6)%,'Vectorized','on');%,'SingularTerm',[0,0;0,1]);
+options =[]%bvpset('RelTol',1e-5,'AbsTol',1e-8,'Nmax',1e6)%,'Vectorized','on');%,'SingularTerm',[0,0;0,1]);
 func = @(eta,Psi,rstar)psiODE(eta,Psi,rstar,R,W,G,d);
 bound = @(psirstar,psiR,rstar)boundaries(psirstar,psiR,rstar,R,W);
 sol=bvp5c(func,bound,solinit,options);
@@ -68,33 +68,41 @@ function eta = rToeta(r,rstar,R)
 eta = (r-rstar)./(R-rstar);
 end
 
+%rotating flow
 function out= psiODE(eta,Psi,rstar,R,W,G,d)
-%dpsi2dr2 - dpsidr / r = f(r,psi)
-
-
-%at the starting point, Psi = dPsi = 0 and so rhs = NaN. Have to deal with
-%the division by Psi.
-%convert eta to r
-%eta = (r-rstar)/(R-rstar)
-
+k = G/d;
 r = etaTor(eta,rstar,R);
-
-%  if Psi(1,:) < 0.0001
-%     PsiSeries = 1 - (-1+Psi(1,:)) + (-1+Psi(1,:)).^2;
-%     rhs = G^2/(2*W*d^2*pi^2) * ((r.^2*W .*PsiSeries) -1).*(exp(-2*Psi(1,:)/(W*d^2)) - exp(-4*Psi(1,:)/(W*d^2))); 
-%  else
-%     rhs = G^2/(2*W*d^2*pi^2) * ((r.^2*W./(2*Psi(1,:)) -1).*(exp(-2*Psi(1,:)/(W*d^2)) - exp(-4*Psi(1,:)/(W*d^2))));
-% 
-%  end
-%homo case
-rhs = (2*G^2/W).* r.^2 - (4*G^2/W^2) .* Psi(1,:); 
-%rhs = Psi(1,:) .*(-4*G^2/W^2 + 1./r.^2);
-
+rhs = (k^2/(2*W)).* r.^2 - k^2 .* Psi(1,:); 
 dPsidr = Psi(2,:);
+d2Psidr2 =dPsidr./r + rhs;
+out = [dPsidr ; d2Psidr2];
 
-dPsi2dr2 = dPsidr./r + rhs;
-
-%out = [dPsidr ; dPsi2dr2 ; w];
-%out = [dPsidr ; dPsi2dr2;dPsidr/r];
-out = [dPsidr ; dPsi2dr2];
 end
+% function out= psiODE(eta,Psi,rstar,R,W,G,d)
+% %dpsi2dr2 - dpsidr / r = f(r,psi)
+% 
+% 
+% %at the starting point, Psi = dPsi = 0 and so rhs = NaN. Have to deal with
+% %the division by Psi.
+% %convert eta to r
+% %eta = (r-rstar)/(R-rstar)
+% 
+% r = etaTor(eta,rstar,R);
+% 
+%   if Psi(1,:) < 0.0001
+%      PsiSeries = 1 - (-1+Psi(1,:)) + (-1+Psi(1,:)).^2;
+%      rhs = G^2/(2*W*d^2*pi^2) * ((r.^2*W .*PsiSeries) -1).*(exp(-2*Psi(1,:)/(W*d^2)) - exp(-4*Psi(1,:)/(W*d^2))); 
+%   else
+%      rhs = G^2/(2*W*d^2*pi^2) * ((r.^2*W./(2*Psi(1,:)) -1).*(exp(-2*Psi(1,:)/(W*d^2)) - exp(-4*Psi(1,:)/(W*d^2))));
+%  
+%   end
+% %rhs = Psi(1,:) .*(-4*G^2/W^2 + 1./r.^2);
+% 
+% dPsidr = Psi(2,:);
+% 
+% dPsi2dr2 = dPsidr./r + rhs;
+% 
+% %out = [dPsidr ; dPsi2dr2 ; w];
+% %out = [dPsidr ; dPsi2dr2;dPsidr/r];
+% out = [dPsidr ; dPsi2dr2];
+% end

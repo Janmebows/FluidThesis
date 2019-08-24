@@ -15,41 +15,53 @@ set(groot, 'DefaultLineLineWidth', 1, ...
     'DefaultAxesTickLabelInterpreter','latex');
 
 
-%singular de must include the singular point
-%in this case dpsi/r(0) = 0
-initguess = @(eta) [0.5*W*eta^2,W*eta]%[1.5*eta.^2+1,1.5*eta.^2];
-%may need to find a way to solve right to left rather than left to right.
-numPts = 100;
-solinit=bvpinit(linspace(0,1,numPts),initguess,rstarguess);
-%options =bvpset('RelTol',1e-5,'AbsTol',1e-8,'Nmax',1e6,'Vectorized','on');%,'SingularTerm',[0,0;0,1]);
-options =bvpset('RelTol',1e-5,'AbsTol',1e-8,'Nmax',1e6);%,'Vectorized','on');%,'SingularTerm',[0,0;0,1]);
+
 func = @(eta,Psi,rstar)psiODE(eta,Psi,rstar,R,W,k);
-%bound = @(psirstar,psiR,rstar)boundaries(psirstar,psiR,rstar,R,W);
-%sol=bvp5c(func,bound,solinit,options);
-%if too big
+
+step = 0.1;
+errtol = 1e-10;
+lastDir = 0;
 flag = false;
-step = 0.00005;
-errtol = 1e-5;
+%I am making a big assumption on the relationship between the
+% size of rstar and the error
 while ~flag
-    [r,psi] = ode45(@(r,Psi)func(r,Psi,rstarguess),[rstarguess,R],[0,0]);
-    err = psi(end,1) - 0.5*W*R^2
+    [r,Psi] = ode45(@(r,Psi)func(r,Psi,rstarguess),[rstarguess,R],[0,0]);
+    
+    if rstarguess < 0 || rstarguess > 1
+        fprintf("Failed\n\n")
+        return
+    end
+    err = Psi(end,1) - 0.5*W*R^2;
     if err > errtol
-    rstarguess = rstarguess + step
+        fprintf("r^* is too small \n")
+        rstarguess = rstarguess + step;
+        %decrease step size if we change direction
+        if lastDir ==1
+            continue;
+        elseif lastDir ==-1
+            step = step/10;
+        else 
+            lastDir =1;
+        end
     elseif err < -errtol
-        rstarguess = rstarguess - step
+        fprintf("r^* is too big \n")
+        rstarguess = rstarguess - step;
+        if lastDir ==-1
+            continue;
+        elseif lastDir ==1
+            step = step/10;
+        else 
+            lastDir =-1;
+        end
     else 
         flag = true
     end 
-    if rstarguess < 0 || rstarguess > 1
-        fprintf("Won't work\n")
-        break;
-    end
-    
 end
+
 rstar = rstarguess
 
-w = psi(:,2)./r;
-plot(r,psi(:,1))
+w = Psi(:,2)./r;
+plot(r,Psi(:,1))
 ylabel("$$\Psi$$")
 axis([0,R,0,inf])
 figure
@@ -59,27 +71,7 @@ axis([0,R,0,inf])
 
 
 
-function res = boundaries(psirstar,psiR,rstar,R,W)
-%the boundary conditions
-%psi(r*) = 0
-%psi(R) = 0.5*W*R^2
-%w(r*) = dPsidr/r(r*) =0
-res = [psirstar(1);
-       psiR(1) - 0.5*W*R^2;
-        psirstar(2)/rstar];
-end
 
-
-function r = etaTor(eta,rstar,R)
-%eta is 0,...,1
-%convert to r = rstar, ..., R
-r = eta.*(R-rstar) + rstar;
-
-end
-
-function eta = rToeta(r,rstar,R)
-eta = (r-rstar)./(R-rstar);
-end
 
 function out= psiODE(r,Psi,rstar,R,W,k)
 rhs = (k^2/(2*W)).* r.^2 - k^2 .* Psi(1,:); 
