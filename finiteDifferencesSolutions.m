@@ -33,8 +33,8 @@ plot(r,psi)
 axis([0,1,-inf,inf])
 w = zeros(size(psi));
 w(i) = 0.5*invdr*(psi(i+1) - psi(i-1))./r(i);
-%hold on
-%plot(r,w,'r')
+hold on
+plot(r,w,'r')
 
 %%
 %%homogeneous ODE for PSI
@@ -47,9 +47,11 @@ sparse(i,i,-2*invdr^2 +(k^2 - 1./(r(i).^2)),nPoints,nPoints) ...
 +sparse([1 nPoints],[1 nPoints],1,nPoints,nPoints);
 %boundary conditions
 rstarindex = 10;
-bPsi = zeros(nPoints,1);
-bPsi(1) = 0.5*W*rstar;
+%bPsi = zeros(nPoints,1);
+bPsi = sparse(nPoints,1);
+bPsi(1) = 0;
 bPsi(end) = 0.5*W*R^2% + 0.5*W*R^3;
+
 
 Psi = APsi\bPsi;
 psi2 = Psi./r - 0.5*W*r;

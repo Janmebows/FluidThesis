@@ -5,9 +5,9 @@
 close all
 R = 1;
 W = 1;
-G = 4.2;
+G = 1;
 d = 1;
-rstarguess = 0.1;
+rstarguess = 0.5;
 
 %Make plots less repulsive
 set(groot, 'DefaultLineLineWidth', 1, ...
@@ -35,7 +35,7 @@ rstar = sol.parameters
 eta = sol.x;
 r = etaTor(sol.x,rstar,R);
 psi = sol.y(1,:);
-w = sol.y(2,:)./r;
+w = sol.y(2,:)./r *(R-rstar)^2;
 plot(r,psi)
 ylabel("$$\Psi$$")
 axis([0,1,-inf,inf])
@@ -72,10 +72,10 @@ end
 function out= psiODE(eta,Psi,rstar,R,W,G,d)
 k = G/d;
 r = etaTor(eta,rstar,R);
-rhs = (k^2/(2*W)).* r.^2 - k^2 .* Psi(1,:); 
-dPsidr = Psi(2,:);
+rhs = (W*k^2/2).* r.^2 - k^2 .* Psi(1,:); 
+dPsidr = Psi(2,:) * (R-rstar);
 d2Psidr2 =dPsidr./r + rhs;
-out = [dPsidr ; d2Psidr2];
+out = [dPsidr/(R-rstar) ; d2Psidr2/(R-rstar)^2];
 
 end
 % function out= psiODE(eta,Psi,rstar,R,W,G,d)

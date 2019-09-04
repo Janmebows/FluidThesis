@@ -24,10 +24,10 @@ rhs = simplify(r^2*dH - C*dC)
 %rhs = subs(rhs,r,sqrt(2*Psi/W))
 
 limit(rhs,Psi,0,'right')
+taylor(rhs,Psi,0,'Order',1)
 func1 = matlabFunction(rhs)
 func2 = matlabFunction(taylor(rhs,Psi,0,'Order',2))
-func1 = @(r,Psi) func1(1,Psi,1,1,r)
-func2 = @(r,Psi) func2(1,Psi,1,1,r)
+
 %psiEq = diff(Psi,r,2) - diff(Psi,r)/r ==  rhs;
 
 
