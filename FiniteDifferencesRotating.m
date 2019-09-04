@@ -72,17 +72,17 @@ dr = r(2)-r(1);%eta(2)-eta(1);
 dPsidr = @(Psi) (Psi(i+1) - Psi(i-1))/(2*dr);
 d2Psidr2 = @(Psi) (Psi(i+1) - 2*Psi(i) + Psi(i-1))/(dr^2);
 LHS = @(Psi) d2Psidr2(Psi) - (dPsidr(Psi)./r(i));
-%RHS = @(Psi) 2*r(i).^2*Omega^2/W - 4*Psi(i)*Omega^2/W^2;
 RHS = @(Psi) (k^2/(2*W)) * r(i).^2 - k^2 .* Psi(i); 
-%RHS = @(Psi) (k^2/(2*W)).* r(i).^2 - (k^2 .* Psi(i));
 %Equations:
 %Psi(1) =0
 %Psi(end) = 0.5*W*R^2
 %Psi(2:end-1) = ...
-eqn = @(Psi) [Psi(1); LHS(Psi)-RHS(Psi); Psi(end)-0.5*W*R^2];
+eqn = @(Psi) [Psi(1);LHS(Psi)-RHS(Psi); Psi(end)-0.5*W*R^2];
 initGuess = 0.5*W*r.^2;
 
-options = optimset('Display','off');
+%turning off the optim display speeds things up
+options = optimset('Display','off','TolFun',1e-5);
+%options = [];
 [Psi,err,flag,struc] = fsolve(eqn,initGuess,options);
 
 end
