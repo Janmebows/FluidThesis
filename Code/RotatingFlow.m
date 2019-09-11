@@ -21,12 +21,10 @@ A = matlabFunction(symx(1));
 B = matlabFunction(symx(2));
 
 
-
-%rstar: basic vortex breakdown
-%rhat: rankine body
 R = 1;
 W = 1;
 rstar = 0.4* R;
+
 kguess = 5;
 deter = @(r,k,R)besselj(1,k.*r).*bessely(1,k.*R) - besselj(1,k.*R).*bessely(1,k.*r);
 [r,k] = meshgrid(linspace(0.01,R),linspace(0.01,10));
@@ -64,7 +62,7 @@ figure
 hold on
 %Enforce the construction: r < rstar gives w = 0
 wplot = w(r);
-wplot(r<rstar) = 0;
+wplot(r<=rstar) = 0;
 plot(r,wplot)
 xlabel("r")
 ylabel("w")

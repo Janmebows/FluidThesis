@@ -11,11 +11,12 @@ set(groot, 'DefaultLineLineWidth', 1, ...
 
 W = 1;
 R = 1;
-Omega = 2.5;
+Omega = 3.84/2;
 k = 2*Omega/W;
 G = 1;
 d = 1;
 rstarguess = 0.5;
+%populate the params struct 
 params = struct();
 params.R = R;
 params.W = W;
@@ -23,10 +24,15 @@ params.G = G;
 params.d = d;
 params.k = k;
 params.Omega = Omega;
+
+
 func = @rotatingEquation;
+
+
+
 guessFunc = @(rstar)findrstar(func, rstar,params);
-[rstar,err,flag,struc] = fzero(guessFunc,[0,1]);
-[r,Psi,~] = rotatingEquation(rstar,params);
+[rstar,errfzero,flag,struc] = fzero(guessFunc,[0,1]);
+[r,Psi,errfsolve] = rotatingEquation(rstar,params);
 i = 2:length(Psi)-1;
 w = (1./r(i)).*(Psi(i+1) - Psi(i-1))/(2*(r(2)-r(1)));
 
@@ -73,11 +79,14 @@ dPsidr = @(Psi) (Psi(i+1) - Psi(i-1))/(2*dr);
 d2Psidr2 = @(Psi) (Psi(i+1) - 2*Psi(i) + Psi(i-1))/(dr^2);
 LHS = @(Psi) d2Psidr2(Psi) - (dPsidr(Psi)./r(i));
 RHS = @(Psi) (k^2/(2*W)) * r(i).^2 - k^2 .* Psi(i); 
+%backwards difference to get w(r*)
+wAtOne = 
 %Equations:
 %Psi(1) =0
 %Psi(end) = 0.5*W*R^2
 %Psi(2:end-1) = ...
-eqn = @(Psi) [Psi(1);LHS(Psi)-RHS(Psi); Psi(end)-0.5*W*R^2];
+%dPsidr(end) = 0
+eqn = @(Psi) [Psi(1);LHS(Psi)-RHS(Psi); Psi(end)-0.5*W*R^2;dPsidr(Psi(2))];
 initGuess = 0.5*W*r.^2;
 
 %turning off the optim display speeds things up

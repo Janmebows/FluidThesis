@@ -849,8 +849,28 @@ DE becomes
 
 
 
+\clearpage
+Write a function which calculates the residual, i.e.
+\[\hat{r}_i = LHS - RHS| _i\]
+and then fsolve on that
+
+Send through the vector
+\[\begin{pmatrix}
+    \Psi_1\\
+    \vdots\\
+    \Psi_N\\
+    r_*
+\end{pmatrix}\]
 
 
+
+Might be worth looking at setting the RHS
+\[r^2 \odd H\Psi + C \odd C\Psi \]
+As a function $f(r,\Psi)$ and the settings
+\[f(r,\Psi) = \begin{cases}
+    \ldots, &\text{ if } 0 \leq \Psi \leq \frac12 WR^2\\
+    0 & otherwise
+\end{cases}\]
 
 \clearpage
 %trent said - 
