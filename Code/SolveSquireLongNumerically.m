@@ -1,4 +1,4 @@
-close all
+%close all
 %Make plots less repulsive
 set(groot, 'DefaultLineLineWidth', 1, ...
     'DefaultAxesLineWidth', 1, ...
@@ -8,7 +8,9 @@ set(groot, 'DefaultLineLineWidth', 1, ...
     'DefaultLegendInterpreter', 'latex', ...
     'DefaultColorbarTickLabelInterpreter', 'latex', ...
     'DefaultAxesTickLabelInterpreter','latex');
-
+%%%%%%%%%%%%%
+%PARAMETERS
+%%%%%%%%%%%%%
 W = 1;
 R = 1;
 Omega = 3.84/2;
@@ -26,17 +28,20 @@ params.d = d;
 params.k = k;
 params.Omega = Omega;   
 params.numPoints = numPoints;
+
+%Initial guess
 r = linspace(0,R,numPoints)';
 Psiguess = 0.5*r.^2;
 
 
 [lamSol,err,flag,struc] = fsolve(@(x)SLLambOseen(x,params),[Psiguess; rstarguess]);
 figLO = PlotPsiAndW(lamSol,params);
+saveas(figLO,'../Plots/LOSolFD.eps','epsc')
+
 [rotatingSol,err,flag,struc] = fsolve(@(x)SLRotating(x,params),[Psiguess; rstarguess]);
 figRot = PlotPsiAndW(rotatingSol,params);
-
-saveas(figLO,'../Plots/LOSolFD.eps','epsc')
 saveas(figRot,'../Plots/RotSolFD.eps','epsc')
+
 function fig = PlotPsiAndW(sol,params)
 R = params.R;
 numPoints=params.numPoints;
@@ -99,8 +104,10 @@ d2Psidr2 =  (Psi(i+1) - 2*Psi(i) + Psi(i-1))/(dr^2);
 LHS =  d2Psidr2 - (dPsidr./r(i));
 RHS =  (k^2/(2*W)) * r(i).^2 - k^2 .* Psi(i); 
 
-RHS(RHS < 0) = 0;
-wrstar = (Psi(2) - Psi(1))/dr;
+%RHS(RHS < 0) = 0;
+%w(rstar) = 1/rstar *dPsidr(rstar) = 0
+%=> dPsidr(rstar) =0 
+wrstar = (Psi(2) - Psi(1))/(rstar*2*dr); 
 res(2:end-2) = LHS - RHS;
 res(1) = Psi(1);
 res(end-1) = Psi(end) - 0.5*W*R^2;
@@ -130,14 +137,20 @@ LHS =  d2Psidr2 - (dPsidr./r(i));
 %There is a 0/0 limit as Psi -> 0
 %Handle this by giving the taylor series 
 %to the small values of Psi
-RHSsmallPsi = (Psi(i)<0.0001) .*((G^2.*r(i).^2)./(2*W*d^4*pi^2) - (G^2.*Psi(i).*((2*((4*r(i).^2)/d^2 + 2))/(W*d^2) - (2*r(i).^2)/(W*d^4)))./(4*W*d^2*pi^2));
-RHSbigPsi = (Psi(i) >=0.0001) .* (G^2/(2*W*d^2*pi^2).* ((r(i).^2*W ./(2*Psi(i))) -1).*(exp(-2*Psi(i)/(W*d^2)) - exp(-4*Psi(i)/(W*d^2))));  
+%RHSsmallPsi = (Psi(i)<0.0001) .*((G^2.*r(i).^2)./(2*W*d^4*pi^2) - (G^2.*Psi(i).*((2*((4*r(i).^2)/d^2 + 2))/(W*d^2) - (2*r(i).^2)/(W*d^4)))./(4*W*d^2*pi^2));
+RHSsmallPsi = ((G^2.*r(i).^2)./(2*W*d^4*pi^2) - (G^2.*Psi(i).*((2*((4*r(i).^2)/d^2 + 2))/(W*d^2) - (2*r(i).^2)/(W*d^4)))./(4*W*d^2*pi^2));
+
+RHSsmallPsi(Psi(i) >= 0.0001 | RHSsmallPsi < 0) = 0;
+%RHSbigPsi = (Psi(i) >=0.0001) .* (G^2/(2*W*d^2*pi^2).* ((r(i).^2*W ./(2*Psi(i))) -1).*(exp(-2*Psi(i)/(W*d^2)) - exp(-4*Psi(i)/(W*d^2))));  
+RHSbigPsi = (G^2/(2*W*d^2*pi^2).* ((r(i).^2*W ./(2*Psi(i))) -1).*(exp(-2*Psi(i)/(W*d^2)) - exp(-4*Psi(i)/(W*d^2))));  
+
+RHSbigPsi(Psi(i) < 0.0001 | RHSbigPsi < 0) = 0;
 RHS = RHSsmallPsi + RHSbigPsi;
 
 %As per Rusak, Wang 
 %if the RHS is negative - set it to 0
 RHS(RHS < 0) = 0;
-wrstar = (Psi(2) - Psi(1))/dr;
+wrstar = (Psi(2) - Psi(1))/(2*dr);
 res(2:end-2) = LHS - RHS;
 res(1) = Psi(1);
 res(end-1) = Psi(end) - 0.5*W*R^2;

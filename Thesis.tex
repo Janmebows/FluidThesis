@@ -910,13 +910,97 @@ As a function $f(r,\Psi)$ and the settings
 
 
 
+%%%%
+%%
+%% 
+For the method - since we're stuck
+try using
+\[r\dd{}r \left(\frac1r \dd \Psi r\right) = r\frac{\frac1r \dd\Psi r|_{i+\frac12} - \frac1r \dd{\Psi}{r}|_{i-\frac12}}{\Delta r}\]
+Where $r_{i+1/2} = \frac{r_i + r_{i+2}}{\Delta r}$ and $\dd\Psi r |_{i+\frac12} = \frac{\Psi_{i+1} - \Psi_i}{\Delta r}$
+
+and using the rusak method, by letting $y = r^2/2$
+
+We may have to make our own solver, or use an available one ().
+
+Wang and rusak the dynamics of a swirling flow in a pipe and transitions to axisymmetric vortex breakdown
+
+do some research on numerical solutions of axisymmetric swirling flow 
 
 
 
+Trent had a book with a means of numerically solving the system, which will work in 2D as well
+\[\ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd \Psi r = - r \eta\]
+
+We are given an $\eta$. 
+If we let $\Psi_{i,j} = \Psi(r = r_i, z = z_j)$
+\[\ddn \Psi z2\pipe_{i,j} = \frac{\Psi_{i,j+1} - 2 \Psi_{i,j} + \Psi_{i,j-1}}{\Delta z^2}\]
+
+\[\ddn \Psi r2\pipe_{i,j} = \frac{\Psi_{i+1,j} - 2 \Psi_{i,j} + \Psi_{i-1,j}}{\Delta r^2}\]
+
+\[\dd \Psi r \pipe_{i,j} = \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\]
+
+\begin{align*}
+    \frac{\Psi_{i,j+1} - 2 \Psi_{i,j} + \Psi_{i,j-1}}{\Delta z^2} + \frac{\Psi_{i+1,j} - 2 \Psi_{i,j} + \Psi_{i-1,j}}{\Delta r^2} - \frac1{r_i} \left( \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\right) = - r_i \eta_{i,j}
+\end{align*}
+Could write $r_{i,j}$ in case it changes in $j$.
+
+Of course to write this as a linear system, we have to get form $A\vec \Psi = b $
+So we would have to write the vector $\Psi$ as 
+\[\begin{pmatrix}
+    \Psi_{1,1}\\
+    \Psi_{2,1}\\
+    \vdots\\
+    \Psi_{m,1}\\
+    \Psi_{1,2}\\
+    \vdots\\
+    \Psi_{1,n}\\
+    \vdots\\
+    \Psi_{m,n}
+\end{pmatrix}\]
+
+So the index of $\Psi_{i,j}$ will be $i + m(j-1)$ let $v_{i+m(j-1)} = \Psi_{i,j}$, and also expanding $\eta$ in this fashion.
+Hence the vector $\vec v$ is
+\[\begin{pmatrix}
+    v_1\\
+    v_2\\
+    \vdots\\
+    v_{mn}
+\end{pmatrix}\]
+Then the system becomes, after an index shift:
+\begin{align*}
+    \frac{v_{i+m(j+1)} - 2 v_{i+m(j)} + v_{i+m(j-1)}}{\Delta z^2} + \frac{v_{i+1+m(j)} - 2 v_{i+m(j)} + v_{i-1+m(j)}}{\Delta r^2}\\
+     - \frac1{r_i} \left( \frac{v_{i+1+m(j)} - v_{i-1+m(j)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j)}\\
+\end{align*}
+
+% \begin{align*}
+%     \frac{v_{i+m(j)} - 2 v_{i+m(j-1)} + v_{i+m(j-2)}}{\Delta z^2} + \frac{v_{i+1+m(j-1)} - 2 v_{i+m(j-1)} + v_{i-1+m(j-1)}}{\Delta r^2}\\
+%      - \frac1{r_i} \left( \frac{v_{i+1+m(j-1)} - v_{i-1+m(j-1)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j-1)}\\
+% \end{align*}
+% \begin{align*}
+%         v_{i-1+m(j-1)}\left(\frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}\right) + v_{i+m(j-1)} \left(-\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}\right) + v_{i+1+m(j-1)} \left(\frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}\right)\\
+%         + v_{i+m(j-2)} \left(\frac{1}{\Delta z^2}\right) + v_{i+m(j-1)}\left(\frac{1}{\Delta z^2}\right) = -r_i \eta_{i+m(j-1)}
+% \end{align*}
+\begin{align*}
+        v_{i-1+m(j)}\left(\frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}\right) + v_{i+m(j)} \left(-\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}\right) + v_{i+1+m(j)} \left(\frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}\right)\\
+        + v_{i+m(j-1)} \left(\frac{1}{\Delta z^2}\right) + v_{i+m(j+1)}\left(\frac{1}{\Delta z^2}\right) = -r_i \eta_{i+m(j)}
+\end{align*}
+Ignoring the boundary conditions on $\Psi(0,z), \Psi(r,0), \Psi(R,z), \Psi(r,Z)$
+\[A_{a,b} = \begin{cases}
+    \frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}  & b = a - 1 \\
+    -\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}    & b = a \\
+    \frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}  & b = a + 1 \\
+    \frac{1}{\Delta z^2}                            & b = a - m \\
+    \frac{1}{\Delta z^2}                            & b = a + m 
+\end{cases}\]
+
+See if I can construct $A$. especially with sparse.
+With boundaries $\Psi(r=0) = 0$, $\Psi(z=0) = f(r)$, $\Psi(r=R) = f(R)$ and $\Psi(z=Z) = ???$
+
+Wang, Rusak use $\dd\Psi z = 0$. And at the right boundary it might make sense to use a backwards difference so we don't have to deal with the $n+1$.
+So that $\Psi_{i,j}$ is stored in index 
 
 
-
-
+for the time solver precompute the LU factorisation of the matrix.
 
 \clearpage
 \subsection{Outer vortex breakdown}
@@ -942,6 +1026,9 @@ And obtain $k$ using
 
 
 \[\Psi(r^\dagger) = \Psi(R) = \frac12 WR^2\]
+
+
+
 
 
 
