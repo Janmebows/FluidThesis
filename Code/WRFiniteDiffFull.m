@@ -1,3 +1,18 @@
+%initialise eta and v
+eta = 
+v = 
+
+
+
+
+dpsidz = ddz(psi,z);
+dpsidr = ddr(psi,r);
+J = @(x) dpsidz .* (ddz(x,z)) - dpsidr .* (ddr(x,r));
+dvdt = J(v)./r + v.*dpsidz./r.^2 ;
+detadt = J(eta./r) + 2*v.*dvdz./r;
+
+
+
 nPtsR = 500;
 nPtsZ = 500;
 R = 1;
@@ -16,6 +31,8 @@ z = linspace(0,Z,nPtsZ);
 [rmat, zmat] = ndgrid(r,z);
 rhs = -(2*rmat.^2.*(rmat-1) + 2*zmat.*(3*rmat-1).*(zmat-1) - zmat.*(3*rmat-2).*(zmat-1));
 
+
+%%BCs----
 %r=0
 rhs(1,:) = 0;
 %r=R
@@ -116,4 +133,19 @@ function mat = Vec2Mat(vec,ndim,mdim)
 %         mat(:,j) = vec((j-1)*ndim+1:j*mdim);
         mat(:,j) = vec(lind:rind);
     end
+end
+
+
+
+
+function dxdz = ddz(x,z)
+    dz = z(2) - z(1);
+    j = 2:length(z)-1;
+    dxdz = (x(:,j+1) - x(:,j-1))/(2*dz);
+end
+
+function dxdr = ddr(x,r)
+    dr = r(2) - r(1);
+    i = 2:length(r)-1;
+    dxdr = (x(i+1,:) - x(i-1,:))/(2*dr);
 end

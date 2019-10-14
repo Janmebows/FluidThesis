@@ -939,9 +939,7 @@ If we let $\Psi_{i,j} = \Psi(r = r_i, z = z_j)$
 
 \[\dd \Psi r \pipe_{i,j} = \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\]
 
-\begin{align*}
-    \frac{\Psi_{i,j+1} - 2 \Psi_{i,j} + \Psi_{i,j-1}}{\Delta z^2} + \frac{\Psi_{i+1,j} - 2 \Psi_{i,j} + \Psi_{i-1,j}}{\Delta r^2} - \frac1{r_i} \left( \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\right) = - r_i \eta_{i,j}
-\end{align*}
+\[\frac{\Psi_{i,j+1} - 2 \Psi_{i,j} + \Psi_{i,j-1}}{\Delta z^2} + \frac{\Psi_{i+1,j} - 2 \Psi_{i,j} + \Psi_{i-1,j}}{\Delta r^2} - \frac1{r_i} \left( \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\right) = - r_i \eta_{i,j}\]
 Could write $r_{i,j}$ in case it changes in $j$.
 
 Of course to write this as a linear system, we have to get form $A\vec \Psi = b $
@@ -972,6 +970,47 @@ Then the system becomes, after an index shift:
      - \frac1{r_i} \left( \frac{v_{i+1+m(j)} - v_{i-1+m(j)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j)}\\
 \end{align*}
 
+
+% \setcounter{MaxMatrixCols}{12}
+% Example one, let $npts = 3$, $\frac{1}{\Delta r^2} =\frac{1}{\Delta z^2} = 4 $
+% $b=a-1$ gives $4 + 4/r_i$
+% $b=a$ gives $-16$
+% $b=a+1$ gives $4 - 4/r_i$
+% $b=a-nPts$ gives $4$
+% $b=a+nPts$ gives $4$
+% \[\begin{pmatrix}
+%     1&0&0&0&0&0&0&0&0\\ %r=0,z=0
+%     0&1&0&0&0&0&0&0&0\\ %z=0
+%     0&0&1&0&0&0&0&0&0\\ %R=R,z=0
+%     0&0&0&1&0&0&0&0&0\\ %r=0
+%     0&4&0&6&-16&2&0&4&0\\ %actual thing!
+%     0&0&0&0&0&1&0&0&0\\ %r=R
+%     0&0&0&0&0&0&1&0&0\\%z=Z
+%     0&0&0&0&0&0&0&1&0\\%z=Z
+%     0&0&0&0&0&0&0&0&1\\%z=Z
+% \end{pmatrix}
+% \begin{pmatrix}
+%     \Psi_{1,1}\\
+%     \Psi_{2,1}\\
+%     \Psi_{3,1}\\
+%     \Psi_{1,2}\\
+%     \Psi_{2,2}\\
+%     \Psi_{3,2}\\
+%     \Psi_{1,3}\\
+%     \Psi_{2,3}\\
+%     \Psi_{3,3}\\
+% \end{pmatrix} = \begin{pmatrix}
+%     \Psi(r=z=0)\\
+%     \Psi(z=0)\\
+%     \Psi(r=R, z=0)\\
+%     \Psi(r=0)\\
+%     -r_2\eta_{2,2}\\
+%     \Psi(r=R)\\
+%     \Psi(r=0,z=Z)\\
+%     \Psi(z=Z)\\
+%     \Psi(r=R,z=Z)\\
+% \end{pmatrix}\]
+% I.e. the right hand-size needs to be set to bcs, except for those middle cells. with both $i=2:nPts-1$ and $j = 2:nPts-1$
 % \begin{align*}
 %     \frac{v_{i+m(j)} - 2 v_{i+m(j-1)} + v_{i+m(j-2)}}{\Delta z^2} + \frac{v_{i+1+m(j-1)} - 2 v_{i+m(j-1)} + v_{i-1+m(j-1)}}{\Delta r^2}\\
 %      - \frac1{r_i} \left( \frac{v_{i+1+m(j-1)} - v_{i-1+m(j-1)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j-1)}\\
@@ -999,8 +1038,81 @@ With boundaries $\Psi(r=0) = 0$, $\Psi(z=0) = f(r)$, $\Psi(r=R) = f(R)$ and $\Ps
 Wang, Rusak use $\dd\Psi z = 0$. And at the right boundary it might make sense to use a backwards difference so we don't have to deal with the $n+1$.
 So that $\Psi_{i,j}$ is stored in index 
 
+Test case:
+\begin{align*}
+    \Psi(r,z) &= r^2(r-1)z(z-1)\\
+    \Psi_{zz} &= 2r^2(r-1)\\
+    \Psi_{rr} &= 2z(3r-1)(z-1)\\
+    \frac1r \Psi_r    &= z(3r-2)(z-1)\\
+\end{align*}
+\begin{align*}
+    -r \eta(r,z) &= 2r^2(r-1) + 2z(3r-1)(z-1) - z(3r-2)(z-1)
+\end{align*}
 
 for the time solver precompute the LU factorisation of the matrix.
+
+
+The BCs for our system will be:
+
+
+at $z=0$, use $w$ to get two of these.
+\begin{align*}
+    \Psi = f(r)\\     
+    v = g(r)\\
+    \eta = - \dd wr
+\end{align*} 
+
+
+at $r=0$, the trivial BCs.
+\begin{align*}
+    \Psi= 0\\
+    v = 0\\
+    \eta = 0
+\end{align*}
+
+
+at $r= R$
+\begin{align*}
+    \Psi = f(R)\\
+    v = g(R)\\
+    \eta = ?
+\end{align*}
+$v = g(R)$ taken from (7.5.7) from bachelors book.
+% We require $u = 0$ on the wall, and $\dd uz = 0$ on the wall, meaning $\eta - \dd wr$
+We don't actually need an $\eta$ condition here really
+
+
+In the book he uses $\dd \Psi r = 0$ on rigid boundaries, which sets $w=0$, but we can't do this for this problem. 
+
+On the wall $r=R$
+\[\eta = \dd uz - \dd wr = - \dd wr = \frac1{r^2} \dd \Psi r - \frac1r \ddn \Psi r 2\]
+He claims 
+
+
+at $z=Z$ (outlet)
+\begin{align*}
+    \dd\Psi z = 0\\
+    \dd \eta z = 0\\
+    \dd vz = 0 
+\end{align*}
+The latter two we just assumed without any checking.
+
+\[\Psi(r=R,z) = f(R)\]
+
+
+Use backwards difference on the edge of $r=R$ 
+\[\eta = - \dd wr =  \frac{1}{r^2} \dd\Psi r - \frac1r \ddn \Psi r 2\]
+
+
+Way to solve based on this paper:
+%write the solution method here
+
+We use the streamfunction-vorticity formulation
+\[\ddn \Psi z2 + \ddn \Psi r2 - \frac1r \dd \Psi r = -r \eta\]
+
+
+
+
 
 \clearpage
 \subsection{Outer vortex breakdown}

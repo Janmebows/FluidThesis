@@ -1,0 +1,194 @@
+\documentclass{X:/Documents/Coding/Latex/myreport}
+\usepackage[toc,page]{appendix}
+\title{Fluid Thesis}
+
+%-----------------------------------------------------------------------
+% theorems, lemma etc
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{question}[theorem]{Question}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{example}{Example}[section]
+\newtheorem{note}{Note}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+
+\begin{document}
+
+%
+%-----beginning of title page -----------------------------
+%
+\begin{titlepage}
+\begin{flushleft}
+\hrule
+\vspace{1 cm}
+
+
+{\huge{\bf TITLE GOES \\[15pt] HERE}}
+\vspace*{2cm}
+
+
+
+
+\vspace{1 cm}
+{\large S. T. Udent}
+
+\vspace{0.5 cm}
+
+{\large Supervisor: Professor Bloggs}
+
+\vspace{0.5 cm}
+
+{October 20??}
+
+\vspace{2.5 cm}
+
+{ Thesis submitted for the degree of Honours in ?????}
+
+
+
+\vspace{10 cm}
+
+
+\hrule
+
+
+\end{flushleft}
+\begin{flushleft}
+\textbf{\textsf{SCHOOL OF MATHEMATICAL SCIENCES}}
+\end{flushleft}
+
+
+\vspace{-1cm}
+%
+% Adelaide University Crest
+%
+
+%
+\begin{flushright}
+\includegraphics[scale=0.25]{ua_crest.pdf}
+\end{flushright}
+\vspace{-2 cm}
+
+\end{titlepage}
+
+
+%
+%---------- end of title page -------------------------------
+%
+\pagenumbering{roman}
+
+\chapter*{Declaration}
+
+Except where stated this thesis is, to  the best of my knowledge,  my own work and my supervisor has approved its submission.
+
+\vspace{20 pt}
+
+\begin{flushleft}
+Signed by student:  \\[15 pt]
+Date:
+\end{flushleft}
+
+\vspace{20 pt}
+\begin{flushleft}
+Signed  by supervisor:\\[15 pt]
+Date:
+\end{flushleft}
+
+
+\chapter*{Acknowledgements}
+
+\chapter*{Abstract}
+
+\begin{abstract}
+	Abstract
+\end{abstract}
+
+\tableofcontents
+
+\pagenumbering{arabic}
+%
+%---------------- thesis ------------------------------------
+%
+\chapter{Introduction}
+
+
+\chapter{The Squire-Long model}
+%outline of squirelong derivation
+%key assumptions
+%
+
+\chapter{Flow Examples}
+%Here we explore some different flow types and their behaviour
+%Should describe what the flow is, and where we might see it
+%Particularly talk about the assumptions we will universally make
+%E.g. $\Psi(r) = \frac12 Wr^2$ initially
+\section{Rotating Flow}
+\section{Rankine Vortex}
+\section{Lamb-Oseen Vortex}
+
+% \chapter{}
+\chapter{Solver}
+
+\section{Computational Efficiency}
+
+
+\begin{appendices}
+\chapter{Derivation of Squire-Long}
+%The actual full derivation here?
+\chapter{Code}
+\section{Code1}
+	
+\end{appendices}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{thebibliography}{9}
+%
+% the 9 here is so LaTeX knows how  big a space to leave for numbers
+% in the bibliography. Put 9 if you have < 10 items, 99 if you have
+% less than 100 etc
+%
+
+
+% \bibitem{Hit}
+% N.J. Hitchin, Lectures on special Lagrangian 
+% submanifolds. Preprint, Oxford 1999.
+
+
+
+% \bibitem{Mur}
+% M. K. Murray, 
+% Bundle gerbes, 
+% J. London Math. Soc. (2) {\bf 54} 
+% (1996), no.~2, 403--416.
+
+
+\end{thebibliography}
+\end{document}
+
