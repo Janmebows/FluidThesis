@@ -1,5 +1,5 @@
-nPtsR = 500;
-nPtsZ = 500;
+nPtsR = 50;
+nPtsZ = 50;
 R = 1;
 Z = 1;
 params.nPtsR = nPtsR;
@@ -10,7 +10,6 @@ params.Z = Z;
 
 [L,U,A] = solveAAndDecompose(params);
 
-repR = repmat(linspace(0,R,nPtsR),1,nPtsZ)';
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
 [rmat, zmat] = ndgrid(r,z);

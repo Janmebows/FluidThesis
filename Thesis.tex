@@ -78,7 +78,7 @@ Now, combining this last statement with the equation for $\omega_\theta$:
 
 Taken from Batchelor's An Introduction to Fluid Dynamics
 
-
+\section{Rotating Flow}
 Considering the flow far upstream where there is constant uniform axial velocity and rotates with angular velocity $\Omega$ 
 \[\Psi_{\text{upstream}} = \frac12 W r^2\]
 \[v = \Omega r, w =W\]
@@ -444,7 +444,7 @@ find $K = \Omega r_0^2$?
 
 
 
-\subsection{Rankine Body}
+\section{Rankine Body}
 $w = W$, 
 \[v = \begin{cases}
     \frac{\Gamma}{{2 \pi r}}, &r > r_0 \\
@@ -651,7 +651,9 @@ Figure~\ref{fig:rankineSolutions} shows the solution set for the problem. It dis
 %
 
 %%%
-\subsection{Lamb-Oseen Vortex}
+
+\clearpage
+\section{Lamb-Oseen Vortex}
 %pretty sure this is the Lamb-Oseen vortex but trent called it burgers
 Q-vortex without a Jet.
 Start with 
@@ -913,6 +915,9 @@ As a function $f(r,\Psi)$ and the settings
 %%%%
 %%
 %% 
+
+
+\section{2D System}
 For the method - since we're stuck
 try using
 \[r\dd{}r \left(\frac1r \dd \Psi r\right) = r\frac{\frac1r \dd\Psi r|_{i+\frac12} - \frac1r \dd{\Psi}{r}|_{i-\frac12}}{\Delta r}\]
@@ -1038,18 +1043,18 @@ With boundaries $\Psi(r=0) = 0$, $\Psi(z=0) = f(r)$, $\Psi(r=R) = f(R)$ and $\Ps
 Wang, Rusak use $\dd\Psi z = 0$. And at the right boundary it might make sense to use a backwards difference so we don't have to deal with the $n+1$.
 So that $\Psi_{i,j}$ is stored in index 
 
-Test case:
-\begin{align*}
-    \Psi(r,z) &= r^2(r-1)z(z-1)\\
-    \Psi_{zz} &= 2r^2(r-1)\\
-    \Psi_{rr} &= 2z(3r-1)(z-1)\\
-    \frac1r \Psi_r    &= z(3r-2)(z-1)\\
-\end{align*}
-\begin{align*}
-    -r \eta(r,z) &= 2r^2(r-1) + 2z(3r-1)(z-1) - z(3r-2)(z-1)
-\end{align*}
+% Test case:
+% \begin{align*}
+%     \Psi(r,z) &= r^2(r-1)z(z-1)\\
+%     \Psi_{zz} &= 2r^2(r-1)\\
+%     \Psi_{rr} &= 2z(3r-1)(z-1)\\
+%     \frac1r \Psi_r    &= z(3r-2)(z-1)\\
+% \end{align*}
+% \begin{align*}
+%     -r \eta(r,z) &= 2r^2(r-1) + 2z(3r-1)(z-1) - z(3r-2)(z-1)
+% \end{align*}
 
-for the time solver precompute the LU factorisation of the matrix.
+for the time solver, precompute the LU factorisation of the matrix.
 
 
 The BCs for our system will be:
@@ -1111,11 +1116,24 @@ We use the streamfunction-vorticity formulation
 \[\ddn \Psi z2 + \ddn \Psi r2 - \frac1r \dd \Psi r = -r \eta\]
 
 
+Process: start with (3),(4) then (5) including BCs for psi. now obtain BCs of eta.
+
+Try and get code working - read new paper for BCs and algorithms, etc.
+
+Do a write up and look at some of the research - explain them, bifurcations etc.
+Talk about how vortex breakdown is studied a lot and how we're reproduced results, differences, agreement.
+
+Research applications.
+
+f18 vortex breakdown - occurs in aerodynamic flows - why its a problem (interacts with tail of jets)
+
+vortical flows used in combustion devices
 
 
 
 \clearpage
-\subsection{Outer vortex breakdown}
+
+\section{Outer vortex breakdown}
 Considering the initial problem for vortex breakdown, except perhaps the breakdown is a pocket expanding from $R$ rather than $0$. I.e. the breakdown occurs about the wall rather than the center.
 So assuming $r^\dagger $ is our outer vortex breakdown radius
 
@@ -1189,8 +1207,5 @@ Zvi Rusak, and Shixiao Wang
 The Navier-Stokes equations: a classification of flows and exact solutions
 Drazin, Riley
 
-
-%looking for r_* = 0 and w(r_*) = 0
-%go through analytics to find this
 
 \end{document}

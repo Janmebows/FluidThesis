@@ -1,64 +1,104 @@
-%initialise eta and v
-eta = 
-v = 
-
-
-
-
-dpsidz = ddz(psi,z);
-dpsidr = ddr(psi,r);
-J = @(x) dpsidz .* (ddz(x,z)) - dpsidr .* (ddr(x,r));
-dvdt = J(v)./r + v.*dpsidz./r.^2 ;
-detadt = J(eta./r) + 2*v.*dvdz./r;
-
-
-
-nPtsR = 500;
-nPtsZ = 500;
+close all 
+clear all
+nPtsR = 100;
+nPtsZ = 100;
 R = 1;
-Z = 1;
+Z = 1.5;
+W = 1;
 params.nPtsR = nPtsR;
 params.nPtsZ = nPtsZ;
 params.R = R;
 params.Z = Z;
-%precompute LU factors
-
-[L,U,A] = solveAAndDecompose(params);
-
-repR = repmat(linspace(0,R,nPtsR),1,nPtsZ)';
+params.W = W;
+dt = 0.05;
+tEnd = 10;
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
 [rmat, zmat] = ndgrid(r,z);
-rhs = -(2*rmat.^2.*(rmat-1) + 2*zmat.*(3*rmat-1).*(zmat-1) - zmat.*(3*rmat-2).*(zmat-1));
-
-
-%%BCs----
-%r=0
-rhs(1,:) = 0;
-%r=R
-rhs(end,:) = 0;
-%z=0
-rhs(:,1) =0;
-%z=Z
-rhs(:,end) =0;
-
-%solve L*U*psi = -r*etaV
-rhsvec = rhs(:);
-
-y = L\rhsvec;
-psiV= U\y;
-psi = Vec2Mat(psiV,nPtsR,nPtsZ);
-
-close all
-surf(rmat,zmat,psi)
+dr = r(2)-r(1);
+dz = z(2)-z(1);
+%initial conditions
+psi = 0.5*W*rmat.^2;
+eta = 0*rmat; 
+v = W*zmat;
+%preallocate matrices
+etaStar = zeros(size(rmat));
+vStar = zeros(size(rmat));
+%precompute LU decomp for A * Psi = r * eta
+[L,U,A] = solveAAndDecompose(params);
 figure
-truSol = -rmat.^2.*(rmat-1).*zmat.*(zmat-1);
-surf(rmat,zmat,truSol)
-xlabel("true sol")
+for t=0:dt:5
+    
+    %steps 3,4
+    dpsidz = ddz(psi,z);
+    dpsidr = ddr(psi,r);
+    J = @(x) dpsidz .* (ddz(x,z)) - dpsidr .* (ddr(x,r));
+    dvdt = J(v)./rmat + v.*dpsidz./rmat.^2 ;
+    temp  = eta./rmat;
+    %handle the 0/0 problem
+    temp(eta==0) =0;
+    detadt = J(temp) + 2*v.*ddz(v,z)./rmat;
+%     detadt(isnan(detadt)) = 0;
+    %step 5
+    rhs = - rmat.*eta;
+    rhs = PsiBCs(rhs,params);
+    rhsvec = rhs(:);
+    y = L\rhsvec;
+    psiV= U\y;
+    psi = Vec2Mat(psiV,nPtsR,nPtsZ);
 
-% diff = abs(psi - truSol);
-% figure
-% surf(rmat,zmat,diff)
+    %step 7
+    %iteration process
+    %first iteration t=0 is odd step
+    if(mod(t/2+1,dt)==0)
+        etaStar = eta + dt .* detadt;
+        vStar = v + dt.* dvdt;
+        
+        dvStardt = J(vStar)./rmat + v.*dpsidz./rmat.^2 ;
+        detaStardt = J(etaStar./rmat) + 2*v.*ddz(vStar,z)./rmat;
+        eta = eta + dt.*etaStar;
+        v = v + dt.*vStar;
+    else
+        eta = eta + dt.*eta;
+        v = v + dt.*v;
+    end
+    
+    %display result
+    
+    surf(rmat,zmat,psi)
+    axis([0,R,0,Z,0,inf])
+    
+    %contourf(zmat,rmat,psi,20)
+    %caxis([0,20])
+    %colorbar
+    xlabel("r")
+    ylabel("z")
+    zlabel("psi")
+    drawnow
+    pause(0.05)
+    
+
+    v(1,:) = 0;
+    v(end,:) = 0;
+    v(:,1) = r;
+    v(:,end) = 0;
+        
+    %eta bcs 
+
+    eta(end,:) = -2 * psi(end-1,:)/(dr^2);
+    
+    
+    eta(:,1) = -2* psi(:,2)./(r'*dz^2);
+    eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
+    eta(1,:) = 0 ;
+
+
+
+end
+
+
+
+
 function [L,U,A] = solveAAndDecompose(params)
 %obtain the LU factorisation of the 
 %finite difference formula for
@@ -91,7 +131,7 @@ for j=2:nPtsZ-1
        A(i+(j-1)*nPtsR,i+j*nPtsR) = invdz^2; 
    end    
 end
-spy(A)
+
 %BCs
 for i=1:nPtsR
     %z = 0 => j=1
@@ -105,15 +145,10 @@ end
 for j=1:nPtsZ
     ind = cvtIndex(1,j,nPtsR);
     A(ind,ind) = 1;
-    %A(i+((nPts-1)*nPts),i+((nPts-1)*nPts)) = 1;
     %r=R
     ind = cvtIndex(nPtsR,j,nPtsR);
     A(ind,ind) = 1;
-    %A(ind,ind) = 0.5*R^2;
-    
-    %A(nPts*i,nPts*i) = 0.5*R^2;
 end   
-spy(A)
 [L, U] = lu(A);
 end
 % plot3(r,z,eta)
@@ -121,31 +156,41 @@ function ind = cvtIndex(i,j,nPtsR)
     ind = i+(j-1)*nPtsR;
 end
 
-function vec = Mat2Vec(mat)
-    vec = mat(:);
-end
-
 function mat = Vec2Mat(vec,ndim,mdim)
     mat = zeros(ndim,mdim);
     for j=1:mdim
         lind = cvtIndex(1,j,ndim);
         rind = cvtIndex(0,j+1,ndim);
-%         mat(:,j) = vec((j-1)*ndim+1:j*mdim);
         mat(:,j) = vec(lind:rind);
     end
 end
+function rhs = PsiBCs(rhs,params)
+%     W = params.W;
+%     R = params.R;
+    %%BCs----
+    %r=0
+    rhs(1,:) = 0;
+    %r=R
+    rhs(end,:) = 0;
+    %z=0
+    rhs(:,1) =0;
+    %z=Z
+    rhs(:,end) =0;
 
-
+end
 
 
 function dxdz = ddz(x,z)
+    dxdz = zeros(size(x));
     dz = z(2) - z(1);
     j = 2:length(z)-1;
-    dxdz = (x(:,j+1) - x(:,j-1))/(2*dz);
+    dxdz(:,2:end-1) = (x(:,j+1) - x(:,j-1))/(2*dz);
 end
 
 function dxdr = ddr(x,r)
+
+    dxdr = zeros(size(x));
     dr = r(2) - r(1);
     i = 2:length(r)-1;
-    dxdr = (x(i+1,:) - x(i-1,:))/(2*dr);
+    dxdr(2:end-1,:) = (x(i+1,:) - x(i-1,:))/(2*dr);
 end
