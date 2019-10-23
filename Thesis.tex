@@ -1120,14 +1120,106 @@ Process: start with (3),(4) then (5) including BCs for psi. now obtain BCs of et
 
 Try and get code working - read new paper for BCs and algorithms, etc.
 
-Do a write up and look at some of the research - explain them, bifurcations etc.
-Talk about how vortex breakdown is studied a lot and how we're reproduced results, differences, agreement.
 
 Research applications.
 
 f18 vortex breakdown - occurs in aerodynamic flows - why its a problem (interacts with tail of jets)
 
 vortical flows used in combustion devices
+
+
+
+
+\section{Papers}
+
+
+Do a write up and look at some of the research - explain them, bifurcations etc.
+Talk about how vortex breakdown is studied a lot and how we're reproduced results, differences, agreement.
+
+\subsection{An Introduction to Fluid Dynamics}
+Bachelor.
+
+Best place to start - really goes to the basics and has derivations for the squire-longe equation as well as some examples, analytic solutions.
+A bit limited however for the relevant area - truly just gives an introduction to vortex breakdown.
+
+
+\subsection{Simulations of axisymmetric, inviscid swirling flows in circular pipes with various geometries}
+Wang, Rusak paper.
+Looks at a computational method for solving the problem, with the extra condition of allowing the pipes to have varying geometry.
+
+
+
+\subsection{The Structure and Dynamics of Bubble-Type Vortex Breakdown}
+Spall, Ash, Gatski
+
+The paper doesn't fully explain what they do. They do give some initial conditions however, including a boundary condition I don't think i've seen in any other papers
+\[\dd vy + \dd wz = const\]
+The paper doesn't really explain very much of the maths, but ends up with some interesting plots.
+Including plots of the radial velocity which a lot of the other papers simply disregard.
+\subsection{Computational Design for Long-Term Numerical Integration of the Equations of Fluid Motion: Two-Dimensional Incompressible Flow Part 1}
+Arakawa
+
+Uses a strange syntax, particularly using $\xi$ as the vorticity.
+The paper has a lot of equations in it, but none of them really seem to relate... Part 2 may be a little more insightful?
+
+It does aim to obtain the jacobian for the numerical method. The paper kind of goes backwards - describing an average/finite different quantity and then explaining what continuous quantity it represents.
+\subsection{VORTEX BREAKDOWN: A TWO-STAGE TRANSITION}
+Escudier, Keller
+This considered the rankine vortex and applied a zero net force condition to the flow to look for `realistic' solutions given no external force applied. The paper does not fully derive this however. 
+It also looks at the same thing for potential flow. Not a huge amount of information in this paper, although the force condition is useful as it ensures that solutions are natural.
+
+
+\subsection{Theory of the vortex breakdown phenomenon}
+Benjamin
+A highly verbose paper. Attempts to explain how the flow states can change, and how vortex breakdown can actually occur. Uses linearisation mostly, and calculus of variations to explain vortex breakdown.
+Doesn't actually have all that much information...
+
+
+\subsection{Some Exact Solutions of the Flow Through Annular Cascade Actuator Discs}
+Bragg, Hawthorne
+
+Derivation of the vorticity form of the S-L equation.
+A bit harder to read than the other papers, quite packed full of equations
+
+
+
+\subsection{Swirling flow states in finite-length diverging or contracting circular pipes}
+Wang Rusak
+Another verbose paper. Particularly interested in looking at steady states with vortex breakdown. 
+Enforces the condition of zero radial velocity at the outlet - this may be questionable.
+Goes a little in depth to explain how the shape of a pipe affects the occurrence of vortex breakdown.
+
+They use the $y = \frac{r^2}{2}$ trick in this paper.
+
+This is similar to their `simulations of ...' paper , except this one looks more at analysis and analytics instead of simulation.
+Calculus of variations.
+
+\subsection{Wall-separation and vortex-breakdown zones in a solid-body rotation flow in a rotating finite-length straight circular pipe}
+Wang, Rusak
+
+ANother verbose paper. Looks at bifurcations for vortex breakdown. Looks at finding critical swirl ratios where bifurcations occur. This paper limits its scope to regular straight pipes. This also uses calculus of variations.
+
+This paper is a lot harder to understand than the others since CoV can be quite hard to interpret.
+
+
+
+\subsection{Axisymmetric vortex breakdown Part 1. Confined swirling flow}
+
+Lopez
+
+Introduces a procedure to numerically solve the system. Unfortunately the paper doesn't clearly indicate some factors for solving - e.g. initial conditions. It also does not derive or explain the prediction equations that it uses.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,9 +1,9 @@
 close all 
 clear all
-nPtsR = 100;
-nPtsZ = 100;
+nPtsR = 60;
+nPtsZ = 60;
 R = 1;
-Z = 1.5;
+Z = 2;
 W = 1;
 params.nPtsR = nPtsR;
 params.nPtsZ = nPtsZ;
@@ -11,24 +11,25 @@ params.R = R;
 params.Z = Z;
 params.W = W;
 dt = 0.05;
-tEnd = 10;
+tEnd = 60;
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
 [rmat, zmat] = ndgrid(r,z);
 dr = r(2)-r(1);
 dz = z(2)-z(1);
 %initial conditions
-psi = 0.5*W*rmat.^2;
+psi = 0*rmat; %0.001* rand(size(rmat));
 eta = 0*rmat; 
-v = W*zmat;
+v   = 0*rmat;
+v(1:end-1,1) = r(1:end-1);
+psi(:,1) = 0.5*W*r.^2;
 %preallocate matrices
 etaStar = zeros(size(rmat));
 vStar = zeros(size(rmat));
 %precompute LU decomp for A * Psi = r * eta
 [L,U,A] = solveAAndDecompose(params);
 figure
-for t=0:dt:5
-    
+for t=0:dt:tEnd
     %steps 3,4
     dpsidz = ddz(psi,z);
     dpsidr = ddr(psi,r);
@@ -38,7 +39,7 @@ for t=0:dt:5
     %handle the 0/0 problem
     temp(eta==0) =0;
     detadt = J(temp) + 2*v.*ddz(v,z)./rmat;
-%     detadt(isnan(detadt)) = 0;
+    %detadt(isnan(detadt)) = 0;
     %step 5
     rhs = - rmat.*eta;
     rhs = PsiBCs(rhs,params);
@@ -66,10 +67,10 @@ for t=0:dt:5
     %display result
     
     surf(rmat,zmat,psi)
-    axis([0,R,0,Z,0,inf])
-    
+    %axis([0,R,0,Z,0,inf])
+    %contour(rmat,zmat,psi,50)
     %contourf(zmat,rmat,psi,20)
-    %caxis([0,20])
+    %caxis([0,1])
     %colorbar
     xlabel("r")
     ylabel("z")
@@ -80,14 +81,12 @@ for t=0:dt:5
 
     v(1,:) = 0;
     v(end,:) = 0;
-    v(:,1) = r;
+    v(2:end-1,1) = r(2:end-1);
     v(:,end) = 0;
         
     %eta bcs 
 
     eta(end,:) = -2 * psi(end-1,:)/(dr^2);
-    
-    
     eta(:,1) = -2* psi(:,2)./(r'*dz^2);
     eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
     eta(1,:) = 0 ;
