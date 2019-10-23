@@ -1134,14 +1134,16 @@ vortical flows used in combustion devices
 
 
 Do a write up and look at some of the research - explain them, bifurcations etc.
-Talk about how vortex breakdown is studied a lot and how we're reproduced results, differences, agreement.
+Talk about how vortex breakdown is studied a lot and how we've reproduced results, differences, agreement.
+
 
 \subsection{An Introduction to Fluid Dynamics}
 Bachelor.
 
-Best place to start - really goes to the basics and has derivations for the squire-longe equation as well as some examples, analytic solutions.
+Best place to start - really goes to the basics and has derivations for the Squire-Long equation as well as some examples, analytic solutions.
 A bit limited however for the relevant area - truly just gives an introduction to vortex breakdown.
 
+We re-derived the SL equation
 
 \subsection{Simulations of axisymmetric, inviscid swirling flows in circular pipes with various geometries}
 Wang, Rusak paper.
@@ -1159,7 +1161,7 @@ Including plots of the radial velocity which a lot of the other papers simply di
 \subsection{Computational Design for Long-Term Numerical Integration of the Equations of Fluid Motion: Two-Dimensional Incompressible Flow Part 1}
 Arakawa
 
-Uses a strange syntax, particularly using $\xi$ as the vorticity.
+Uses a strange syntax, particularly using $\zeta$ as the vorticity.
 The paper has a lot of equations in it, but none of them really seem to relate... Part 2 may be a little more insightful?
 
 It does aim to obtain the jacobian for the numerical method. The paper kind of goes backwards - describing an average/finite different quantity and then explaining what continuous quantity it represents.
@@ -1167,6 +1169,8 @@ It does aim to obtain the jacobian for the numerical method. The paper kind of g
 Escudier, Keller
 This considered the rankine vortex and applied a zero net force condition to the flow to look for `realistic' solutions given no external force applied. The paper does not fully derive this however. 
 It also looks at the same thing for potential flow. Not a huge amount of information in this paper, although the force condition is useful as it ensures that solutions are natural.
+
+We used the $\Delta s$ condition here and were able to reproduce their results for the rankine vortex.
 
 
 \subsection{Theory of the vortex breakdown phenomenon}
@@ -1197,7 +1201,7 @@ Calculus of variations.
 \subsection{Wall-separation and vortex-breakdown zones in a solid-body rotation flow in a rotating finite-length straight circular pipe}
 Wang, Rusak
 
-ANother verbose paper. Looks at bifurcations for vortex breakdown. Looks at finding critical swirl ratios where bifurcations occur. This paper limits its scope to regular straight pipes. This also uses calculus of variations.
+Another verbose paper. Looks at bifurcations for vortex breakdown. Looks at finding critical swirl ratios where bifurcations occur. This paper limits its scope to regular straight pipes. This also uses calculus of variations.
 
 This paper is a lot harder to understand than the others since CoV can be quite hard to interpret.
 
@@ -1210,7 +1214,7 @@ Lopez
 Introduces a procedure to numerically solve the system. Unfortunately the paper doesn't clearly indicate some factors for solving - e.g. initial conditions. It also does not derive or explain the prediction equations that it uses.
 
 
-
+We are trying to reproduce the code used in this paper.
 
 
 
