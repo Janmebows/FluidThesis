@@ -1,54 +1,56 @@
 close all 
 clear all
+%parameters
 nPtsR = 60;
-nPtsZ = 60;
+nPtsZ = 100;
 R = 1;
-Z = 2;
+Z = 2.5;
 W = 1;
+Omega = 1;
+dt = 0.05;
+tEnd = 60;
+%upstream flow
+PsiInit = @(r) 0.5*W*r.^2;
+VInit = @(r) Omega*r;
+%put them in a params struct
 params.nPtsR = nPtsR;
 params.nPtsZ = nPtsZ;
 params.R = R;
 params.Z = Z;
 params.W = W;
-dt = 0.05;
-tEnd = 60;
+params.Omega = Omega;
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
 [rmat, zmat] = ndgrid(r,z);
 dr = r(2)-r(1);
 dz = z(2)-z(1);
 %initial conditions
-psi = 0*rmat; %0.001* rand(size(rmat));
-eta = 0*rmat; 
-v   = 0*rmat;
-v(1:end-1,1) = r(1:end-1);
-psi(:,1) = 0.5*W*r.^2;
+psi = PsiInit(rmat);
+%using eta = -dwdr = - ddr(ddr(psi)./rmat)
+eta = zeros(size(rmat));
+v   = VInit(rmat);
+
+
+
 %preallocate matrices
 etaStar = zeros(size(rmat));
 vStar = zeros(size(rmat));
-%precompute LU decomp for A * Psi = r * eta
+%precompute LU decomp for A * Psi = -r * eta
 [L,U,A] = solveAAndDecompose(params);
 figure
 for t=0:dt:tEnd
     %steps 3,4
     dpsidz = ddz(psi,z);
     dpsidr = ddr(psi,r);
-    J = @(x) dpsidz .* (ddz(x,z)) - dpsidr .* (ddr(x,r));
+    J = @(x) dpsidz .* (ddr(x,r)) - dpsidr .* (ddz(x,z));
     dvdt = J(v)./rmat + v.*dpsidz./rmat.^2 ;
     temp  = eta./rmat;
     %handle the 0/0 problem
     temp(eta==0) =0;
     detadt = J(temp) + 2*v.*ddz(v,z)./rmat;
-    %detadt(isnan(detadt)) = 0;
-    %step 5
-    rhs = - rmat.*eta;
-    rhs = PsiBCs(rhs,params);
-    rhsvec = rhs(:);
-    y = L\rhsvec;
-    psiV= U\y;
-    psi = Vec2Mat(psiV,nPtsR,nPtsZ);
-
-    %step 7
+    
+    
+        %step 7
     %iteration process
     %first iteration t=0 is odd step
     if(mod(t/2+1,dt)==0)
@@ -60,14 +62,68 @@ for t=0:dt:tEnd
         eta = eta + dt.*etaStar;
         v = v + dt.*vStar;
     else
-        eta = eta + dt.*eta;
-        v = v + dt.*v;
+         eta = eta + dt.*eta;
+         v = v + dt.*v;
     end
+
+    %r=0
+    v(1,:) = 0;
+    %r=R
+    v(end,:) = VInit(R);
+    %z=0
+    v(:,1) = VInit(r);
+    %z=Z
+    v(:,end) = v(:,end-1);
     
+    %step 5
+    rhs = - rmat.*eta;
+    %rhs = PsiBCs(rhs,params);
+        %%PSI BCs----
+    %r=0
+    rhs(1,:) = 0;
+    %r=R
+    rhs(end,:) = PsiInit(R);
+    %z=0
+    rhs(:,1) =0;
+    %z=Z
+    rhs(:,end) =rhs(:,end-1);
+    
+    
+    
+    
+    
+    rhsvec = rhs(:);
+    y = L\rhsvec;
+    psiV= U\y;
+        %break if numerics break
+    if any(isnan(psiV))
+        "failed"
+        break
+    end
+    psi = Vec2Mat(psiV,nPtsR,nPtsZ);
+
+
+        
+    %eta bcs 
+    %r=0
+    eta(1,:) = 0 ;
+    %r=R
+    %OLD
+    %eta(end,:) = -2 * psi(end-1,:)/(R*dr^2);
+    eta(end,:) = (1/R).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
+    %z=0
+    %not sure how to handle this one...
+    %OLD
+    %eta(:,1) = -2* psi(:,2)./(r'*dz^2);
+    i = 2:length(r)-1;
+    eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
+    %z=Z
+    %OLD
+    %eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
+    eta(:,end) = eta(:,end-1);
     %display result
-    
     surf(rmat,zmat,psi)
-    %axis([0,R,0,Z,0,inf])
+    axis([0,R,0,Z,0,inf])
     %contour(rmat,zmat,psi,50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
@@ -75,21 +131,12 @@ for t=0:dt:tEnd
     xlabel("r")
     ylabel("z")
     zlabel("psi")
+    title("t = "+ t)
     drawnow
     pause(0.05)
     
 
-    v(1,:) = 0;
-    v(end,:) = 0;
-    v(2:end-1,1) = r(2:end-1);
-    v(:,end) = 0;
-        
-    %eta bcs 
 
-    eta(end,:) = -2 * psi(end-1,:)/(dr^2);
-    eta(:,1) = -2* psi(:,2)./(r'*dz^2);
-    eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
-    eta(1,:) = 0 ;
 
 
 
@@ -99,9 +146,11 @@ end
 
 
 function [L,U,A] = solveAAndDecompose(params)
+%Get the matrix A and decompose it into L U
 %obtain the LU factorisation of the 
 %finite difference formula for
 %psi_zz + psi_rr - psi_r / r = A*psi
+%tested and working
 R = params.R;
 Z = params.Z;
 nPtsR = params.nPtsR;
@@ -150,11 +199,14 @@ for j=1:nPtsZ
 end   
 [L, U] = lu(A);
 end
-% plot3(r,z,eta)
+
 function ind = cvtIndex(i,j,nPtsR)
+%converts an i,j into a single index ind 
+%for finding psi_{i,j} stored in psiV(ind)
     ind = i+(j-1)*nPtsR;
 end
 
+%convert vector to matrix (tested)
 function mat = Vec2Mat(vec,ndim,mdim)
     mat = zeros(ndim,mdim);
     for j=1:mdim
@@ -163,33 +215,31 @@ function mat = Vec2Mat(vec,ndim,mdim)
         mat(:,j) = vec(lind:rind);
     end
 end
+
+%puts in the boundary conditions for psi 
+%where rhs is -r*eta 
 function rhs = PsiBCs(rhs,params)
-%     W = params.W;
-%     R = params.R;
-    %%BCs----
-    %r=0
-    rhs(1,:) = 0;
-    %r=R
-    rhs(end,:) = 0;
-    %z=0
-    rhs(:,1) =0;
-    %z=Z
-    rhs(:,end) =0;
+    W = params.W;
+    R = params.R;
+
 
 end
 
 
+%derivative wrt z (tested)
 function dxdz = ddz(x,z)
     dxdz = zeros(size(x));
     dz = z(2) - z(1);
     j = 2:length(z)-1;
-    dxdz(:,2:end-1) = (x(:,j+1) - x(:,j-1))/(2*dz);
+    dxdz(:,j) = (x(:,j+1) - x(:,j-1))/(2*dz);
 end
 
+
+%derivative wrt r (tested)
 function dxdr = ddr(x,r)
 
     dxdr = zeros(size(x));
     dr = r(2) - r(1);
     i = 2:length(r)-1;
-    dxdr(2:end-1,:) = (x(i+1,:) - x(i-1,:))/(2*dr);
+    dxdr(i,:) = (x(i+1,:) - x(i-1,:))/(2*dr);
 end

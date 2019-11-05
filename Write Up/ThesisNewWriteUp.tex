@@ -41,11 +41,11 @@
 
 
 \vspace{1 cm}
-{\large S. T. Udent}
+{\large A. J. Martin}
 
 \vspace{0.5 cm}
 
-{\large Supervisor: Professor Bloggs}
+{\large Supervisor: Dr Trent Mattner}
 
 \vspace{0.5 cm}
 
@@ -127,15 +127,36 @@ Date:
 %definition, explanation of what a stream function is
 %theorems, form in cylindrical coords
 \definition{Stream Function}
+\definition{Vorticity}
+\definition{Circulation}
 \theorem{}
 \lemma
 
+\subsection{Finite Differences}
+First order:
+
+Backward difference:
+\[f'(x) = \frac{f(x) - f(x-h)}{h} + \bigo(h)\]
+
+Forward Difference
+\[f'(x) = \frac{f(x+h) - f(x)}{h}+ \bigo(h)\]
+
+Central Differences
+\[f'(x) = \frac{f(x+h) - f(x-h)}{2h}+ \bigo(h^2)\]
+
+Backwards differences for a second derivative
+\[f''(x) = \frac{f(x) - 2f(x-h) + f(x-2h)}{h^2}\]
+Forwards
+\[f''(x) = \frac{f(x+2h) - 2f(x+h) + f(x)}{h^2}\]
+Central 
+\[f''(x) = \frac{f(x+h) - 2 f(x) + f(x-h)}{h^2}\]
 \chapter{The Squire-Long model}
 %outline of squirelong derivation
 %key assumptions
 
 %navier stokes background
-
+\section{Vorticity form}
+Azimuthal vorticity, $\eta$.
 \chapter{Flow Examples}
 %Here we explore some different flow types and their behaviour
 %Should describe what the flow is, and where we might see it
@@ -143,17 +164,19 @@ Date:
 %E.g. $\Psi(r) = \frac12 Wr^2$ initially
 \section{Rotating Flow}
 \section{Rankine Vortex}
-\section{Lamb-Oseen Vortex}
+\section{Lamb-Oseen Vortex (Possibly Bachelor Vortex?)}
 
 % \chapter{}
 \chapter{Solver}
 
-\section{Computational Efficiency}
+\section{Computational Efficiency?}
 
 
 \begin{appendices}
 \chapter{Derivation of Squire-Long}
 %The actual full derivation here?
+
+\chapter{Conclusion}
 \chapter{Code}
 \section{Code1}
 	

@@ -11,6 +11,31 @@
 \tableofcontents
 \section{Introduction}
 
+\section{Background}
+Fluid dynamics 
+This paper will be concerned with strictly dynamic flows.
+
+
+The flow considered will be axisymmetric, incompressible, inviscid, cylindrical flow with cylindrical coordinate system $(r,\theta,z)$, where $\theta$ denotes angle around the $z$ axis.
+
+
+The flow will have velocity components $(u,v,w)$ in the directions of $r,\theta$, and $z$ respectively. That is to say $u, v, w$ are the radial, azimuthal and axial components of the flow respectively.
+
+
+
+
+Incompressibility
+\[\nabla \cdot \vec u = 0 \]
+
+For incompressible flow in cylindrical coordinates, the stream function, $\Psi$ is defined in terms of the velocity
+\[u = \frac{1}{r} \dd\Psi z, \quad w = - \frac{1}{r} \dd \Psi r\]
+
+
+
+Definition of the stream function
+We define the stream function $\Psi$ 
+
+
 \section{Derivation of the Squire-Long equation}
 Squire-long / Bragg-Hawthorne equation for the stream function of axisymmetric inviscid fluid, using cylindrical coordinates
 \[\ddn{\Psi}{z}{2} + \ddn{\Psi}{r}{2} - \frac1r \dd{\Psi}{r} = r^2 \frac{dH}{d\Psi} - C \frac{dC}{d\Psi}\]
@@ -18,10 +43,10 @@ radial component u,  azimuthal (swirl) is v, axial component w
 
 stream function satisfies
 
-$\nabla \cdot u = 0$ $\longrightarrow$ streamfunction exists\\
+$\nabla \cdot u = 0$ $\longrightarrow$ stream function exists\\
 Remember for cylindrical coordinates:
 %I think my u v w are in the wrong order whoops
-\[u = \frac1r \dd\Psi{z}, \quad w = -\frac1r \dd\Psi{r} \]
+\[u = -\frac1r \dd\Psi{z}, \quad w = \frac1r \dd\Psi{r} \]
 
 $\Psi$ is the stream function\\
 $r$ is the radius\\
@@ -138,18 +163,18 @@ If we take $x = kr$, $\frac{dF}{dr} = \frac{dF}{dx} \frac{dx}{dr} = k$ and $\fra
     \frac{x^2}{k^2}k^2 \frac{d^2F}{dx^2} - \frac{x}{k}k \frac{dF}{dx} + F(\frac{x^2}{k^2}k^2 - 1) = 0\\
     x^2 \frac{d^2F}{dx^2} - x \frac{dF}{dx} + F(x^2 - 1) = 0
 \end{align*}
-Which is the form of a bessel differential equation of order $\nu =1$, giving solutions
+Which is the form of a Bessel differential equation of order $\nu =1$, giving solutions
 \[F = AJ_1(kr) + BY_1(kr)  \]
 
 
 
-Returning to the streamfunction:
+Returning to the stream function:
 \[\Psi = \frac12 W r^2 + r\left(AJ_1(kr) + BY_1(kr)\right)\]
 
 And hence
 \[w = \frac1r \dd\Psi r = W + Ak J_0(kr) + Bk Y_0(kr)\]
 %parameters kr_* and kR
-$A$, and $B$ rely on boundary conditions. In this case, it is necessary forthe streamlines to be the same as at the inlet along the boundary. Also introduce a vortex breakdown condition in the core of the stream, i.e. a region $0<r<r_*$ where the streamfunction becomes zero:
+$A$, and $B$ rely on boundary conditions. In this case, it is necessary forthe streamlines to be the same as at the inlet along the boundary. Also introduce a vortex breakdown condition in the core of the stream, i.e. a region $0<r<r_*$ where the stream function becomes zero:
 \[\Psi(R) = \frac12 WR^2\]
 \[\Psi(r_*) = 0 \]
 Consider it as a matrix system
@@ -251,7 +276,7 @@ Gives
 % Which is identical to the equation with the assumption $\ddn \Psi z2 = 0$ with $R := \Psi$ which gives solution
 % \[R = r(AJ_1(kr) + BY_1(kr))\]
 
-%To obtain the values of $c_1$, $c_2$ and $A$ some other conditions must be satisfied.Since finite $R = 0$ has already been enforced, consider a point at the border $R=R_0$. At the point $R_0$, the streamfunction must be the same as it was far upstream (streamlines cannot cross), i.e. $\psi(R_0) = \frac12  WR_0^2$
+%To obtain the values of $c_1$, $c_2$ and $A$ some other conditions must be satisfied.Since finite $R = 0$ has already been enforced, consider a point at the border $R=R_0$. At the point $R_0$, the stream function must be the same as it was far upstream (streamlines cannot cross), i.e. $\psi(R_0) = \frac12  WR_0^2$
 %Conditions
 %\[\frac12 WR^2 + \psi(R_0) = \frac12 WR^2 \implies \psi(R_0) = 0\]
 %\[\Psi = r Z(z) R(r)\]
@@ -450,7 +475,7 @@ $w = W$,
     \frac{\Gamma}{{2 \pi r}}, &r > r_0 \\
 \Omega r ,& r \leq r_0
 \end{cases}  \]
-Where the second condition was the previous solution. Since the velocity profile is now piecewise defined, the streamfunction must also be, i.e. it is necessary to split the streamfunction into 2 regions to solve this problem. The upstream regions:
+Where the second condition was the previous solution. Since the velocity profile is now piecewise defined, the stream function must also be, i.e. it is necessary to split the stream function into 2 regions to solve this problem. The upstream regions:
  \[\begin{cases}
          \Psi_{inner}, & 0\leq r\leq r_0 \\
          \Psi_{outer}, & r_0\leq r\leq R
@@ -975,55 +1000,6 @@ Then the system becomes, after an index shift:
      - \frac1{r_i} \left( \frac{v_{i+1+m(j)} - v_{i-1+m(j)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j)}\\
 \end{align*}
 
-
-% \setcounter{MaxMatrixCols}{12}
-% Example one, let $npts = 3$, $\frac{1}{\Delta r^2} =\frac{1}{\Delta z^2} = 4 $
-% $b=a-1$ gives $4 + 4/r_i$
-% $b=a$ gives $-16$
-% $b=a+1$ gives $4 - 4/r_i$
-% $b=a-nPts$ gives $4$
-% $b=a+nPts$ gives $4$
-% \[\begin{pmatrix}
-%     1&0&0&0&0&0&0&0&0\\ %r=0,z=0
-%     0&1&0&0&0&0&0&0&0\\ %z=0
-%     0&0&1&0&0&0&0&0&0\\ %R=R,z=0
-%     0&0&0&1&0&0&0&0&0\\ %r=0
-%     0&4&0&6&-16&2&0&4&0\\ %actual thing!
-%     0&0&0&0&0&1&0&0&0\\ %r=R
-%     0&0&0&0&0&0&1&0&0\\%z=Z
-%     0&0&0&0&0&0&0&1&0\\%z=Z
-%     0&0&0&0&0&0&0&0&1\\%z=Z
-% \end{pmatrix}
-% \begin{pmatrix}
-%     \Psi_{1,1}\\
-%     \Psi_{2,1}\\
-%     \Psi_{3,1}\\
-%     \Psi_{1,2}\\
-%     \Psi_{2,2}\\
-%     \Psi_{3,2}\\
-%     \Psi_{1,3}\\
-%     \Psi_{2,3}\\
-%     \Psi_{3,3}\\
-% \end{pmatrix} = \begin{pmatrix}
-%     \Psi(r=z=0)\\
-%     \Psi(z=0)\\
-%     \Psi(r=R, z=0)\\
-%     \Psi(r=0)\\
-%     -r_2\eta_{2,2}\\
-%     \Psi(r=R)\\
-%     \Psi(r=0,z=Z)\\
-%     \Psi(z=Z)\\
-%     \Psi(r=R,z=Z)\\
-% \end{pmatrix}\]
-% I.e. the right hand-size needs to be set to bcs, except for those middle cells. with both $i=2:nPts-1$ and $j = 2:nPts-1$
-% \begin{align*}
-%     \frac{v_{i+m(j)} - 2 v_{i+m(j-1)} + v_{i+m(j-2)}}{\Delta z^2} + \frac{v_{i+1+m(j-1)} - 2 v_{i+m(j-1)} + v_{i-1+m(j-1)}}{\Delta r^2}\\
-%      - \frac1{r_i} \left( \frac{v_{i+1+m(j-1)} - v_{i-1+m(j-1)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j-1)}\\
-% \end{align*}
-% \begin{align*}
-%         v_{i-1+m(j-1)}\left(\frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}\right) + v_{i+m(j-1)} \left(-\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}\right) + v_{i+1+m(j-1)} \left(\frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}\right)\\
-%         + v_{i+m(j-2)} \left(\frac{1}{\Delta z^2}\right) + v_{i+m(j-1)}\left(\frac{1}{\Delta z^2}\right) = -r_i \eta_{i+m(j-1)}
-% \end{align*}
 \begin{align*}
         v_{i-1+m(j)}\left(\frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}\right) + v_{i+m(j)} \left(-\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}\right) + v_{i+1+m(j)} \left(\frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}\right)\\
         + v_{i+m(j-1)} \left(\frac{1}{\Delta z^2}\right) + v_{i+m(j+1)}\left(\frac{1}{\Delta z^2}\right) = -r_i \eta_{i+m(j)}
@@ -1043,16 +1019,6 @@ With boundaries $\Psi(r=0) = 0$, $\Psi(z=0) = f(r)$, $\Psi(r=R) = f(R)$ and $\Ps
 Wang, Rusak use $\dd\Psi z = 0$. And at the right boundary it might make sense to use a backwards difference so we don't have to deal with the $n+1$.
 So that $\Psi_{i,j}$ is stored in index 
 
-% Test case:
-% \begin{align*}
-%     \Psi(r,z) &= r^2(r-1)z(z-1)\\
-%     \Psi_{zz} &= 2r^2(r-1)\\
-%     \Psi_{rr} &= 2z(3r-1)(z-1)\\
-%     \frac1r \Psi_r    &= z(3r-2)(z-1)\\
-% \end{align*}
-% \begin{align*}
-%     -r \eta(r,z) &= 2r^2(r-1) + 2z(3r-1)(z-1) - z(3r-2)(z-1)
-% \end{align*}
 
 for the time solver, precompute the LU factorisation of the matrix.
 
@@ -1062,12 +1028,34 @@ The BCs for our system will be:
 
 at $z=0$, use $w$ to get two of these.
 \begin{align*}
-    \Psi = f(r)\\     
-    v = g(r)\\
-    \eta = - \dd wr
+    \Psi &= f(r)\\     
+    v &= g(r)\\
+    \eta &= - \dd wr = \frac{1}{r^2} \dd \Psi r (r,0) - \frac1r \ddn \Psi r2 (r,0)
 \end{align*} 
+First order:
+
+Backward difference:
+\[f'(x) = \frac{f(x) - f(x-h)}{h} + \bigo(h)\]
+
+Forward Difference
+\[f'(x) = \frac{f(x+h) - f(x)}{h}+ \bigo(h)\]
+
+Central Differences
+\[f'(x) = \frac{f(x+h) - f(x-h)}{2h}+ \bigo(h^2)\]
+
+Backwards differences for a second derivative
+\[f''(x) = \frac{f(x) - 2f(x-h) + f(x-2h)}{h^2}\]
+Forwards
+\[f''(x) = \frac{f(x+2h) - 2f(x+h) + f(x)}{h^2}\]
+Central 
+\[f''(x) = \frac{f(x+h) - 2 f(x) + f(x-h)}{h^2}\]
 
 
+\[-\dd wr = \frac{1}{r^2} \dd\Psi r - \frac1r \ddn\Psi r2 \]
+\begin{align*}
+    \eta|_{r=R} &\approx \frac{1}{r^2}\left(\frac{\Psi_{nr,j} - \Psi_{nr-1,j}}{\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{nr,j} - 2\Psi_{nr-1,j} + \Psi_{nr-2,j}}{\Delta r^2}\right) \\
+    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\Psi_{i+1,1} - \Psi_{i-1,1}}{\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{i+1,1} - 2 \Psi_{i,1} + \Psi_{i-1,1}}{\Delta r^2}\right)
+\end{align*}
 at $r=0$, the trivial BCs.
 \begin{align*}
     \Psi= 0\\
@@ -1080,7 +1068,7 @@ at $r= R$
 \begin{align*}
     \Psi = f(R)\\
     v = g(R)\\
-    \eta = ?
+    \eta = - \dd wr  = \frac{1}{R^2} \Psi'(R,z) - \frac1R \Psi''(R,z)
 \end{align*}
 $v = g(R)$ taken from (7.5.7) from bachelors book.
 % We require $u = 0$ on the wall, and $\dd uz = 0$ on the wall, meaning $\eta - \dd wr$
@@ -1090,7 +1078,7 @@ We don't actually need an $\eta$ condition here really
 In the book he uses $\dd \Psi r = 0$ on rigid boundaries, which sets $w=0$, but we can't do this for this problem. 
 
 On the wall $r=R$
-\[\eta = \dd uz - \dd wr = - \dd wr = \frac1{r^2} \dd \Psi r - \frac1r \ddn \Psi r 2\]
+\[\eta = \dd uz - \dd wr = - \dd wr = -\dd{}{r}\left(\frac1r \dd \Psi r\right) = \frac1{r^2} \dd \Psi r - \frac1r \ddn \Psi r 2\]
 He claims 
 
 
@@ -1102,17 +1090,21 @@ at $z=Z$ (outlet)
 \end{align*}
 The latter two we just assumed without any checking.
 
-\[\Psi(r=R,z) = f(R)\]
-
+These can be approximated by
+\begin{align*}
+    \Psi(Z) = \Psi(Z- \delta z)\\
+    \eta(Z) = \eta(Z -\delta z)\\
+    v(Z) = v(Z - \delta z)
+\end{align*}
 
 Use backwards difference on the edge of $r=R$ 
 \[\eta = - \dd wr =  \frac{1}{r^2} \dd\Psi r - \frac1r \ddn \Psi r 2\]
 
-
+For rotating flow $f(r) = \frac12 W r^2$ and $g(r) = \Omega r$
 Way to solve based on this paper:
 %write the solution method here
 
-We use the streamfunction-vorticity formulation
+We use the stream function-vorticity formulation
 \[\ddn \Psi z2 + \ddn \Psi r2 - \frac1r \dd \Psi r = -r \eta\]
 
 
