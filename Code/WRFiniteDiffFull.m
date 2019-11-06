@@ -27,7 +27,7 @@ dz = z(2)-z(1);
 %initial conditions
 psi = PsiInit(rmat);
 %using eta = -dwdr = - ddr(ddr(psi)./rmat)
-eta = ones(size(rmat));
+eta = zeros(size(rmat)); %temporary
 v   = VInit(rmat);
 
 
@@ -49,28 +49,16 @@ for t=0:dt:tEnd
     dpsidz = ddz(psi,z);
     dpsidr = ddr(psi,r);
     J = @(x) dpsidz .* (ddr(x,r)) - (dpsidr .* (ddz(x,z)));
+    %dvdt is exploding
     dvdt = J(v)./rmat + v.*dpsidz./rmat.^2 ;
     temp  = eta./rmat;
-    %handle the 0/0 problem
+    %handle the 0/0 problem?
     temp(eta==0) =0;
     
     temp(1,:) = temp(2,:);
     detadt =  2*v.*ddz(v,z)./rmat;
     detadt(rIsZero)= 0;
     detadt = J(temp) +detadt;
-    
-    %step 5
-    rhs = - rmat.*eta;
-    
-    %%PSI BCs----
-    %r=0
-    rhs(rIsZero) = 0;
-    %r=R
-    rhs(rIsR) = PsiInit(R);
-    %z=0
-    rhs(zIsZero) =PsiInit(r);
-    %z=Z
-    rhs(zIsZ) =rhs(:,end-1);
     
         %step 7
     %iteration process
@@ -84,8 +72,8 @@ for t=0:dt:tEnd
 %         eta = eta + dt.*detaStardt;
 %         v = v + dt.*dvStardt;
 %     else
-          eta = eta + dt.*detadt;
-          v = v + dt.*dvdt;
+          eta = eta + dt*detadt;
+          v = v + dt*dvdt;
 %     end
 
     %r=0
@@ -99,7 +87,20 @@ for t=0:dt:tEnd
     
     
     
+        %step 5
+    rhs = - rmat.*eta;
     
+    %%PSI BCs----
+    %r=0
+    rhs(rIsZero) = 0;
+    %r=R
+    rhs(rIsR) = PsiInit(R);
+    %z=0
+    rhs(zIsZero) =PsiInit(r);
+    %z=Z
+    rhs(zIsZ) =rhs(:,end-1);
+    
+
     
     
     rhsvec = rhs(:);
@@ -126,6 +127,7 @@ for t=0:dt:tEnd
     %not sure how to handle this one...
     %OLD
     %eta(:,1) = -2* psi(:,2)./(r'*dz^2);
+    %this line may be slightly off?
     i = 2:length(r)-1;
     eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) ...
         - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
@@ -133,6 +135,9 @@ for t=0:dt:tEnd
     %OLD
     %eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
     eta(zIsZ) = eta(:,end-1);
+    
+    
+    
     %display result
     surf(rmat,zmat,psi)
     axis([0,R,0,Z,0,inf])
@@ -228,7 +233,7 @@ function mat = Vec2Mat(vec,ndim,mdim)
     end
 end
 
-%derivative wrt z (tested)
+%central differences derivative wrt z (tested)
 function dxdz = ddz(x,z)
     dxdz = zeros(size(x));
     dz = z(2) - z(1);
@@ -237,7 +242,7 @@ function dxdz = ddz(x,z)
 end
 
 
-%derivative wrt r (tested)
+%central differences derivative wrt r (tested)
 function dxdr = ddr(x,r)
 
     dxdr = zeros(size(x));
