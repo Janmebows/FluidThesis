@@ -31,7 +31,13 @@ eta = ones(size(rmat));
 v   = VInit(rmat);
 
 
+%more readable way for BCs
+rIsZero = rmat==0;
+zIsZero = zmat==0;
+rIsR = rmat==R;
+zIsZ = zmat==Z;
 
+contours = linspace(0,0.1,20);
 %preallocate matrices
 etaStar = zeros(size(rmat));
 vStar = zeros(size(rmat));
@@ -42,25 +48,29 @@ for t=0:dt:tEnd
     %steps 3,4
     dpsidz = ddz(psi,z);
     dpsidr = ddr(psi,r);
-    J = @(x) dpsidz .* (ddr(x,r)) - dpsidr .* (ddz(x,z));
+    J = @(x) dpsidz .* (ddr(x,r)) - (dpsidr .* (ddz(x,z)));
     dvdt = J(v)./rmat + v.*dpsidz./rmat.^2 ;
     temp  = eta./rmat;
     %handle the 0/0 problem
     temp(eta==0) =0;
-    detadt = J(temp) + 2*v.*ddz(v,z)./rmat;
+    
+    temp(1,:) = temp(2,:);
+    detadt =  2*v.*ddz(v,z)./rmat;
+    detadt(rIsZero)= 0;
+    detadt = J(temp) +detadt;
     
     %step 5
     rhs = - rmat.*eta;
     
     %%PSI BCs----
     %r=0
-    rhs(1,:) = 0;
+    rhs(rIsZero) = 0;
     %r=R
-    rhs(end,:) = PsiInit(R);
+    rhs(rIsR) = PsiInit(R);
     %z=0
-    rhs(:,1) =0;
+    rhs(zIsZero) =PsiInit(r);
     %z=Z
-    rhs(:,end) =rhs(:,end-1);
+    rhs(zIsZ) =rhs(:,end-1);
     
         %step 7
     %iteration process
@@ -74,18 +84,18 @@ for t=0:dt:tEnd
 %         eta = eta + dt.*detaStardt;
 %         v = v + dt.*dvStardt;
 %     else
-          eta = eta + dt.*eta;
-          v = v + dt.*v;
+          eta = eta + dt.*detadt;
+          v = v + dt.*dvdt;
 %     end
 
     %r=0
-    v(1,:) = 0;
+    v(rIsZero) = 0;
     %r=R
-    v(end,:) = VInit(R);
+    v(rIsR) = VInit(R);
     %z=0
-    v(:,1) = VInit(r);
+    v(zIsZero) = VInit(r);
     %z=Z
-    v(:,end) = v(:,end-1);
+    v(zIsZ) = v(:,end-1);
     
     
     
@@ -102,16 +112,16 @@ for t=0:dt:tEnd
     end
     
     psi = Vec2Mat(psiV,nPtsR,nPtsZ);
-
+    
 
         
     %eta bcs 
     %r=0
-    eta(1,:) = 0 ;
+    eta(rIsZero) = 0 ;
     %r=R
     %OLD
     %eta(end,:) = -2 * psi(end-1,:)/(R*dr^2);
-    eta(end,:) = (1/R).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
+    eta(rIsR) = (1/R).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
     %z=0
     %not sure how to handle this one...
     %OLD
@@ -122,11 +132,12 @@ for t=0:dt:tEnd
     %z=Z
     %OLD
     %eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
-    eta(:,end) = eta(:,end-1);
+    eta(zIsZ) = eta(:,end-1);
     %display result
-    %surf(rmat,zmat,psi)
-    %axis([0,R,0,Z,0,inf])
-    contour(rmat,zmat,psi,50)
+    surf(rmat,zmat,psi)
+    axis([0,R,0,Z,0,inf])
+    
+    %contour(rmat,zmat,psi,contours)
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
