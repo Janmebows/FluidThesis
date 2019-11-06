@@ -1020,20 +1020,6 @@ Wang, Rusak use $\dd\Psi z = 0$. And at the right boundary it might make sense t
 So that $\Psi_{i,j}$ is stored in index 
 
 
-for the time solver, precompute the LU factorisation of the matrix.
-
-
-The BCs for our system will be:
-
-
-at $z=0$, use $w$ to get two of these.
-\begin{align*}
-    \Psi &= f(r)\\     
-    v &= g(r)\\
-    \eta &= - \dd wr = \frac{1}{r^2} \dd \Psi r (r,0) - \frac1r \ddn \Psi r2 (r,0)
-\end{align*} 
-First order:
-
 Backward difference:
 \[f'(x) = \frac{f(x) - f(x-h)}{h} + \bigo(h)\]
 
@@ -1051,11 +1037,21 @@ Central
 \[f''(x) = \frac{f(x+h) - 2 f(x) + f(x-h)}{h^2}\]
 
 
-\[-\dd wr = \frac{1}{r^2} \dd\Psi r - \frac1r \ddn\Psi r2 \]
+for the time solver, precompute the LU factorisation of the matrix.
+
+
+The BCs for our system will be:
+
+
+at $z=0$, use $w$ to get two of these.
 \begin{align*}
-    \eta|_{r=R} &\approx \frac{1}{r^2}\left(\frac{\Psi_{nr,j} - \Psi_{nr-1,j}}{\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{nr,j} - 2\Psi_{nr-1,j} + \Psi_{nr-2,j}}{\Delta r^2}\right) \\
-    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\Psi_{i+1,1} - \Psi_{i-1,1}}{\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{i+1,1} - 2 \Psi_{i,1} + \Psi_{i-1,1}}{\Delta r^2}\right)
-\end{align*}
+    \Psi &= f(r)\\     
+    v &= g(r)\\
+    \eta &= - \dd wr = \frac{1}{r^2} \dd \Psi r (r,0) - \frac1r \ddn \Psi r2 (r,0)
+\end{align*} 
+First order:
+
+
 at $r=0$, the trivial BCs.
 \begin{align*}
     \Psi= 0\\
@@ -1066,20 +1062,15 @@ at $r=0$, the trivial BCs.
 
 at $r= R$
 \begin{align*}
-    \Psi = f(R)\\
-    v = g(R)\\
-    \eta = - \dd wr  = \frac{1}{R^2} \Psi'(R,z) - \frac1R \Psi''(R,z)
+    \Psi &= f(R)\\
+    v &= g(R)\\
+    \eta &= - \dd wr  = \frac{1}{R^2} \Psi'(R,z) - \frac1R \Psi''(R,z)
 \end{align*}
-$v = g(R)$ taken from (7.5.7) from bachelors book.
+$v(R) = g(R)$ taken from (7.5.7) from bachelors book.
 % We require $u = 0$ on the wall, and $\dd uz = 0$ on the wall, meaning $\eta - \dd wr$
-We don't actually need an $\eta$ condition here really
+We don't actually need an $\eta$ condition here really?
 
 
-In the book he uses $\dd \Psi r = 0$ on rigid boundaries, which sets $w=0$, but we can't do this for this problem. 
-
-On the wall $r=R$
-\[\eta = \dd uz - \dd wr = - \dd wr = -\dd{}{r}\left(\frac1r \dd \Psi r\right) = \frac1{r^2} \dd \Psi r - \frac1r \ddn \Psi r 2\]
-He claims 
 
 
 at $z=Z$ (outlet)
@@ -1099,6 +1090,15 @@ These can be approximated by
 
 Use backwards difference on the edge of $r=R$ 
 \[\eta = - \dd wr =  \frac{1}{r^2} \dd\Psi r - \frac1r \ddn \Psi r 2\]
+
+
+\begin{align*}
+    \eta|_{r=R} &\approx \frac{1}{R^2}\left(\frac{\Psi_{nr,j} - \Psi_{nr-1,j}}{\Delta r}\right) - \frac{1}{R} \left(\frac{\Psi_{nr,j} - 2\Psi_{nr-1,j} + \Psi_{nr-2,j}}{\Delta r^2}\right) \\
+    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\Psi_{i+1,1} - \Psi_{i-1,1}}{\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{i+1,1} - 2 \Psi_{i,1} + \Psi_{i-1,1}}{\Delta r^2}\right)
+\end{align*}
+
+
+
 
 For rotating flow $f(r) = \frac12 W r^2$ and $g(r) = \Omega r$
 Way to solve based on this paper:

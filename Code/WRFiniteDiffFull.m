@@ -6,9 +6,9 @@ nPtsZ = 100;
 R = 1;
 Z = 2.5;
 W = 1;
-Omega = 1;
+Omega = 2;
 dt = 0.05;
-tEnd = 60;
+tEnd = 6;
 %upstream flow
 PsiInit = @(r) 0.5*W*r.^2;
 VInit = @(r) Omega*r;
@@ -27,7 +27,7 @@ dz = z(2)-z(1);
 %initial conditions
 psi = PsiInit(rmat);
 %using eta = -dwdr = - ddr(ddr(psi)./rmat)
-eta = zeros(size(rmat));
+eta = ones(size(rmat));
 v   = VInit(rmat);
 
 
@@ -49,22 +49,34 @@ for t=0:dt:tEnd
     temp(eta==0) =0;
     detadt = J(temp) + 2*v.*ddz(v,z)./rmat;
     
+    %step 5
+    rhs = - rmat.*eta;
+    
+    %%PSI BCs----
+    %r=0
+    rhs(1,:) = 0;
+    %r=R
+    rhs(end,:) = PsiInit(R);
+    %z=0
+    rhs(:,1) =0;
+    %z=Z
+    rhs(:,end) =rhs(:,end-1);
     
         %step 7
     %iteration process
     %first iteration t=0 is odd step
-    if(mod(t/2+1,dt)==0)
-        etaStar = eta + dt .* detadt;
-        vStar = v + dt.* dvdt;
-        
-        dvStardt = J(vStar)./rmat + v.*dpsidz./rmat.^2 ;
-        detaStardt = J(etaStar./rmat) + 2*v.*ddz(vStar,z)./rmat;
-        eta = eta + dt.*etaStar;
-        v = v + dt.*vStar;
-    else
-         eta = eta + dt.*eta;
-         v = v + dt.*v;
-    end
+%     if(mod(t/2+1,dt)==0)
+%         etaStar = eta + dt .* detadt;
+%         vStar = v + dt.* dvdt;
+%         
+%         dvStardt = J(vStar)./rmat + v.*dpsidz./rmat.^2 ;
+%         detaStardt = J(etaStar./rmat) + 2*v.*ddz(vStar,z)./rmat;
+%         eta = eta + dt.*detaStardt;
+%         v = v + dt.*dvStardt;
+%     else
+          eta = eta + dt.*eta;
+          v = v + dt.*v;
+%     end
 
     %r=0
     v(1,:) = 0;
@@ -75,18 +87,6 @@ for t=0:dt:tEnd
     %z=Z
     v(:,end) = v(:,end-1);
     
-    %step 5
-    rhs = - rmat.*eta;
-    %rhs = PsiBCs(rhs,params);
-        %%PSI BCs----
-    %r=0
-    rhs(1,:) = 0;
-    %r=R
-    rhs(end,:) = PsiInit(R);
-    %z=0
-    rhs(:,1) =0;
-    %z=Z
-    rhs(:,end) =rhs(:,end-1);
     
     
     
@@ -100,6 +100,7 @@ for t=0:dt:tEnd
         "failed"
         break
     end
+    
     psi = Vec2Mat(psiV,nPtsR,nPtsZ);
 
 
@@ -116,15 +117,17 @@ for t=0:dt:tEnd
     %OLD
     %eta(:,1) = -2* psi(:,2)./(r'*dz^2);
     i = 2:length(r)-1;
-    eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
+    eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) ...
+        - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
     %z=Z
     %OLD
     %eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
     eta(:,end) = eta(:,end-1);
     %display result
-    surf(rmat,zmat,psi)
-    axis([0,R,0,Z,0,inf])
-    %contour(rmat,zmat,psi,50)
+    %surf(rmat,zmat,psi)
+    %axis([0,R,0,Z,0,inf])
+    contour(rmat,zmat,psi,50)
+    %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
     %colorbar
@@ -134,10 +137,8 @@ for t=0:dt:tEnd
     title("t = "+ t)
     drawnow
     pause(0.05)
+
     
-
-
-
 
 
 end
@@ -215,16 +216,6 @@ function mat = Vec2Mat(vec,ndim,mdim)
         mat(:,j) = vec(lind:rind);
     end
 end
-
-%puts in the boundary conditions for psi 
-%where rhs is -r*eta 
-function rhs = PsiBCs(rhs,params)
-    W = params.W;
-    R = params.R;
-
-
-end
-
 
 %derivative wrt z (tested)
 function dxdz = ddz(x,z)
