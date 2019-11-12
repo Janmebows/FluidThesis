@@ -1,13 +1,13 @@
 close all 
 clear all
 %parameters
-nPtsR = 60;
-nPtsZ = 100;
+nPtsR = 20;
+nPtsZ = 50;
 R = 1;
 Z = 2.5;
 W = 1;
 Omega = 2;
-dt = 0.05;
+dt = 0.005;
 tEnd = 6;
 %upstream flow
 PsiInit = @(r) 0.5*W*r.^2;
@@ -44,14 +44,14 @@ vStar = zeros(size(rmat));
 %precompute LU decomp for A * Psi = -r * eta
 [L,U,A] = solveAAndDecompose(params);
 figure
-for t=0:dt:tEnd
+for t=dt:dt:tEnd
     %steps 3,4
     dpsidz = ddz(psi,z);
     dpsidr = ddr(psi,r);
-    J = @(x) dpsidz .* (ddr(x,r)) - (dpsidr .* (ddz(x,z)));
+    J = @(x) (dpsidz .* (ddr(x,r))) - (dpsidr .* (ddz(x,z)));
     %dvdt is exploding
     dvdt = J(v)./rmat + v.*dpsidz./rmat.^2 ;
-    temp  = eta./rmat;
+    temp = eta./rmat;
     %handle the 0/0 problem?
     temp(eta==0) =0;
     
@@ -62,8 +62,7 @@ for t=0:dt:tEnd
     
         %step 7
     %iteration process
-    %first iteration t=0 is odd step
-%     if(mod(t/2+1,dt)==0)
+%     if(mod(t/2,dt)==0)
 %         etaStar = eta + dt .* detadt;
 %         vStar = v + dt.* dvdt;
 %         
@@ -75,7 +74,7 @@ for t=0:dt:tEnd
           eta = eta + dt*detadt;
           v = v + dt*dvdt;
 %     end
-
+% 
     %r=0
     v(rIsZero) = 0;
     %r=R
@@ -97,16 +96,15 @@ for t=0:dt:tEnd
     rhs(rIsR) = PsiInit(R);
     %z=0
     rhs(zIsZero) =PsiInit(r);
-    %z=Z
-    rhs(zIsZ) =rhs(:,end-1);
+    %z=Z -> z derivative is zero
+    rhs(zIsZ) =0;
     
 
     
     
     rhsvec = rhs(:);
     y = L\rhsvec;
-    psiV= U\y;
-        %break if numerics break
+    psiV= U\y;        %break if numerics break
     if any(isnan(psiV))
         "failed"
         break
@@ -139,20 +137,20 @@ for t=0:dt:tEnd
     
     
     %display result
-    surf(rmat,zmat,psi)
-    axis([0,R,0,Z,0,inf])
+    %surf(rmat,zmat,psi)
+    %axis([0,R,0,Z,0,inf])
     
-    %contour(rmat,zmat,psi,contours)
+    contour(rmat,zmat,v)
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
-    %colorbar
+    colorbar
     xlabel("r")
     ylabel("z")
     zlabel("psi")
     title("t = "+ t)
     drawnow
-    pause(0.05)
+    pause
 
     
 
@@ -205,6 +203,8 @@ for i=1:nPtsR
     %z = Z => j = nPts
     ind = cvtIndex(i,nPtsZ,nPtsR);
     A(ind,ind) = 1;
+    ind2 = cvtIndex(i,nPtsZ-1,nPtsR);
+    A(ind,ind2) = -1;
 
 end   
 for j=1:nPtsZ
