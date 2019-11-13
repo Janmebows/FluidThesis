@@ -53,9 +53,10 @@ etaVInit(:,:,2) = v(2:end-1,2:end-1);
 %post process the data
 eta = zeros(nPtsR,nPtsZ,length(t));
 v = zeros(nPtsR,nPtsZ,length(t));
-%temp = reshape(out,[nPtsR-2,nPtsZ-2,length(t),2]);
-%eta(2:end-1,2:end-1,:) = temp(:,:,:,1);
-%v(2:end-1,2:end-1,:) = temp(:,:,:,2);
+
+
+%unfortunately i've had to do this in a 
+%loop since reshape isn't cooperating
 for i = 1:length(t)
     temp = reshape(out(i,:), [nPtsR-2,nPtsZ-2,2]);
     eta(2:end-1,2:end-1,i) = temp(:,:,1);
@@ -67,7 +68,6 @@ end
 figure
 
 for i = 1:length(t)
-        
     contour(rmat,zmat,eta(:,:,i))
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
@@ -79,13 +79,14 @@ for i = 1:length(t)
     title("t = "+ t(i))
     drawnow
     Frame(i) = getframe(gcf);
-    pause(0.01)%
+    pause
 
 end
-v = VideoWriter('contourseta.mp4','MPEG-4');
-open(v)
-writeVideo(v,Frame);
-close(v)
+%%%save to file
+% v = VideoWriter('contours.mp4','MPEG-4');
+% open(v)
+% writeVideo(v,Frame);
+% close(v)
 function out = DE(~,in,params)
 %%%%%unpack variables
 
