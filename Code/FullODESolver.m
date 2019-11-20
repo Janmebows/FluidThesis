@@ -23,6 +23,8 @@ params.PsiInit = PsiInit;
 params.VInit = VInit;
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
+params.r = r;
+params.z = z;
 [rmat, zmat] = ndgrid(r,z);
 dr = r(2)-r(1);
 dz = z(2)-z(1);
@@ -51,6 +53,7 @@ etaVInit(:,:,2) = v(2:end-1,2:end-1);
 [t,out] = ode45(@(t,in)DE(t,in,params),[0,6],etaVInit);
 
 %post process the data
+%%
 eta = zeros(nPtsR,nPtsZ,length(t));
 v = zeros(nPtsR,nPtsZ,length(t));
 
@@ -61,14 +64,15 @@ for i = 1:length(t)
     temp = reshape(out(i,:), [nPtsR-2,nPtsZ-2,2]);
     eta(2:end-1,2:end-1,i) = temp(:,:,1);
     v(2:end-1,2:end-1,i) = temp(:,:,2);
- 
+    eta(:,:,i) = EtaBCs(eta(:,:,i),psi,params);
+    v(:,:,i) = VBCs(v(:,:,i),params);
 end
 
 %%plotting 
 figure
 
 for i = 1:length(t)
-    contour(rmat,zmat,eta(:,:,i))
+    contour(rmat,zmat,v(:,:,i))
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
@@ -147,39 +151,21 @@ zIsZ = zmat==Z;
     
 
    
-    %r=0
-    v(rIsZero) = 0;
-    %r=R
-    v(rIsR) = VInit(R);
-    %z=0
-    v(zIsZero) = VInit(r);
-    %z=Z
-    v(zIsZ) = v(:,end-1);
-    
-    
+%     %r=0
+%     v(rIsZero) = 0;
+%     %r=R
+%     v(rIsR) = VInit(R);
+%     %z=0
+%     v(zIsZero) = VInit(r);
+%     %z=Z
+%     v(zIsZ) = v(:,end-1);
+%     
+    v = VBCs(v,params);
     
         %step 5
 
-        
-    %eta bcs 
-    %r=0
-    eta(rIsZero) = 0 ;
-    %r=R
-    %OLD
-    %eta(end,:) = -2 * psi(end-1,:)/(R*dr^2);
-    eta(rIsR) = (1/R).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
-    %z=0
-    %not sure how to handle this one...
-    %OLD
-    %eta(:,1) = -2* psi(:,2)./(r'*dz^2);
-    %this line may be slightly off?
-    i = 2:length(r)-1;
-    eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) ...
-        - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
-    %z=Z
-    %OLD
-    %eta(:,end) = -2*psi(:,end-1)./(r'*dz^2);
-    eta(zIsZ) = eta(:,end-1);
+        eta = EtaBCs(eta,psi,params);
+
     
      
 %steps 3,4
@@ -208,7 +194,36 @@ zIsZ = zmat==Z;
 end
 
 
+function eta = EtaBCs(eta,psi,params)
+r = params.r;
+R = params.R;
+dr = r(2)-r(1);
+    %r=0
+    eta(1,:) = 0 ;
+    %r=R
+    eta(end,:) = (1/R).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
+    %z=0
+    i = 2:length(r)-1;
+    eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) ...
+        - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
+    %z=Z
+    %OLD
+    eta(:,end) = eta(:,end-1);
+end
 
+function v = VBCs(v,params)
+r = params.r;
+R = params.R;
+VInit = params.VInit;
+    %r=0
+    v(1,:) = 0;
+    %r=R
+    v(end,:) = VInit(R);
+    %z=0
+    v(:,1) = VInit(r);
+    %z=Z
+    v(:,end) = v(:,end-1);
+end
 
 function [L,U,A] = solveAAndDecompose(params)
 %Get the matrix A and decompose it into L U
