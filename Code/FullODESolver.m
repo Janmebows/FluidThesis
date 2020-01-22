@@ -7,7 +7,6 @@ R = 1;
 Z = 2.5;
 W = 1;
 Omega = 2;
-dt = 0.005;
 tEnd = 6;
 %upstream flow
 PsiInit = @(r) 0.5*W*r.^2;
@@ -67,12 +66,12 @@ for i = 1:length(t)
     eta(:,:,i) = EtaBCs(eta(:,:,i),psi,params);
     v(:,:,i) = VBCs(v(:,:,i),params);
 end
-
+%% 
 %%plotting 
 figure
 
 for i = 1:length(t)
-    contour(rmat,zmat,v(:,:,i))
+    contour(rmat,zmat,eta(:,:,i))
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
@@ -82,15 +81,17 @@ for i = 1:length(t)
     zlabel("psi")
     title("t = "+ t(i))
     drawnow
-    Frame(i) = getframe(gcf);
+    %Frame(i) = getframe(gcf);
     pause
 
+    
 end
+%%
 %%%save to file
-% v = VideoWriter('contours.mp4','MPEG-4');
-% open(v)
-% writeVideo(v,Frame);
-% close(v)
+ vwriter = VideoWriter('contourseta.mp4','MPEG-4');
+ open(vwriter)
+ writeVideo(vwriter,Frame);
+ close(vwriter)
 function out = DE(~,in,params)
 %%%%%unpack variables
 
@@ -201,11 +202,14 @@ dr = r(2)-r(1);
     %r=0
     eta(1,:) = 0 ;
     %r=R
-    eta(end,:) = (1/R).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
+    %this guy is problematic
+    eta(end,:) = (1/R^2).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));
+
     %z=0
+    %not enforcing anything
     i = 2:length(r)-1;
-    eta(i,1) = (1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/dr) ...
-        - (1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2));
+    eta(i,1) = ((1./r(i).^2)'.*((psi(i+1,1) - psi(i-1,1))/(2*dr))) ...
+        - ((1./r(i))' .*((psi(i+1,1) - 2*psi(i,1) + psi(i-1,1))/(dr^2)));
     %z=Z
     %OLD
     eta(:,end) = eta(:,end-1);

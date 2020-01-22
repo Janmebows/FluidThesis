@@ -659,6 +659,9 @@ Which comes to:
 
 
 
+
+
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{rankineSolutionSet.eps}
@@ -1064,7 +1067,7 @@ at $r= R$
 \begin{align*}
     \Psi &= f(R)\\
     v &= g(R)\\
-    \eta &= - \dd wr  = \frac{1}{R^2} \Psi'(R,z) - \frac1R \Psi''(R,z)
+    \eta &= - \dd wr\pipe_{r=R}  = -\dd{}{r}\left(\frac{1}{r} \dd \Psi r\right)\pipe_{r=R}= \frac{1}{R^2} \Psi'(R,z) - \frac1R \Psi''(R,z)
 \end{align*}
 $v(R) = g(R)$ taken from (7.5.7) from bachelors book.
 % We require $u = 0$ on the wall, and $\dd uz = 0$ on the wall, meaning $\eta - \dd wr$
@@ -1094,7 +1097,7 @@ Use backwards difference on the edge of $r=R$
 
 \begin{align*}
     \eta|_{r=R} &\approx \frac{1}{R^2}\left(\frac{\Psi_{nr,j} - \Psi_{nr-1,j}}{\Delta r}\right) - \frac{1}{R} \left(\frac{\Psi_{nr,j} - 2\Psi_{nr-1,j} + \Psi_{nr-2,j}}{\Delta r^2}\right) \\
-    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\Psi_{i+1,1} - \Psi_{i-1,1}}{\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{i+1,1} - 2 \Psi_{i,1} + \Psi_{i-1,1}}{\Delta r^2}\right)
+    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\Psi_{i+1,1} - \Psi_{i-1,1}}{2\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{i+1,1} - 2 \Psi_{i,1} + \Psi_{i-1,1}}{\Delta r^2}\right)
 \end{align*}
 
 
@@ -1228,58 +1231,79 @@ We are trying to reproduce the code used in this paper.
 
 \clearpage
 
-\section{Outer vortex breakdown}
-Considering the initial problem for vortex breakdown, except perhaps the breakdown is a pocket expanding from $R$ rather than $0$. I.e. the breakdown occurs about the wall rather than the center.
-So assuming $r^\dagger $ is our outer vortex breakdown radius
+% \section{Outer vortex breakdown}
+% Considering the initial problem for vortex breakdown, except perhaps the breakdown is a pocket expanding from $R$ rather than $0$. I.e. the breakdown occurs about the wall rather than the center.
+% So assuming $r^\dagger $ is our outer vortex breakdown radius
 
 
-This simply means obtaining a new $A$, $B$ and $k$.
-\[\Psi(r) = \frac12 W r^2 + r(A J_1(kr) + BY_1(kr))\]
-\[w(r) = W + k(A J_0(kr) + B Y_0(kr))\]
-Such that
-\[w(r^\dagger) = 0,\qquad \Psi(0) = 0,\quad and \quad \Psi(r^\dagger) = 0  \]
+% This simply means obtaining a new $A$, $B$ and $k$.
+% \[\Psi(r) = \frac12 W r^2 + r(A J_1(kr) + BY_1(kr))\]
+% \[w(r) = W + k(A J_0(kr) + B Y_0(kr))\]
+% Such that
+% \[w(r^\dagger) = 0,\qquad \Psi(0) = 0,\quad and \quad \Psi(r^\dagger) = 0  \]
  
-To enforce $\Psi(0) = 0$ note that $\lim_{r\to 0} \frac{Y_1(kr)}{r} = -\infty$. Hence it is necessary to set $B = 0$. 
-\[\Psi(r) = \frac12 Wr^2 + rAJ_1(kr), \quad w (r) = W + kAJ_0(kr)\]
-And to enforce 
-$\Psi(r^\dagger) = 0$
-\[\implies Ar^\dagger J_1(kr^\dagger) = -\frac12 Wr^{\dagger2}\]
-\[A = \frac{-Wr^{\dagger}}{2J_1(kr^\dagger)}\]
-And obtain $k$ using
-\[w(r^\dagger) = 0\]
-\[k AJ_0(kr) = -W\]
+% To enforce $\Psi(0) = 0$ note that $\lim_{r\to 0} \frac{Y_1(kr)}{r} = -\infty$. Hence it is necessary to set $B = 0$. 
+% \[\Psi(r) = \frac12 Wr^2 + rAJ_1(kr), \quad w (r) = W + kAJ_0(kr)\]
+% And to enforce 
+% $\Psi(r^\dagger) = 0$
+% \[\implies Ar^\dagger J_1(kr^\dagger) = -\frac12 Wr^{\dagger2}\]
+% \[A = \frac{-Wr^{\dagger}}{2J_1(kr^\dagger)}\]
+% And obtain $k$ using
+% \[w(r^\dagger) = 0\]
+% \[k AJ_0(kr) = -W\]
 
 
-\[\Psi(r^\dagger) = \Psi(R) = \frac12 WR^2\]
-
-
-
+% \[\Psi(r^\dagger) = \Psi(R) = \frac12 WR^2\]
 
 
 
 
 
-%%%TRY SOLVING THE REGULAR PROBLEM WITH r^* = 0 and B = 0
+%look at euler equations to derive the detadt and dvdt equations (potentially)
+%cylindrical euler equations
+%better to just reference it though
 
-%%%summary of project
-%%%Vortex breakdown states
-%Columnar flows
-%- rotating flows DONE
-% - analytics DONE
-% - numerics DONE
-%- rankine vortex DONE
-%   analytics DONE
-%   numerics DONE
-%- Burgers vortex DONE
-%   analytics DONE
-%   numerics DONE
-%- Q' vortex
-%   numerics
-%Pipe flow
+
+%try higher order finite diff for the r=R bc of eta
+%repeat the wang rusak flow stuff in the `wall separation' paper 
+%will need to use a perturbation similar to what they use however.
+%just above section 4.1
+\begin{align*}
+  \psi(x,y,0) &= y + \delta \phi_B(y) \sin(\pi x/2L)\\
+  \chi(x,y,0) &= -\delta[\phi_{Byy}(y) -(\pi/2L)^2 \phi_B(y)/2y]\sin(\pi x/2L)\\
+  K(x,y,0) = 2 \omega y + 2  \delta \omega \phi_B(y) \sin (\pi x/2L)
+\end{align*}
+\[\phi_B(y) = \phi_1(y) = \sqrt{2y} J_1(2\omega_B \sqrt{2y})\]
+$\omega_B$ is the first zero to the bessel function $J_1$.
+And $\phi_{m}(y)$ is the solution to
+\begin{align*}
+    \phi_{myy} + \left(4 \omega^2_{(m,n)} - \frac{(2n -1)^2 \pi^2}{4L^2}\right) \frac{\phi_m}{2y} = 0\\
+    \phi_m(0) = \phi_m(\frac12) = 0
+\end{align*}
+\[\eta = \sqrt{2y} \chi = r \chi\]
+Length of pipe $R=1$, $L=6$, $\omega = \{1.9,1.95,1.97\}$ for the three sims.
+
+$y = r^2/2$
+
+try playing around with outlet conditions. wang,rusak use the d*dz = 0
+
+trent suggested at $z=Z$
+\[\dd \phi t = -U_{a} \dd \phi z\]
+where $\phi$ would be both v and $\eta$ and $U_a$ is a parameter
+set $U_a$ to some value, perhaps the mean velocity in the tube - i.e. try 1
+
+If the flow is steady however, this is equivalent to $\dd \phi z = 0$, so we want to check if this makes any difference.
+
 %-finite length (straight) pipe
 %-pipe with sink outlet (apparently theres a paper on this that i should find)
 %-tornados?
 %-variable radius
+
+%I AM MISSING A W,R PAPER
+%The dynamics of a swirling flow in a pipe and ...
+
+
+
 
 
 \clearpage
