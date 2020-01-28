@@ -1271,7 +1271,7 @@ We are trying to reproduce the code used in this paper.
 \begin{align*}
   \psi(x,y,0) &= y + \delta \phi_B(y) \sin(\pi x/2L)\\
   \chi(x,y,0) &= -\delta[\phi_{Byy}(y) -(\pi/2L)^2 \phi_B(y)/2y]\sin(\pi x/2L)\\
-  K(x,y,0) = 2 \omega y + 2  \delta \omega \phi_B(y) \sin (\pi x/2L)
+  K(x,y,0) &= 2 \omega y + 2  \delta \omega \phi_B(y) \sin (\pi x/2L)
 \end{align*}
 \[\phi_B(y) = \phi_1(y) = \sqrt{2y} J_1(2\omega_B \sqrt{2y})\]
 $\omega_B$ is the first zero to the bessel function $J_1$.
@@ -1280,16 +1280,23 @@ And $\phi_{m}(y)$ is the solution to
     \phi_{myy} + \left(4 \omega^2_{(m,n)} - \frac{(2n -1)^2 \pi^2}{4L^2}\right) \frac{\phi_m}{2y} = 0\\
     \phi_m(0) = \phi_m(\frac12) = 0
 \end{align*}
-\[\eta = \sqrt{2y} \chi = r \chi\]
+\[K = rv\]
+\[\eta = \sqrt{2y} \chi = r \chi \]
+
 Length of pipe $R=1$, $L=6$, $\omega = \{1.9,1.95,1.97\}$ for the three sims.
 
 $y = r^2/2$
 
-try playing around with outlet conditions. wang,rusak use the d*dz = 0
+try playing around with outlet conditions. wang,rusak use the $\dd \phi z = 0$
 
 trent suggested at $z=Z$
 \[\dd \phi t = -U_{a} \dd \phi z\]
-where $\phi$ would be both v and $\eta$ and $U_a$ is a parameter
+
+where $\phi$ would be both v and $\eta$, i.e.
+\[\dd vt = - U_{a} \dd v z\]
+\[\dd\eta t = - U_{a} \dd \eta z\]
+and $U_a$ is a parameter.
+
 set $U_a$ to some value, perhaps the mean velocity in the tube - i.e. try 1
 
 If the flow is steady however, this is equivalent to $\dd \phi z = 0$, so we want to check if this makes any difference.

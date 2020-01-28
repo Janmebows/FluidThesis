@@ -7,11 +7,20 @@ R = 1;
 Z = 6;
 W = 1;
 Omega = 1.97;
+%omegaB is the first zero of J_1 which is near 3
+omegaB = fsolve(@(x) besselj(1,x),3)/2; %good
 tEnd = 6;
 delta = 0.1;
+n=1; %i think they use n=1 throughout without explicitly saying it
+     %so ill use that
 %upstream flow
-PsiInit = @(r) r.^2/2 + delta *phiB(r^2/2).*sin(pi*z/(2*Z));
-VInit = @(r) Omega*r;
+%something wrong here it should be 0 when y = 1/2
+phiB = @(y) sqrt(2*y).*besselj(1,2*omegaB.*sqrt(2*y)); %good
+omegamn = sqrt(omegaB^2 + (2*n-1)^2 * pi^2/(16*Z^2));
+phiByy = @(y) -(4*omegamn^2 - ((2*n-1)^2 *pi^2)/(4*Z^2))*phiB(y)./(2*y);%TEMP
+PsiInit = @(r,z) r.^2/2 + delta *phiB(r.^2/2).*sin(pi*z/(2*Z));
+etaInit = @(r,z) r.*(-delta*(phiByy(r.^2/2) - (pi/(2*Z))^2.*phiB(r.^2/2)./(2*r.^2/2))).*sin(pi*z/(2*Z));
+VInit = @(r,z) (1./r).*(2*Omega*r.^2/2 + 2*delta*Omega*phiB(r.^2/2).*sin(pi*z/(2*Z)));
 %put them in a params struct
 params.nPtsR = nPtsR;
 params.nPtsZ = nPtsZ;
@@ -21,6 +30,7 @@ params.W = W;
 params.Omega = Omega;
 params.PsiInit = PsiInit;
 params.VInit = VInit;
+params.etaInit = etaInit;
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
 params.r = r;
@@ -29,10 +39,10 @@ params.z = z;
 dr = r(2)-r(1);
 dz = z(2)-z(1);
 %initial conditions
-psi = PsiInit(rmat);
+psi = PsiInit(rmat,zmat);
 %using eta = -dwdr = - ddr(ddr(psi)./rmat)
-eta = zeros(size(rmat)); %temporary
-v   = VInit(rmat);
+eta = etaInit(rmat,zmat); %temporary
+v   = VInit(rmat,zmat);
 
 
 
@@ -45,7 +55,6 @@ vStar = zeros(size(rmat));
 params.L = L;
 params.U = U;
 
-etaInit = zeros(nPtsR,nPtsZ);
 etaVInit(:,:,1) = eta(2:end-1,2:end-1);
 etaVInit(:,:,2) = v(2:end-1,2:end-1);
 
@@ -53,7 +62,7 @@ etaVInit(:,:,2) = v(2:end-1,2:end-1);
 [t,out] = ode45(@(t,in)DE(t,in,params),[0,6],etaVInit);
 
 %post process the data
-%%
+
 eta = zeros(nPtsR,nPtsZ,length(t));
 v = zeros(nPtsR,nPtsZ,length(t));
 
@@ -67,7 +76,7 @@ for i = 1:length(t)
     eta(:,:,i) = EtaBCs(eta(:,:,i),psi,params);
     v(:,:,i) = VBCs(v(:,:,i),params);
 end
-%% 
+ 
 %%plotting 
 figure
 
@@ -133,9 +142,10 @@ zIsZ = zmat==Z;
     %r=0
     rhs(rIsZero) = 0;
     %r=R
-    rhs(rIsR) = PsiInit(R);
+    %may need to loop this...
+    rhs(1,:) = PsiInit(R,z);
     %z=0
-    rhs(zIsZero) =PsiInit(r);
+    rhs(:,1) =PsiInit(r,0);
     %z=Z -> z derivative is zero
     rhs(zIsZ) =0;
     
@@ -218,14 +228,15 @@ end
 
 function v = VBCs(v,params)
 r = params.r;
+z = params.z;
 R = params.R;
 VInit = params.VInit;
     %r=0
     v(1,:) = 0;
     %r=R
-    v(end,:) = VInit(R);
+    v(end,:) = VInit(R,z);
     %z=0
-    v(:,1) = VInit(r);
+    v(:,1) = VInit(r,0);
     %z=Z
     v(:,end) = v(:,end-1);
 end
