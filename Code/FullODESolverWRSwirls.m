@@ -6,11 +6,11 @@ nPtsZ = 50;
 R = 1;
 Z = 6;
 W = 1;
-Omega = 1.97;
+Omega = 1.9; %is this the same omega as ours?
 %omegaB is the first zero of J_1 which is near 3
 omegaB = fsolve(@(x) besselj(1,x),3)/2; %good
 tEnd = 6;
-delta = 0.1;
+delta = -1.111;
 n=1; %i think they use n=1 throughout without explicitly saying it
      %so ill use that
 %upstream flow
@@ -31,6 +31,7 @@ params.Omega = Omega;
 params.PsiInit = PsiInit;
 params.VInit = VInit;
 params.etaInit = etaInit;
+params.psi = [];
 r = linspace(0,R,nPtsR);
 z = linspace(0,Z,nPtsZ);
 params.r = r;
@@ -40,16 +41,16 @@ dr = r(2)-r(1);
 dz = z(2)-z(1);
 %initial conditions
 psi = PsiInit(rmat,zmat);
-%using eta = -dwdr = - ddr(ddr(psi)./rmat)
-eta = etaInit(rmat,zmat); %temporary
+%using eta = -dwdr = - ddr(ddrr(psi)./rmat)
+eta = etaInit(rmat,zmat);
 v   = VInit(rmat,zmat);
 
 
 
-contours = linspace(0,0.1,20);
+contours = linspace(0.01,0.49,25);
 %preallocate matrices
-etaStar = zeros(size(rmat));
-vStar = zeros(size(rmat));
+%etaStar = zeros(size(rmat));
+%vStar = zeros(size(rmat));
 %precompute LU decomp for A * Psi = -r * eta
 [L,U,A] = solveAAndDecompose(params);
 params.L = L;
@@ -58,14 +59,13 @@ params.U = U;
 etaVInit(:,:,1) = eta(2:end-1,2:end-1);
 etaVInit(:,:,2) = v(2:end-1,2:end-1);
 
-
-[t,out] = ode45(@(t,in)DE(t,in,params),[0,6],etaVInit);
+t = linspace(0,6,100);
+[t,out] = ode45(@(t,in)DE(t,in,params),t,etaVInit);
 
 %post process the data
 
 eta = zeros(nPtsR,nPtsZ,length(t));
 v = zeros(nPtsR,nPtsZ,length(t));
-
 
 %unfortunately i've had to do this in a 
 %loop since reshape isn't cooperating
@@ -73,15 +73,44 @@ for i = 1:length(t)
     temp = reshape(out(i,:), [nPtsR-2,nPtsZ-2,2]);
     eta(2:end-1,2:end-1,i) = temp(:,:,1);
     v(2:end-1,2:end-1,i) = temp(:,:,2);
-    eta(:,:,i) = EtaBCs(eta(:,:,i),psi,params);
+    
+        
+    %psi
+    rhs = - rmat.*eta(:,:,i);
+    
+    %%PSI BCs----
+    %r=0
+    rhs(1,:) = 0;
+    %r=R
+    rhs(end,:) = PsiInit(R,z);
+    %z=0
+    rhs(:,1) =PsiInit(r,0);
+    %z=Z -> z derivative is zero
+    rhs(:,end) =0;
+    
+
+    
+    
+    rhsvec = rhs(:);
+    y = L\rhsvec;
+    psiV= U\y;        %break if numerics break
+    if any(isnan(psiV))
+        error("failed")
+    end
+    
+    psi(:,:,i) = Vec2Mat(psiV,nPtsR,nPtsZ);
+    
+    
+    eta(:,:,i) = EtaBCs(eta(:,:,i),psi(:,:,i),params);
     v(:,:,i) = VBCs(v(:,:,i),params);
+
 end
  
 %%plotting 
 figure
 
 for i = 1:length(t)
-    contour(rmat,zmat,eta(:,:,i))
+    contour(rmat,zmat,psi(:,:,i),contours)
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
@@ -140,14 +169,13 @@ zIsZ = zmat==Z;
     
     %%PSI BCs----
     %r=0
-    rhs(rIsZero) = 0;
+    rhs(1,:) = 0;
     %r=R
-    %may need to loop this...
-    rhs(1,:) = PsiInit(R,z);
+    rhs(end,:) = PsiInit(R,z);
     %z=0
     rhs(:,1) =PsiInit(r,0);
     %z=Z -> z derivative is zero
-    rhs(zIsZ) =0;
+    rhs(:,end) =0;
     
 
     
@@ -195,8 +223,6 @@ zIsZ = zmat==Z;
     detadt(rIsZero)= 0;
     detadt = J(temp) +detadt;
     
-
-
     out(:,:,1) = detadt(2:end-1,2:end-1);
     out(:,:,2) = dvdt(2:end-1,2:end-1);
 
@@ -209,9 +235,12 @@ end
 function eta = EtaBCs(eta,psi,params)
 r = params.r;
 R = params.R;
+z = params.z;
+etaInit = params.etaInit;
+
 dr = r(2)-r(1);
     %r=0
-    eta(1,:) = 0 ;
+    eta(1,:) = 0;
     %r=R
     %this guy is problematic
     eta(end,:) = (1/R^2).*((psi(end,:) - psi(end-1,:))/dr) - (1/R) .*((psi(end,:) - 2*psi(end-1,:) + psi(end-2,:))/(dr^2));

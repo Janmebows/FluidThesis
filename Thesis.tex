@@ -333,8 +333,8 @@ Code - homogeneousODE.m
 
 
 %Tasks:
-% \subsection{Lamb-Oseen Vortex}
-% The Lamb-Oseen vortex (or Q' vortex)
+% \subsection{Burgers Vortex}
+% The Burgers vortex (or Q' vortex)
 % \[\ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= r^2 \frac{dH}{d\psi} - C\frac{dC}{d\psi}\]
 
 % Q' vortex 
@@ -681,8 +681,8 @@ Figure~\ref{fig:rankineSolutions} shows the solution set for the problem. It dis
 %%%
 
 \clearpage
-\section{Lamb-Oseen Vortex}
-%pretty sure this is the Lamb-Oseen vortex but trent called it burgers
+\section{Burgers Vortex}
+%pretty sure this is the Burgers vortex but trent called it burgers
 Q-vortex without a Jet.
 Start with 
 \[w = W\]
@@ -784,7 +784,7 @@ To use the $r_*$ and $w$ parts, we can use $w = \frac1r\dd\Psi r $
 
 Try putting in the homogeneous solution to the solver to see if it works (i.e. the one with $v = \Omega r$ and $w=W$).
 
-We should expect that the Lamb-Oseen vortex should be a more smooth version of the Rankine problem - so we should be able to compare the two.
+We should expect that the Burgers vortex should be a more smooth version of the Rankine problem - so we should be able to compare the two.
 
 May want to find $v_{max} = r_0$ to compare to the previous problem.
 Should expect the circulation goes to $\Gamma / 2 \pi$ as $r\to \infty$.
@@ -1300,6 +1300,9 @@ and $U_a$ is a parameter.
 set $U_a$ to some value, perhaps the mean velocity in the tube - i.e. try 1
 
 If the flow is steady however, this is equivalent to $\dd \phi z = 0$, so we want to check if this makes any difference.
+
+
+The current issue is i am not obtaining psi in the post processing.
 
 %-finite length (straight) pipe
 %-pipe with sink outlet (apparently theres a paper on this that i should find)

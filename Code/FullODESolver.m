@@ -37,8 +37,8 @@ v   = VInit(rmat);
 
 contours = linspace(0,0.1,20);
 %preallocate matrices
-etaStar = zeros(size(rmat));
-vStar = zeros(size(rmat));
+%etaStar = zeros(size(rmat));
+%vStar = zeros(size(rmat));
 %precompute LU decomp for A * Psi = -r * eta
 [L,U,A] = solveAAndDecompose(params);
 params.L = L;
@@ -49,13 +49,14 @@ etaVInit(:,:,1) = eta(2:end-1,2:end-1);
 etaVInit(:,:,2) = v(2:end-1,2:end-1);
 
 
-[t,out] = ode45(@(t,in)DE(t,in,params),[0,6],etaVInit);
+t = linspace(0,6,100);
+[t,out] = ode45(@(t,in)DE(t,in,params),t,etaVInit);
 
 %post process the data
 %%
 eta = zeros(nPtsR,nPtsZ,length(t));
 v = zeros(nPtsR,nPtsZ,length(t));
-
+psi = zeros(nPtsR,nPtsZ,length(t));
 
 %unfortunately i've had to do this in a 
 %loop since reshape isn't cooperating
@@ -63,7 +64,35 @@ for i = 1:length(t)
     temp = reshape(out(i,:), [nPtsR-2,nPtsZ-2,2]);
     eta(2:end-1,2:end-1,i) = temp(:,:,1);
     v(2:end-1,2:end-1,i) = temp(:,:,2);
-    eta(:,:,i) = EtaBCs(eta(:,:,i),psi,params);
+    
+        
+    %psi
+    rhs = - rmat.*eta(:,:,i);
+    
+    %%PSI BCs----
+    %r=0
+    rhs(1,:) = 0;
+    %r=R
+    rhs(end,:) = PsiInit(R);
+    %z=0
+    rhs(:,1) =PsiInit(r);
+    %z=Z -> z derivative is zero
+    rhs(:,end) =0;
+    
+
+    
+    
+    rhsvec = rhs(:);
+    y = L\rhsvec;
+    psiV= U\y;        %break if numerics break
+    if any(isnan(psiV))
+        error("failed")
+    end
+    
+    psi(:,:,i) = Vec2Mat(psiV,nPtsR,nPtsZ);
+    
+    
+    eta(:,:,i) = EtaBCs(eta(:,:,i),psi(:,:,i),params);
     v(:,:,i) = VBCs(v(:,:,i),params);
 end
 %% 
