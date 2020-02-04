@@ -18,7 +18,7 @@ n=1; %i think they use n=1 throughout without explicitly saying it
 phiB = @(y) sqrt(2*y).*besselj(1,2*omegaB.*sqrt(2*y)); %good
 omegamn = sqrt(omegaB^2 + (2*n-1)^2 * pi^2/(16*Z^2));
 phiByy = @(y) -(4*omegamn^2 - ((2*n-1)^2 *pi^2)/(4*Z^2))*phiB(y)./(2*y);%TEMP
-PsiInit = @(r,z) r.^2/2 + delta *phiB(r.^2/2).*sin(pi*z/(2*Z));
+PsiInit = @(r,z) r.^2/2 + (delta *phiB(r.^2/2).*sin(pi*z/(2*Z)));
 etaInit = @(r,z) r.*(-delta*(phiByy(r.^2/2) - (pi/(2*Z))^2.*phiB(r.^2/2)./(2*r.^2/2))).*sin(pi*z/(2*Z));
 VInit = @(r,z) (1./r).*(2*Omega*r.^2/2 + 2*delta*Omega*phiB(r.^2/2).*sin(pi*z/(2*Z)));
 %put them in a params struct
@@ -93,11 +93,8 @@ for i = 1:length(t)
     
     rhsvec = rhs(:);
     y = L\rhsvec;
-    psiV= U\y;        %break if numerics break
-    if any(isnan(psiV))
-        error("failed")
-    end
-    
+    psiV= U\y;    
+
     psi(:,:,i) = Vec2Mat(psiV,nPtsR,nPtsZ);
     
     
@@ -110,13 +107,14 @@ end
 figure
 
 for i = 1:length(t)
-    contour(rmat,zmat,psi(:,:,i),contours)
+    contour(zmat',rmat',psi(:,:,i)',contours)
+    %contour(zmat',rmat',eta(:,:,i)')
     %contour(zmat,rmat,psi',50)
     %contourf(zmat,rmat,psi,20)
     %caxis([0,1])
     colorbar
-    xlabel("r")
-    ylabel("z")
+    xlabel("z")
+    ylabel("r")
     zlabel("psi")
     title("t = "+ t(i))
     drawnow
