@@ -16,19 +16,18 @@ Fluid dynamics
 This paper will be concerned with strictly dynamic flows.
 
 
-The flow considered will be axisymmetric, incompressible, inviscid, cylindrical flow with cylindrical coordinate system $(r,\theta,z)$, where $\theta$ denotes angle around the $z$ axis.
+The flow considered will be axisymmetric, incompressible, inviscid, cylindrical flow with cylindrical coordinate system $(r,\theta,z)$, where $\theta$ denotes angle around the $z$ axis. The corresponding velocity components are $(u,v,w)$, the radial, azimuthal and axial components of the flow respectively.
 
 
-The flow will have velocity components $(u,v,w)$ in the directions of $r,\theta$, and $z$ respectively. That is to say $u, v, w$ are the radial, azimuthal and axial components of the flow respectively.
-
-
-
+Leibovich (1978) defines vortex breakdown as ``a disturbance characterized
+by the formation of an internal stagnation point on the vortex axis, followed by
+reversed flow in a region of limited axial extent''
 
 Incompressibility
 \[\nabla \cdot \vec u = 0 \]
 
 For incompressible flow in cylindrical coordinates, the stream function, $\Psi$ is defined in terms of the velocity
-\[u = \frac{1}{r} \dd\Psi z, \quad w = - \frac{1}{r} \dd \Psi r\]
+\[u = -\frac{1}{r} \dd\Psi z, \quad w =  \frac{1}{r} \dd \Psi r\]
 
 
 
@@ -39,9 +38,8 @@ We define the stream function $\Psi$
 \section{Derivation of the Squire-Long equation}
 Squire-long / Bragg-Hawthorne equation for the stream function of axisymmetric inviscid fluid, using cylindrical coordinates
 \[\ddn{\Psi}{z}{2} + \ddn{\Psi}{r}{2} - \frac1r \dd{\Psi}{r} = r^2 \frac{dH}{d\Psi} - C \frac{dC}{d\Psi}\]
-radial component u,  azimuthal (swirl) is v, axial component w
 
-stream function satisfies
+The stream function satisfies
 
 $\nabla \cdot u = 0$ $\longrightarrow$ stream function exists\\
 Remember for cylindrical coordinates:
@@ -174,7 +172,7 @@ Returning to the stream function:
 And hence
 \[w = \frac1r \dd\Psi r = W + Ak J_0(kr) + Bk Y_0(kr)\]
 %parameters kr_* and kR
-$A$, and $B$ rely on boundary conditions. In this case, it is necessary forthe streamlines to be the same as at the inlet along the boundary. Also introduce a vortex breakdown condition in the core of the stream, i.e. a region $0<r<r_*$ where the stream function becomes zero:
+$A$, and $B$ rely on boundary conditions. In this case, it is necessary for the streamlines to be the same as at the inlet along the boundary. Also introduce a vortex breakdown condition in the core of the stream, i.e. a region $0<r<r_*$ where the stream function becomes zero:
 \[\Psi(R) = \frac12 WR^2\]
 \[\Psi(r_*) = 0 \]
 Consider it as a matrix system
@@ -1263,7 +1261,21 @@ We are trying to reproduce the code used in this paper.
 %cylindrical euler equations
 %better to just reference it though
 
-
+The system is
+\begin{align*}
+    \psi(x,y,0) &= y + \delta \phi_B(y) \sin (\pi x / 2L)\\
+    \eta(x,y,0) &= -\sqrt{2y} \delta \left[\phi_B{yy}(y) - (\pi/2L)^2 \phi_B(y)/2y\right]\sin \pi x/2L)\\
+    v(x,y,0) &= \frac{1}{\sqrt{2y}} \left(2 \omega y + 2 \delta \omega \phi_B(y) \sin(\pi x/2L)\right)
+\end{align*}
+With BCs:
+\begin{align*}
+    \psi(x=0) &= y\\
+    \psi(y=1/2) &= 1/2\\
+    \psi(y=0) &= 0\\
+    \psi_x(x=L) &= 0 \\
+    K(x=0) &= 2(\omega y)\\
+    \chi(x=0) &= - \psi_0{yy} = 0\\
+\end{align*}
 %try higher order finite diff for the r=R bc of eta
 %repeat the wang rusak flow stuff in the `wall separation' paper 
 %will need to use a perturbation similar to what they use however.
@@ -1309,8 +1321,6 @@ The current issue is I am not obtaining psi in the post processing.
 %-tornados?
 %-variable radius
 
-%I AM MISSING A W,R PAPER
-%The dynamics of a swirling flow in a pipe and ...
 
 
 
@@ -1335,6 +1345,10 @@ Zvi Rusak, and Shixiao Wang
 
 The Navier-Stokes equations: a classification of flows and exact solutions
 Drazin, Riley
+
+
+The Structure of Vortex Breakdown, 
+Leibovich
 
 
 \end{document}
