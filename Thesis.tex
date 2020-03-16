@@ -1157,16 +1157,20 @@ We are trying to reproduce the code used in this paper.
 %cylindrical euler equations
 %better to just reference it though
 When breakdown is present, require
-\[C = \frac{u_x \delta t}{\delta x} + \frac{u_y \delta t}{\delta y} \leq C_max = 0.05\]
+\[C = \frac{u_x \delta t}{\delta x} + \frac{u_y \delta t}{\delta y} \leq C_{max} = 0.05\]
 Otherwise $0.2$.
 
 
 The system is
 \begin{align*}
-    \psi(x,y,0) &= y + \delta \phi_B(y) \sin (\pi x / 2L)\\
-    \eta(x,y,0) &= -\sqrt{2y} \delta \left[\phi_B{yy}(y) - (\pi/2L)^2 \phi_B(y)/2y\right]\sin \pi x/2L\\
-    v(x,y,0) &= \frac{1}{\sqrt{2y}} \left(2 \omega y + 2 \delta \omega \phi_B(y) \sin(\pi x/2L)\right)
+    \psi(r,z,0) &= \frac12 r^2 + \delta \phi_B(r) \sin\left(\frac{\pi z}{2Z}\right)\\
+    \eta(r,z,0) &= - \delta r \left(\phi_{Byy}(r) - \left(\frac{\pi}{2Z}\right)^2 \frac{\phi_B(r)}{r^2}\right)  \sin\left(\frac{\pi z}{2Z}\right)\\
+    v(r,z,0) &= \frac{\omega}{r} \left(r^2  +2\delta \phi_B(r) \sin\left(\frac{\pi z}{2Z}\right)\right)
 \end{align*}
+
+
+
+\[\phi_B = r J_1(2\omega_B r)\]
 With BCs:
 \begin{align*}
     \psi(x=0) &= y\\
