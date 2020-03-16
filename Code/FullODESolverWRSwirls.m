@@ -184,18 +184,19 @@ function out = DE(~,in,params)
 %%%%%unpack variables
 nPtsR = params.nPtsR;
 nPtsZ = params.nPtsZ;
-%format in vector into nPtsR-2,nPtsZ-2,2 matrix
-in = reshape(in,[nPtsR-2,nPtsZ-2,2]);
-eta = zeros(nPtsR,nPtsZ);
-v = zeros(nPtsR,nPtsZ);
-eta(2:end-1,2:end-1) = in(:,:,1);
-v(2:end-1,2:end-1) = in(:,:,2);
-
 %might pass these in as params
 r = params.r;
 z = params.z;
 rmat = params.rmat;
-    %get psi at time t
+%format in vector into nPtsR-2,nPtsZ-2,2 matrix
+in = reshape(in,[nPtsR-2,nPtsZ-2,2]);
+eta = zeros(nPtsR,nPtsZ);
+v = zeros(nPtsR,nPtsZ);
+%eta and v at time t
+eta(2:end-1,2:end-1) = in(:,:,1);
+v(2:end-1,2:end-1) = in(:,:,2);
+
+    %get psi at time t+delta t
     psi = PsiFromEta(eta,params);
     %use this for BCs of v, eta at t
     v = VBCs(v,params);
@@ -204,7 +205,7 @@ rmat = params.rmat;
 
         eta = EtaBCs(eta,psi,params);
      
-    %steps 3,4
+    %steps 3,4 now get detadt dvdt for t+delta t
     dpsidz = ddz(psi,z);
     dpsidr = ddr(psi,r);
     J = @(x) (dpsidz .* (ddr(x,r))) - (dpsidr .* (ddz(x,z)));
