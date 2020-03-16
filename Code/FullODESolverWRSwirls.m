@@ -1,25 +1,27 @@
 close all 
 clear all
-
+%%%%%%%%%%%
 %parameters
-nPtsR = 50;
-nPtsZ = 50;
+%%%%%%%%%%%
+nPtsR = 40;
+nPtsZ = 100;
 nPtst = 50;
 R = 1;
 Z = 6;
 W = 1;
-omega = 1.9; %is this the same omega as ours?
-%omegaB is the first zero of J_1 which is near 3
+%%%%%
+%Wang, rusak parameters
+%%%%%
+omega = 1.9;
+delta = -1.111;
+
 tEnd = 2;
-delta = 2.5%-1.111;
-n=1; %i think they use n=1 throughout without explicitly saying it
-     %so ill use that
-%upstream flow
+
 omegaB = fsolve(@(x) besselj(1,x),3)/2; %good
 omegamn = sqrt(omegaB^2 + pi^2/(16*Z^2));
 
 phiB = @(y) sqrt(2*y).*besselj(1,2*omegaB.*sqrt(2*y)); %good
-phiByy = @(y) 4 * omegaB^2 * phiB(y)./(2 * y);
+phiByy = @(y) -4 * omegaB^2 * phiB(y)./(2 * y);
 
 
 % %phiB = @(r) r.*besselj(1,2*omegaB*r); %good
@@ -45,9 +47,9 @@ VInit = @(r,z) VInity(r.^2/2,z);
 
 %%%verify that solid body works
 %%%I.e. no perturbation
-%PsiInit = @(r,z) 0.5 * r.^2;
-%VInit = @(r,z) omega * r;
-%etaInit = @(r,z) 0;
+% PsiInit = @(r,z) 0.5 * r.^2;
+% VInit = @(r,z) omega * r;
+% etaInit = @(r,z) 0;
 
 
 
@@ -134,18 +136,18 @@ for i = 1:floor(length(t)/100):length(t)
     title("t = "+ t(i))
     drawnow
     %Frame(i) = getframe(gcf);
-    figure(2)
-    contour(zmat',rmat',eta(:,:,i)')
-    colorbar
-    drawnow
-    
-    
-    figure(3)
-    contour(zmat',rmat',v(:,:,i)')
-    colorbar
-    drawnow
-    
-    pause(0.0001)
+% % %     figure(2)
+% % %     contour(zmat',rmat',eta(:,:,i)')
+% % %     colorbar
+% % %     drawnow
+% % %     
+% % %     
+% % %     figure(3)
+% % %     contour(zmat',rmat',v(:,:,i)')
+% % %     colorbar
+% % %     drawnow
+% % %     
+% % %     pause(0.0001)
 
     
 end
@@ -209,7 +211,7 @@ VInit = params.VInit;
 L = params.L;
 U = params.U;
 
-%might pass these in as params
+
 r = params.r;
 z = params.z;
 rmat = params.rmat;
@@ -255,9 +257,6 @@ psi = PsiFromEta(eta,params);
     out(:,:,1) = detadt(2:end-1,2:end-1);
     out(:,:,2) = dvdt(2:end-1,2:end-1);
 
-    contour(zmat',rmat',psi(:,:)')
-    drawnow
-    pause(0.01)
     out = out(:);
 
 
