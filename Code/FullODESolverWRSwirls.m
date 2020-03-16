@@ -1,52 +1,52 @@
 close all 
 clear all
+
 %parameters
-nPtsR = 40;
-nPtsZ = 100;
+nPtsR = 50;
+nPtsZ = 50;
+nPtst = 50;
 R = 1;
 Z = 6;
 W = 1;
-Omega = 1.9; %is this the same omega as ours?
+omega = 1.9; %is this the same omega as ours?
 %omegaB is the first zero of J_1 which is near 3
-omegaB = fsolve(@(x) besselj(1,x),3)/2; %good
-tEnd = 6*2.315;
-delta = -1.1111;
+tEnd = 2;
+delta = 2.5%-1.111;
 n=1; %i think they use n=1 throughout without explicitly saying it
      %so ill use that
 %upstream flow
-omegamn = sqrt(omegaB^2 + (2*n-1)^2 * pi^2/(16*Z^2));
+omegaB = fsolve(@(x) besselj(1,x),3)/2; %good
+omegamn = sqrt(omegaB^2 + pi^2/(16*Z^2));
 
+phiB = @(y) sqrt(2*y).*besselj(1,2*omegaB.*sqrt(2*y)); %good
+phiByy = @(y) 4 * omegaB^2 * phiB(y)./(2 * y);
 
 
 % %phiB = @(r) r.*besselj(1,2*omegaB*r); %good
 % phiB = @(y) sqrt(2*y).*besselj(1,2*omegaB.*sqrt(2*y)); %good
-% %phiByy = @(y) -(4*omegamn^2 - ((2*n-1)^2 *pi^2)/(4*Z^2))*phiB(y)./(2*y);%TEMP
-% phiByy = @(r) -(4*omegamn^2 - ((2*n-1)^2 *pi^2)/(4*Z^2))*phiB(r)./(r.^2);%TEMP
 % %PsiInit = @(r,z) r.^2/2 + (delta *phiB(r.^2/2).*sin(pi*z/(2*Z)));
 % PsiInit = @(r,z) r.^2/2 + (delta *phiB(r).*sin(pi*z/(2*Z)));
 % %etaInit = @(r,z) r.*(-delta*(phiByy(r.^2/2) - (pi/(2*Z))^2.*phiB(r.^2/2)./(2*r.^2/2))).*sin(pi*z/(2*Z));
-% %VInit = @(r,z) (1./r).*(2*Omega*r.^2/2 + 2*delta*Omega*phiB(r.^2/2).*sin(pi*z/(2*Z)));
+% %VInit = @(r,z) (1./r).*(2*omega*r.^2/2 + 2*delta*omega*phiB(r.^2/2).*sin(pi*z/(2*Z)));
 % etaInit = @(r,z) -delta*(phiByy(r) - (pi/(2*Z))^2*phiB(r)./(r)).*sin(pi*z/(2*Z));
-% VInit = @(r,z) (1./r).*(2*Omega*r.^2/2 + 2*delta*Omega*phiB(r).*sin(pi*z/(2*Z)));
+%VInit = @(r,z) (1./r).*(2*omega*r.^2/2 + 2*delta*omega*phiB(r).*sin(pi*z/(2*Z)));
 
-phiB = @(y) sqrt(2*y).*besselj(1,2*omegaB.*sqrt(2*y)); %good
-phiByy = @(y)-(4*omegamn^2 -  (pi/(2*Z))^2) *phiB(y)./(2*y);%TEMP
+
 PsiInity = @(y,z) y + (delta *phiB(y).*sin(pi*z./(2*Z)));
 
 etaInity = @(y,z) sqrt(2*y).*(-delta*(phiByy(y) - (pi/(2*Z))^2.*phiB(y)./(2*y))).*sin(pi*z/(2*Z));
 
-VInity = @(y,z) (1./sqrt(2*y)).*((2*Omega*y) + (2*delta*Omega*phiB(y).*sin(pi*z/(2*Z))));
+VInity = @(y,z) (1./sqrt(2*y)).*((2*omega*y) + (2*delta*omega*phiB(y).*sin(pi*z/(2*Z))));
 
 PsiInit = @(r,z) PsiInity(r.^2/2,z);
 etaInit = @(r,z) etaInity(r.^2/2,z);
 VInit = @(r,z) VInity(r.^2/2,z);
 
 
-
 %%%verify that solid body works
 %%%I.e. no perturbation
 %PsiInit = @(r,z) 0.5 * r.^2;
-%VInit = @(r,z) Omega * r;
+%VInit = @(r,z) omega * r;
 %etaInit = @(r,z) 0;
 
 
@@ -58,7 +58,7 @@ params.nPtsZ = nPtsZ;
 params.R = R;
 params.Z = Z;
 params.W = W;
-params.Omega = Omega;
+params.omega = omega;
 params.PsiInit = PsiInit;
 params.VInit = VInit;
 params.etaInit = etaInit;
@@ -78,9 +78,10 @@ psi = PsiInit(rmat,zmat);
 eta = etaInit(rmat,zmat);
 v   = VInit(rmat,zmat);
 
-
-
 contours = linspace(0.01,0.49,25);
+% contour(zmat',ymat',psi(:,:)',contours)
+% pause
+
 %preallocate matrices
 %etaStar = zeros(size(rmat));
 %vStar = zeros(size(rmat));
@@ -92,7 +93,7 @@ params.U = U;
 etaVInit(:,:,1) = eta(2:end-1,2:end-1);
 etaVInit(:,:,2) = v(2:end-1,2:end-1);
 
-t = linspace(0,tEnd,100);
+t = linspace(0,tEnd,nPtst*tEnd);
 [t,out] = ode45(@(t,in)DE(t,in,params),t,etaVInit);
 
 %post process the data
@@ -102,23 +103,25 @@ v = zeros(nPtsR,nPtsZ,length(t));
 
 %unfortunately i've had to do this in a 
 %loop since reshape isn't cooperating
-for i = 1:length(t)
+for i = 1:length(t)-1
     temp = reshape(out(i,:), [nPtsR-2,nPtsZ-2,2]);
     eta(2:end-1,2:end-1,i) = temp(:,:,1);
     v(2:end-1,2:end-1,i) = temp(:,:,2);
     
-    psi(:,:,i) = PsiFromEta(eta(:,:,i), params);
+    
 
     
     
     eta(:,:,i) = EtaBCs(eta(:,:,i),psi(:,:,i),params);
     v(:,:,i) = VBCs(v(:,:,i),params);
+    psi(:,:,i+1) = PsiFromEta(eta(:,:,i), params);
 
 end
  
 %%plotting 
 figure 
-for i = 1:length(t)
+for i = 1:floor(length(t)/100):length(t)
+    figure(1)
     contour(zmat',rmat',psi(:,:,i)',contours)
     %contour(zmat',rmat',eta(:,:,i)')
     %contour(zmat,rmat,psi',50)
@@ -131,8 +134,18 @@ for i = 1:length(t)
     title("t = "+ t(i))
     drawnow
     %Frame(i) = getframe(gcf);
+    figure(2)
+    contour(zmat',rmat',eta(:,:,i)')
+    colorbar
+    drawnow
     
-    pause(0.001)
+    
+    figure(3)
+    contour(zmat',rmat',v(:,:,i)')
+    colorbar
+    drawnow
+    
+    pause(0.0001)
 
     
 end
@@ -143,8 +156,8 @@ end
 %  writeVideo(vwriter,Frame);
 %  close(vwriter)
 %  
- 
  function psi = PsiFromEta(eta, params)
+
 rmat = params.rmat;
 R = params.R;
 z = params.z;
@@ -155,15 +168,15 @@ nPtsR = params.nPtsR;
 nPtsZ = params.nPtsZ;
 PsiInit = params.PsiInit;
  %psi
-    rhs = - rmat.*eta();
+    rhs = - rmat.*eta;
     
     %%PSI BCs----
     %r=0
     rhs(1,:)    = 0;
     %r=R
-    rhs(end,:)  = 1/2;    %PsiInit(R,z);
+    rhs(end,:)  = PsiInit(R,z);
     %z=0
-    rhs(:,1)    = r.^2/2;  %PsiInit(r,0);
+    rhs(:,1)    = PsiInit(r,0);
     %z=Z -> z derivative is zero
     rhs(:,end)  = 0;
     
@@ -197,8 +210,8 @@ L = params.L;
 U = params.U;
 
 %might pass these in as params
-r = linspace(0,R,nPtsR);
-z = linspace(0,Z,nPtsZ);
+r = params.r;
+z = params.z;
 rmat = params.rmat;
 zmat = params.zmat;
 
@@ -242,6 +255,9 @@ psi = PsiFromEta(eta,params);
     out(:,:,1) = detadt(2:end-1,2:end-1);
     out(:,:,2) = dvdt(2:end-1,2:end-1);
 
+    contour(zmat',rmat',psi(:,:)')
+    drawnow
+    pause(0.01)
     out = out(:);
 
 

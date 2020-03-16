@@ -24,13 +24,19 @@ if flag >0 && err ~= -0.5*W*R^2
     [r,psi] = ode45(@(r,Psi)func(r,Psi,rstar),[rstar,R],[0,0]);
 
     w = psi(:,2)./r;
+    figure
+    subplot(2,1,1)
     plot(r,psi(:,1))
     ylabel("$$\Psi$$")
     axis([0,R,0,inf])
-    figure
+    grid on
+    subplot(2,1,2)
     plot(r,w)
     ylabel("$$w$$")
     axis([0,R,0,inf])
+    grid on
+    saveas(gcf,'burgerExampleSolution.eps','epsc')
+    
 else
     fprintf('failed\n\n')
 end

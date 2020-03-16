@@ -35,7 +35,7 @@ wrstartimesdet = @(r,k,R) W*deter(r,k,R) + k.*(Atimesdet(r,k,R).*besselj(0,k.*r)
 
 contour(k*R,r/R,wrstartimesdet(r,k,R),[0,0],'k')
 xlabel('kR')
-ylabel('r^*/R')
+ylabel('$$r^*/R$$')
 legend('$$w(r^*) =0$$','interpreter','latex')
 saveas(gcf,'kRstarContour.eps','epsc')
     

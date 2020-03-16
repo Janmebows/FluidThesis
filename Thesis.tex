@@ -16,59 +16,52 @@ Fluid dynamics
 This paper will be concerned with strictly dynamic flows.
 
 
-The flow considered will be axisymmetric, incompressible, inviscid, cylindrical flow with cylindrical coordinate system $(r,\theta,z)$, where $\theta$ denotes angle around the $z$ axis. The corresponding velocity components are $(u,v,w)$, the radial, azimuthal and axial components of the flow respectively.
+The flow considered will be an axisymmetric, incompressible, inviscid, cylindrical flow. The stream function, $\psi$ corresponds to the cylindrical coordinate system $(r,\theta,z)$, where $\theta$ denotes angle around the $z$ axis. The corresponding velocity components are $(u,v,w)$, the radial, azimuthal and axial components of the flow respectively. 
+
+It will always be assumed that at the inlet 
+\[\psi(z=0) = \psi_{u} = \frac12 W r^2\]
+
+Incompressibility is defined as:
+\[\nabla \cdot \vec u = 0 \]
+
+
+
+
 
 
 Leibovich (1978) defines vortex breakdown as ``a disturbance characterized
 by the formation of an internal stagnation point on the vortex axis, followed by
 reversed flow in a region of limited axial extent''
 
-Incompressibility
-\[\nabla \cdot \vec u = 0 \]
-
-For incompressible flow in cylindrical coordinates, the stream function, $\Psi$ is defined in terms of the velocity
-\[u = -\frac{1}{r} \dd\Psi z, \quad w =  \frac{1}{r} \dd \Psi r\]
-
-
-
-Definition of the stream function
-We define the stream function $\Psi$ 
-
 
 \section{Derivation of the Squire-Long equation}
-Squire-long / Bragg-Hawthorne equation for the stream function of axisymmetric inviscid fluid, using cylindrical coordinates
-\[\ddn{\Psi}{z}{2} + \ddn{\Psi}{r}{2} - \frac1r \dd{\Psi}{r} = r^2 \frac{dH}{d\Psi} - C \frac{dC}{d\Psi}\]
+The Squire-Long / Bragg-Hawthorne equation for the stream function of axisymmetric inviscid fluid, using cylindrical coordinates is:
+\[\ddn{\psi}{z}{2} + \ddn{\psi}{r}{2} - \frac1r \dd{\psi}{r} = r^2 \odd H\psi - C \odd C\psi\]
 
-The stream function satisfies
+Where $C$ is the prescribed circulation, $C(\psi_{u}) = rv$ and $H(\psi_{u})$ is the prescribed flow head. 
+% $C = rv$\\
+% $H = \frac{p}{\rho} + \frac12 (u^2 + v^2 + w^2)$ \\
+% $H$ is conserved on stream surfaces \\
+% $C$ is conserved on stream surfaces \\
 
-$\nabla \cdot u = 0$ $\longrightarrow$ stream function exists\\
-Remember for cylindrical coordinates:
-%I think my u v w are in the wrong order whoops
-\[u = -\frac1r \dd\Psi{z}, \quad w = \frac1r \dd\Psi{r} \]
-
-$\Psi$ is the stream function\\
-$r$ is the radius\\
-$C = rv$\\
-$H = \frac{p}{\rho} + \frac12 (u^2 + v^2 + w^2)$ \\
-$H$ is conserved on stream surfaces \\
-$C$ is conserved on stream surfaces \\
-
-vorticity
+Vorticity
 \[w = w_re_r + w_\theta e_\theta + w_ze_z\]
 where $w_r, w_\theta, w_z$ can be written in terms of the velocity
 
-\newpage
 
-Considering cylindrical coordinates ($z$,$r$,$\theta$) with corresponding velocity ($u$,$v$,$w$), vorticity components ($w_z,w_r,w_\theta$). Axisymmetric flow as:
+The following derivation largely follows that of An Introduction to Fluid Dynamics by Batchelor:
+
+Considering cylindrical coordinates ($r$,$\theta$,$z$) with corresponding velocity ($u$,$v$,$w$), vorticity components ($w_r,w_\theta,w_z$). Axisymmetric flow as:
 \[\omega_z = \frac1r \dd{rv}{r}, \quad \omega_r = -\dd{rv}{z},\quad \omega_\theta = \dd{u}{z} - \dd{w}{r}\]
-The continuity equation (conservation of mass) is satisfied by setting
-\[w =\frac1r \dd\Psi{r} , \quad u=-\frac1r \dd\Psi{z}\]
-Where $\Psi$ is the stream function
-This gives the azimuthal component for $w_\theta$:
+
+The stream function will exist if the continuity equation (corresponding to conservation of mass) is satisfied, I.e. 
+\[ u=-\frac1r \dd\psi{z}, \quad w =\frac1r \dd\psi{r} \]
+Where $\psi$ is the stream function
+Hence the azimuthal component for $w_\theta$ is
 \begin{align*}
     \omega_\theta &= \dd uz - \dd wr\\
-    &= -\frac1r \ddn\Psi z2 - \frac1r \ddn \Psi r2 + \frac{1}{r^2} \dd\Psi r\\
-    &= -\frac1r\left(\ddn\Psi z2 + \ddn \Psi r2 - \frac1r\dd\Psi r\right)
+    &= -\frac1r \ddn\psi z2 - \frac1r \ddn \psi r2 + \frac{1}{r^2} \dd\psi r\\
+    &= -\frac1r\left(\ddn\psi z2 + \ddn \psi r2 - \frac1r\dd\psi r\right)
 \end{align*}
 Use the vorticity equation
 \[w \times v - \dd wt = \nabla H\]
@@ -84,30 +77,27 @@ The last one is equivalent to the material derivative of $rw$ set to 0:
 \[\DD{(rv)}{t} = 0\]
 
 From the Bernoulli equation:
-\[rv = C(\Psi)\]
-\[\dd{\Psi}{t} + \frac12 |\vec w|^2 + \frac{p}{\rho} = H(\Psi)\]
-Where $H(\Psi)$ and $C(\Psi)$ are arbitrary functions.
+\[rv = C(\psi)\]
+\[\dd{\psi}{t} + \frac12 |\vec w|^2 + \frac{p}{\rho} = H(\psi)\]
+Where $H(\psi)$ and $C(\psi)$ are arbitrary functions.
 
 Rewriting $\omega$:
-\[\omega_z = w \frac{dC}{d\Psi}, \quad \omega_r = u \frac{dC}{d\Psi}\]
+\[\omega_z = w \frac{dC}{d\psi}, \quad \omega_r = u \frac{dC}{d\psi}\]
  
 
 Giving
-\[\frac{\omega_\theta}{r} = \frac{v\omega_r}{ru} + \frac1{ru}\frac{dH}{d\Psi} \dd\Psi z = \frac{C}{r^2} \frac{dC}{d\Psi} - \frac{dH}{d\Psi}\]
+\[\frac{\omega_\theta}{r} = \frac{v\omega_r}{ru} + \frac1{ru}\frac{dH}{d\psi} \dd\psi z = \frac{C}{r^2} \frac{dC}{d\psi} - \frac{dH}{d\psi}\]
 Which is the form taken by the second of the dynamic equations.
 Now, combining this last statement with the equation for $\omega_\theta$:
-\[\ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd\Psi r= r^2 \frac{dH}{d\Psi} - C\frac{dC}{d\Psi}\]
+\[\ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= r^2 \frac{dH}{d\psi} - C\frac{dC}{d\psi}\]
 
-
-Taken from Batchelor's An Introduction to Fluid Dynamics
 
 \section{Rotating Flow}
 Considering the flow far upstream where there is constant uniform axial velocity and rotates with angular velocity $\Omega$ 
-\[\Psi_{\text{upstream}} = \frac12 W r^2\]
 \[v = \Omega r, w =W\]
 And
-\[C = rv =  \frac{v^2}{\Omega} = \Omega r^2 = 2\Omega \Psi/W \]
-\[\frac{dC}{d\Psi} = 2\Omega/W\]
+\[C = rv =  \frac{v^2}{\Omega} = \Omega r^2 = 2\Omega \psi/W \]
+\[\frac{dC}{d\psi} = 2\Omega/W\]
 
 Since the flow is steady, the radial equation of motion yields:
 \[\frac1\rho \frac{dp}{dr} = \frac{w^2}{r} = \frac{C^2}{r^3}\]
@@ -115,48 +105,50 @@ Since the flow is steady, the radial equation of motion yields:
 \begin{align*}
 H &= \frac12 (u^2 + v^2 + w^2) + \frac p\rho\\
 &=\frac12 (\Omega^2r^2 + W^2) + \frac p\rho   \\
-&=\frac{\Omega^2 \Psi}{W} + \frac12 W^2 + \frac p\rho\\
-&=\frac{\Omega^2 \Psi}{W} + \frac12 W^2 +  \int \frac1\rho\frac{dp}{dr} dr\\
-&=\frac{\Omega^2 \Psi}{W} + \frac12 W^2 +  \int \frac{C^2}{r^3} dr\\
-&=\frac{\Omega^2 \Psi}{W} + \frac12 W^2 +  \int \frac{\Omega^2 r^4}{r^3} dr\\
-&=\frac{\Omega^2 \Psi}{W} + \frac12 W^2 +  \int \Omega^2 r dr\\
-&=\frac{\Omega^2 \Psi}{W} + \frac12 W^2 +  \frac12 \Omega^2 r^2 \\
-&=\frac{2\Omega^2 \Psi}{W} + \frac12 W^2 \\
+&=\frac{\Omega^2 \psi}{W} + \frac12 W^2 + \frac p\rho\\
+&=\frac{\Omega^2 \psi}{W} + \frac12 W^2 +  \int \frac1\rho\frac{dp}{dr} dr\\
+&=\frac{\Omega^2 \psi}{W} + \frac12 W^2 +  \int \frac{C^2}{r^3} dr\\
+&=\frac{\Omega^2 \psi}{W} + \frac12 W^2 +  \int \frac{\Omega^2 r^4}{r^3} dr\\
+&=\frac{\Omega^2 \psi}{W} + \frac12 W^2 +  \int \Omega^2 r dr\\
+&=\frac{\Omega^2 \psi}{W} + \frac12 W^2 +  \frac12 \Omega^2 r^2 \\
+&=\frac{2\Omega^2 \psi}{W} + \frac12 W^2 \\
 \end{align*}
 \begin{align*}
-\frac{dH}{d\Psi} &=\dd{\frac{2\Omega^2 \Psi}{W}}{\Psi}\\
+\frac{dH}{d\psi} &=\dd{\frac{2\Omega^2 \psi}{W}}{\psi}\\
 &=  \frac{2\Omega^2}{W}    
 \end{align*}
 
 
 \begin{align*}
-    \ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd\Psi r= r^2 \frac{dH}{d\Psi} - C\frac{dC}{d\Psi}\\
-    \ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd\Psi r= \frac{2 r^2 \Omega^2}{W} - \frac{4\Omega^2}{W^2}\Psi\\
+    \ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= r^2 \frac{dH}{d\psi} - C\frac{dC}{d\psi}\\
+    \ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= \frac{2 r^2 \Omega^2}{W} - \frac{4\Omega^2}{W^2}\psi\\
 \end{align*}
-Or in a more `standard' form
-\[\ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd\Psi r + \frac{4\Omega^2}{W^2}\Psi= \frac{2 r^2 \Omega^2}{W} \]
+Or in a more standard form
+\[\ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r + \frac{4\Omega^2}{W^2}\psi= \frac{2 r^2 \Omega^2}{W} \]
 
 
 
 \clearpage
-\subsection{Homogeneous ODE}
-Considering the case where $\Psi$ is just a function of the radius, $r$. So $\Psi$ does not depend on $z$, and $\ddn\Psi z2 = 0$ 
+\subsection{Analysis}
+Considering some point far downstream, such that $\psi(z,r) = \psi(r)$, i.e. that locally, $\psi$ is just a function of the radius, $r$. 
+The ODE is:
+\[\oddn \psi r2 - \frac1r \odd\psi r= \frac{2 r^2 \Omega^2}{W} - \frac{4\Omega^2}{W^2}\psi \]
 
-To simplify it into a homogeneous ODE, a change of variables is used:
- \[\Psi = \frac12 W r^2 + \psi = \frac12 W r^2 + rF\]
-
+A change of variables can be used to obtain a homogeneous ODE:
+ \[\psi(r) = \frac12 W r^2 = \frac12 W r^2 + rF(r)\]
+Where $F(r)$ is a function of $r$
 \begin{align*}
-    \dd\Psi r = Wr + F + r\dd F r\\
-    \ddn\Psi r2 = W + 2\dd F r + r\ddn Fr 2
+    \odd\psi r = Wr + F + r\odd F r\\
+    \oddn\psi r2 = W + 2\odd F r + r\oddn Fr 2
+\end{align*}
+Reducing the ODE to:
+\begin{align*}
+    r^2 \oddn Fr2 - r \odd Fr + F(r^2k^2 - 1) = 0 
 \end{align*}
 
-\[ \ddn\Psi r2 - \frac1r \dd\Psi r + \Psi(\frac{4\Omega^2}{W^2} - \frac1{r^2}) = 0 \]
-
-\begin{align*}
-    r^2 \frac{d^2F}{dr^2} - r \frac{dF}{dr} + F(r^2k^2 - 1) = 0 
-\end{align*}
-Letting $k = \frac{2\Omega}{W}$
-If we take $x = kr$, $\frac{dF}{dr} = \frac{dF}{dx} \frac{dx}{dr} = k$ and $\frac{d^2F}{dr^2} = k^2 \frac{d^2F}{dx^2}$
+By making the substitutions: $k = \frac{2\Omega}{W}$ and $x = kr$,
+Such that \[\frac{dF}{dr} = \frac{dF}{dx} \frac{dx}{dr} = k,\quad \frac{d^2F}{dr^2} = k^2 \frac{d^2F}{dx^2}\]
+The ODE simplifies to
 \begin{align*}
     \frac{x^2}{k^2}k^2 \frac{d^2F}{dx^2} - \frac{x}{k}k \frac{dF}{dx} + F(\frac{x^2}{k^2}k^2 - 1) = 0\\
     x^2 \frac{d^2F}{dx^2} - x \frac{dF}{dx} + F(x^2 - 1) = 0
@@ -164,17 +156,17 @@ If we take $x = kr$, $\frac{dF}{dr} = \frac{dF}{dx} \frac{dx}{dr} = k$ and $\fra
 Which is the form of a Bessel differential equation of order $\nu =1$, giving solutions
 \[F = AJ_1(kr) + BY_1(kr)  \]
 
-
+Hence the stream function to obtain this is
 
 Returning to the stream function:
-\[\Psi = \frac12 W r^2 + r\left(AJ_1(kr) + BY_1(kr)\right)\]
+\[\psi(r) = \frac12 W r^2 + r\left(AJ_1(kr) + BY_1(kr)\right)\]
 
 And hence
-\[w = \frac1r \dd\Psi r = W + Ak J_0(kr) + Bk Y_0(kr)\]
+\[w = \frac1r \dd\psi r = W + Ak J_0(kr) + Bk Y_0(kr)\]
 %parameters kr_* and kR
-$A$, and $B$ rely on boundary conditions. In this case, it is necessary for the streamlines to be the same as at the inlet along the boundary. Also introduce a vortex breakdown condition in the core of the stream, i.e. a region $0<r<r_*$ where the stream function becomes zero:
-\[\Psi(R) = \frac12 WR^2\]
-\[\Psi(r_*) = 0 \]
+$A$, and $B$ rely on boundary conditions. In this case, it is necessary for the streamlines to be the same as at the inlet along the boundary. Also introduce what will hereby by the vortex breakdown condition on the core of the stream, i.e. a region $0<r<r_*$ where the stream function becomes zero:
+\[\psi(R) = \frac12 WR^2\]
+\[\psi(r_*) = 0 \]
 Consider it as a matrix system
 \[
 \begin{pmatrix}
@@ -216,7 +208,7 @@ With the requirement that $r_* \neq R$ so as to not divide by zero.
 %solutions to A,B should end up with units which non-dimensionalise
 %%%Now plug in w = 1/r dpsi dr and set w(r_*) = 0... try and rearrange for kr
 Using 
-\[w = \frac1r \dd\Psi r\] 
+\[w = \frac1r \dd\psi r\] 
 Gives
 \[w = W + k(AJ_0(kr) + BY_0(kr))\]
 
@@ -232,8 +224,8 @@ Gives
 
 
 % Perhaps $\ddn \psi z2$ was not $0$. 
-% \[\ddn\Psi z2 + \ddn\Psi r2 - \frac1r \dd\Psi r + \Psi(\frac{4\Omega^2}{W^2} - \frac{1}{r^2}) = 0 \]
-% Use separation of variables $\Psi = Z(z)R(r) =: ZR$ for short. And letting $Z' := \dd Zz$ and $R' :=\dd Rr$
+% \[\ddn\psi z2 + \ddn\psi r2 - \frac1r \dd\psi r + \psi(\frac{4\Omega^2}{W^2} - \frac{1}{r^2}) = 0 \]
+% Use separation of variables $\psi = Z(z)R(r) =: ZR$ for short. And letting $Z' := \dd Zz$ and $R' :=\dd Rr$
 % \begin{align*}
 %     Z''R  + ZR'' - \frac1r ZR' + ZR\left(\frac{4\Omega^2}{W^2} - \frac{1}{r^2}\right)=0\\
 %     \frac{Z''R}{Z} + R'' -   \frac1r R' + R\left(\frac{4\Omega^2}{W^2} - \frac{1}{r^2}\right)=0\\
@@ -271,13 +263,13 @@ Gives
 % \end{align*}
 % letting $k^2 = \frac{4\Omega^2}{W^2} - \lambda^2$, and multiplying through by $r^2$ gives
 % \[r^2 R'' - rR' + R\left(r^2k^2 - 1\right) = 0\]
-% Which is identical to the equation with the assumption $\ddn \Psi z2 = 0$ with $R := \Psi$ which gives solution
+% Which is identical to the equation with the assumption $\ddn \psi z2 = 0$ with $R := \psi$ which gives solution
 % \[R = r(AJ_1(kr) + BY_1(kr))\]
 
 %To obtain the values of $c_1$, $c_2$ and $A$ some other conditions must be satisfied.Since finite $R = 0$ has already been enforced, consider a point at the border $R=R_0$. At the point $R_0$, the stream function must be the same as it was far upstream (streamlines cannot cross), i.e. $\psi(R_0) = \frac12  WR_0^2$
 %Conditions
 %\[\frac12 WR^2 + \psi(R_0) = \frac12 WR^2 \implies \psi(R_0) = 0\]
-%\[\Psi = r Z(z) R(r)\]
+%\[\psi = r Z(z) R(r)\]
 %\[R(R_0) = AJ_1(kR_0) = 0 \implies kR_0 = \alpha_i\]
 %Where $\alpha_i$ satisfies $J_1(\alpha_i) = 0$.
 
@@ -289,7 +281,7 @@ Gives
 %Assume ddz2 = 0 still
 %if there were stagnation points in our rotating flow
 %points with no swirl and no velocity
-%satisfy \psi(R) = \frac12 WR^2 and \Psi(r_*) = 0 where $r_*$ is the boundary of the stagnation
+%satisfy \psi(R) = \frac12 WR^2 and \psi(r_*) = 0 where $r_*$ is the boundary of the stagnation
 %C has to be 0
 %$w (r_*) = \frac1{r_*} \dd\psi {r}|r_* = 0$ for the stagnation
 %so $\dd\psi r|r_*$
@@ -300,8 +292,8 @@ Solving this for a given $k$ (or alternatively a desired $r_*$) is done numerica
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{exampleKRstar}
-    \caption{An example solution plot}
+    \includegraphics[width=\linewidth]{Plots/exampleKRstar}
+    \caption{An example solution plot - code: RotatingFlow.m}
     \label{fig:exampleKRstar}
 \end{figure}
 
@@ -312,16 +304,15 @@ The plot figure~\ref{fig:contourSolutions} shows the $k,r_*$ combinations which 
 
 Clearly this can only occur for values of $kR > 3.8$. 
 
-The first branch of this (extending from $kR\approx 3.8$) corresponds to natural solutions, whereas further branches give unwanted behaviour, which introduce reversed flow.
+The first branch of this (extending from $kR\approx 3.8$) corresponds to natural solutions, whereas further branches give unnatural behaviour, introducing factors such as reversed flow.
 
-Code - homogeneousODE.m
 
 
 \begin{figure}[h]
     \centering
     \label{fig:contourSolutions}
-    \includegraphics[width=\linewidth]{kRstarContour}
-    \caption{Solution set for the simplified problem}
+    \includegraphics[width=\linewidth]{Plots/kRstarContour}
+    \caption{Solution set for the simplified problem - code: RotatingFlow.m}
 \end{figure}
 \newpage
 
@@ -329,140 +320,27 @@ Code - homogeneousODE.m
 \clearpage
 
 
-
-%Tasks:
-% \subsection{Burgers Vortex}
-% The Burgers vortex (or Q' vortex)
-% \[\ddn \psi z 2 + \ddn \psi r2 - \frac1r \dd\psi r= r^2 \frac{dH}{d\psi} - C\frac{dC}{d\psi}\]
-
-% Q' vortex 
-% \[v = \frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\]
-% same $w=W$.
-% \begin{align*}
-%     C = rv &= r\left(\frac{2\pi \Gamma}{r} (1-e^{-r^2/\delta^2})\right)\\
-%      &=2\pi \Gamma (1-e^{-r^2/\delta^2})
-% \end{align*}
-
-
-
-
-% %Finite Difference Scheme
-% Using forward finite differences:
-% \[\dd \psi r(r_0) = \frac{\psi(r_0 +h) - \psi(r_0)}{h} + O(h) \]
-% \[\ddn \psi r 2(r_0) = \frac{\psi(r_0+h) - 2\psi(r_0) + \psi(r_0-h)}{h^2} + O(h)\]
-% Where $h$ is some small perturbation away from $r_0$.
-% Truncate by neglecting the $O(h)$ terms
-
-
-
-
-
-%https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem
-
 %rstar to zero is a singular point with a delta function solution
-have to assume things for outside of the region for $\Psi$.  I.e. if we go above the maximum input value then some assumption, and if we go below the minimum then it is a stagnation point
+have to assume things for outside of the region for $\psi$.  I.e. if we go above the maximum input value then some assumption, and if we go below the minimum then it is a stagnation point
 %THIS IS IMPORTANT TO MENTION IN THE WRITE UP
 %\psi < 0 is a stagnation point
 
-see if we can do it for the wall stagnation zones (i.e. psi goes to 0 near R)
-so when $\Psi > \frac12 WR^2$
-Plug it into H and C
-\[H = (\Omega R)^2 + \frac12 W^2\]
-\begin{align*}
-    \dd H\psi = 0\\
-C = \Omega R^2\\
-\dd C\Psi = 0
-\end{align*}
-Which then yields the separable first order ODE
-\[\ddn \Psi r 2 - \frac1r \dd\Psi r = 0 \]
-And hence
-\begin{align*}
-\dd\Psi r = Ar\\
-\Psi = \frac12 Ar^2 + B 
-\end{align*}
-
-
-our left hand side could be written as
-\[r \dd{}r \left(\frac1r \dd \Psi r\right)\]
-using staggered grid 
-\[\ddn \Psi r 2 = \frac1r \dd\Psi r\]
- at the boundary r=0
-
-
-\subsection{Numerics}
-
-Solving the ODE numerically:
-\[\ddn \Psi r 2 - \frac1r \dd \Psi r = r^2 \dd H\Psi + C\dd C\Psi\]
-finite difference - divide r as a grid of $N$ intervals.
-So our grid spaces over $R$, 
-\[r_i = \Delta r_i, \quad \Delta  = \frac RN\]
-So (check this)
-\[\ddn \Psi r 2 = \frac{\Psi_{i+1} - 2 \Psi_i + \Psi_{i-1}}{\Delta ^2}\]
-\[\dd \Psi r = \frac{\Psi_{i+1} - \Psi_{i-1}}{2\Delta }\]
-\[\Psi_0 = 0, \quad \Psi_N = \frac12 W R^2\]
-Which should work for the index $i$ until we reach the bifurcations/stagnations
-
-
-Should end up with a matrix equation
-%[A] \Psi = r sol
-\[
-\begin{pmatrix}
-1 & 0&\hdots &0 & 0 \\
-&&\mathbf{A}&&\\
-0&0&\hdots & 0 & 1
-\end{pmatrix}
-\begin{pmatrix}
-\Psi_0\\
-\mathbf{\Psi}\\
-\Psi_N
-\end{pmatrix}
-=
-\begin{pmatrix}
-0\\
-\mathbf{f}\\
-\frac12 W R^2
-\end{pmatrix}
-\]
-A should be the finite difference version of 
-\[\ddn \Psi r 2 - \frac1r \dd \Psi r = 0\]
-I.e. for the $i^{th}$ row of $\mathbf{A}$
-\[A(i) =\frac{A(i+1) - 2*A(i) + A(i-1)}{\Delta ^2} - \frac{A(i+1) - A(i-1)}{2r(i)\Delta } \]
-\[A_{ij} =\begin{cases}
-1    & j=i=1\\
-1/\Delta^2 +1/(2r_i \Delta)& j=i-1\\
-2/\Delta^2    & j=i\\
-1/\Delta^2 -1/(2r_i \Delta)& j=i+1\\
-1   & j=i=N\\
-0   & otherwise
-\end{cases}\]
-
-For the full equation
-\[\ddn\Psi z2 + \ddn\Psi r2 - \frac1r \dd\Psi r + \Psi(\frac{4\Omega^2}{W^2} - \frac1{r^2}) = 0 \]
-\[\Psi = \frac12 Wr^2 + rF \]
-\[F = \frac{\Psi}{r} - \frac12 Wr\]
-Boundary conditions for $F$ relate to those for $\Psi$.
-\[\Psi(R) = \frac12 WR^2 \implies F(R) = 0\]
-\[\Psi(r_*) = 0 \implies F(r_*) = \frac12 Wr_*^2\]
-
-
-
-
-
-when we look at the vortex breakdown problem, introduce a coordinate transformation
-\[\eta = \frac{r - r_*}{R-r_*}\]
-\[\eta = 0, r=r_*, \eta = 1 r=R\]
-\[\dd\Psi r = \dd\Psi \eta \dd\eta r = \frac{1}{R-r_*} \dd\Psi \eta\]
-\[\ddn \Psi r2 = \frac{1}{(R-r_*)^2} \ddn \Psi \eta 2\]
-
-
-
-use the same conditions we have used anyway where $\Psi(r_*) = w(r_*) = 0$
-%google potential flow
-Rankine body problem:
-At some point on the radius $r_0$, we get $v = K/r_0$ for some constant $K$ 
-find $K = \Omega r_0^2$?
-
-%then we do q vortex numerically (but not yet)
+% see if we can do it for the wall stagnation zones (i.e. psi goes to 0 near R)
+% so when $\psi > \frac12 WR^2$
+% Plug it into H and C
+% \[H = (\Omega R)^2 + \frac12 W^2\]
+% \begin{align*}
+%     \dd H\psi = 0\\
+% C = \Omega R^2\\
+% \dd C\psi = 0
+% \end{align*}
+% Which then yields the separable first order ODE
+% \[\ddn \psi r 2 - \frac1r \dd\psi r = 0 \]
+% And hence
+% \begin{align*}
+% \dd\psi r = Ar\\
+% \psi = \frac12 Ar^2 + B 
+% \end{align*}
 
 
 
@@ -475,56 +353,56 @@ $w = W$,
 \end{cases}  \]
 Where the second condition was the previous solution. Since the velocity profile is now piecewise defined, the stream function must also be, i.e. it is necessary to split the stream function into 2 regions to solve this problem. The upstream regions:
  \[\begin{cases}
-         \Psi_{inner}, & 0\leq r\leq r_0 \\
-         \Psi_{outer}, & r_0\leq r\leq R
+         \psi_{inner}, & 0\leq r\leq r_0 \\
+         \psi_{outer}, & r_0\leq r\leq R
      \end{cases}
  \]
-%should probs get \Psi = Ar^2 + B in the new region
+%should probs get \psi = Ar^2 + B in the new region
 Note that $r_0$ is defined upstream, so the position of the region may have moved downstream to a new radius, $\hat{r}$, and hence, downstream, these regions will become around $\hat{r}$ instead of $r_0$. We enforce some similar conditions as to the normal problem:
 \begin{align*}
-    \Psi(r_*) &= 0, \\
-    \Psi(R) &= \frac12 WR^2,\\
+    \psi(r_*) &= 0, \\
+    \psi(R) &= \frac12 WR^2,\\
     w(r_*) &= 0
 \end{align*}
-With the added condition that $\Psi$ must remain continuous around $\hat{r}$
+With the added condition that $\psi$ must remain continuous around $\hat{r}$
 I.e.
-\[\lim_{r^-\to \hat{r}} \Psi(r^-) = \lim_{r^+ \to \hat{r}} \Psi(r^+)\]
+\[\lim_{r^-\to \hat{r}} \psi(r^-) = \lim_{r^+ \to \hat{r}} \psi(r^+)\]
 And
 \[\lim_{r^- \to \hat{r}} v(r^-) = \lim_{r^+ \to \hat{r}} v(r^+)\]
-Where $\Psi(r^-)$ is $\Psi$ defined for $r \leq \hat{r}$ and $\Psi(r^+)$ is defined in the region $r \geq \hat{r}$.
+Where $\psi(r^-)$ is $\psi$ defined for $r \leq \hat{r}$ and $\psi(r^+)$ is defined in the region $r \geq \hat{r}$.
 
-The region for $\Psi(r)$ with $r\in [0,r_0]$ will be the same as before, i.e.
-\[\Psi(r) = \frac12 Wr^2 + r(AJ_1(kr) + BY_1(kr))\]
+The region for $\psi(r)$ with $r\in [0,r_0]$ will be the same as before, i.e.
+\[\psi(r) = \frac12 Wr^2 + r(AJ_1(kr) + BY_1(kr))\]
 
 For the region $r_0<r<R$ the problem must be resolved from the SL equation
-\[\ddn \Psi r 2 - \frac1r \dd\Psi r = r^2 \frac{dH}{d\Psi} - C \frac{dC}{d\Psi}\]
+\[\ddn \psi r 2 - \frac1r \dd\psi r = r^2 \frac{dH}{d\psi} - C \frac{dC}{d\psi}\]
 \[C = rv = \frac{\Gamma}{2\pi}\]
-\[\frac{dC}{d\Psi} = 0\]
+\[\frac{dC}{d\psi} = 0\]
 \begin{align*}
     H &= \frac12 (u^2 + v^2 + w^2) + \frac{p}{\rho}\\
     &= \frac12 (0 + \frac{\Gamma^2}{4\pi^2 r^2} + W^2) + \int \frac{C^2}{r^3} dr\\
     &=   \frac12 (\frac{\Gamma^2}{4\pi^2 r^2} + W^2) + \int \frac{\Gamma^2}{4 \pi^2r^3} dr\\
     &=   \frac12 (\frac{\Gamma^2}{4\pi^2 r^2} + W^2) -\frac{\Gamma^2}{8 \pi^2r^2} \\
     &= \frac{W^2}{2}\\
-    \frac{dH}{d\Psi} &= 0
+    \frac{dH}{d\psi} &= 0
 \end{align*}
 
 And hence the SL equation gives
 \begin{align*}
- \ddn \Psi r 2 - \frac1r \dd\Psi r &= r^2 \frac{dH}{d\Psi} - C \frac{dC}{d\Psi}\\
- \ddn \Psi r 2 - \frac1r \dd\Psi r &= r^2 \frac{dH}{d\Psi} - C \frac{dC}{d\Psi}\\
-\ddn \Psi r 2 - \frac1r \dd\Psi r &=0\\
+ \ddn \psi r 2 - \frac1r \dd\psi r &= r^2 \frac{dH}{d\psi} - C \frac{dC}{d\psi}\\
+ \ddn \psi r 2 - \frac1r \dd\psi r &= r^2 \frac{dH}{d\psi} - C \frac{dC}{d\psi}\\
+\ddn \psi r 2 - \frac1r \dd\psi r &=0\\
 \end{align*}
 
 Which results in:
-\[\Psi = Cr^2 + D, \quad r \geq \hat{r}\]
-\[w = \frac1r \dd\Psi r = 2C\]
+\[\psi = Cr^2 + D, \quad r \geq \hat{r}\]
+\[w = \frac1r \dd\psi r = 2C\]
 With the requirement that there is no discontinuity at $\hat{r}$, i.e.
-\[\Psi = \frac12 W\hat{r}^2 + \hat{r}\left(AJ_1(k \hat{r}) + BY_1(k\hat{r})\right) = C\hat{r}^2 + D\]
+\[\psi = \frac12 W\hat{r}^2 + \hat{r}\left(AJ_1(k \hat{r}) + BY_1(k\hat{r})\right) = C\hat{r}^2 + D\]
 And using the same for $w$
 \[w(\hat{r}) = W + k(AJ_0(k\hat{r}) + BY_0(k\hat{r})) = 2C\]
 And lastly the wall condition
-\[\Psi(R) = \frac12 W R^2 = C\hat{r}^2 +D\]
+\[\psi(R) = \frac12 W R^2 = C\hat{r}^2 +D\]
 
 With
 \[w(r_*) = 0\]
@@ -535,7 +413,7 @@ Noting that the values for $A$ and $B$ are obtained from the $r_*$ condition.
 
 
 %can use \mathrm{} or \text{} for roman subscripts
-The coefficients for $\Psi$ have to be resolved, since the condition $\Psi_{inner}(R) = \frac12 WR^2$ cannot be imposed.\\
+The coefficients for $\psi$ have to be resolved, since the condition $\psi_{inner}(R) = \frac12 WR^2$ cannot be imposed.\\
 
 Parameters
 \[r_0,\hat{r}, r_*, R,k, \Gamma, W, A,B,C,D\]
@@ -549,27 +427,27 @@ Impose:
 \renewcommand{\theenumi}{\arabic{enumi})}    
 \begin{enumerate}
     \item \label{rankine::1}$w(r_*) = 0$ (as before)
-    \item \label{rankine::2} $\Psi_{inner}(r_*) = 0$ (as before)
-    \item\label{rankine::3} Since at the wall $\Psi$ must remain the same, this applies to where $v$ is changed, i.e. $\Psi_{inner}(\hat{r}) = \frac12 W r_0^2$ 
-    \item\label{rankine::4} For continuity, $\Psi_{outer}(\hat{r}) = \frac12 W r_0^2$ 
+    \item \label{rankine::2} $\psi_{inner}(r_*) = 0$ (as before)
+    \item\label{rankine::3} Since at the wall $\psi$ must remain the same, this applies to where $v$ is changed, i.e. $\psi_{inner}(\hat{r}) = \frac12 W r_0^2$ 
+    \item\label{rankine::4} For continuity, $\psi_{outer}(\hat{r}) = \frac12 W r_0^2$ 
     \item\label{rankine::5} $w_{outer}(\hat{r}) = w_{inner}(\hat{r})$\\
-    \item\label{rankine::6} $\Psi_{outer}(R) = \frac12 WR^2$ 
+    \item\label{rankine::6} $\psi_{outer}(R) = \frac12 WR^2$ 
 \end{enumerate}
 
 
 Redo the problem instead getting $A,B$ from~\ref{rankine::2} and~\ref{rankine::3}
 
-\[\Psi_{inner}(r_*) = 0\]
-\[\Psi_{inner}(\hat{r}) = \frac12 W r_0^2\]
+\[\psi_{inner}(r_*) = 0\]
+\[\psi_{inner}(\hat{r}) = \frac12 W r_0^2\]
 
 
 
 
 Use this for $A,B$
 \begin{align*}
-    \Psi_{inner}(r_*) &= \frac12 Wr_*^2 +r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
+    \psi_{inner}(r_*) &= \frac12 Wr_*^2 +r_*(AJ_1(kr_*) + BY_1(kr_*)) =0\\
     &=r_*(AJ_1(kr_*) + BY_1(kr_*)) =-\frac12 Wr_*^2\\
-    \Psi_{inner}(\hat{r}) &= \frac12 W\hat{r}^2  +\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W r_0^2\\
+    \psi_{inner}(\hat{r}) &= \frac12 W\hat{r}^2  +\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W r_0^2\\
     &=\hat{r}(AJ_1(k\hat{r}) + BY_1(k\hat{r})) =\frac12 W (r_0^2 - \hat{r}^2)
 \end{align*}
 
@@ -623,14 +501,14 @@ Get $C$ from:
 
 Get $D$ here:
 \begin{align*}
-    \Psi_{outer}(R) = CR^2 + D = \frac12 WR^2\\
+    \psi_{outer}(R) = CR^2 + D = \frac12 WR^2\\
     D = \frac12 WR^2 - C
 \end{align*}
 
 %this for \hat{r}
 Hence get $\hat{r}$ from 
 \begin{align*}
-    \Psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 Wr_0^2\\
+    \psi_{outer}(\hat{r}) = C\hat{r}^2 + D = \frac12 Wr_0^2\\
     C\hat{r}^2 + \frac12 WR^2 -C = \frac12 Wr_0^2\\
     \left(\frac12\left(W + k(AJ_0(k\hat{r}) + BY_0(k\hat{r}))\right)\right) (\hat{r}^2 - 1) = \frac12W(r_0^2 - R^2)\\
     \left(AJ_0(k\hat{r}) + BY_0(k\hat{r})\right)(\hat{r}^2 - 1) =\frac1{k}W(r_0^2 - R^2 -1)\\
@@ -650,8 +528,8 @@ Which comes to:
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{rankineExample.eps}
-    \caption{A solution of $w$ and $\Psi$ for the Rankine problem with $0$ net momentum, $k = 3.8961, r_0 = 0.8619, r_* = 0.1784$. Obtained using }
+    \includegraphics[width=\linewidth]{Plots/rankineExample.eps}
+    \caption{A solution of $w$ and $\psi$ for the Rankine problem with $0$ net momentum, $k = 3.8961, r_0 = 0.8619, r_* = 0.1784$ - code: rhatrstarmomentum.m}
     \label{fig:rankineExample}
 \end{figure}
 
@@ -662,21 +540,16 @@ Which comes to:
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{rankineSolutionSet.eps}
-    \caption{Solution space for the Rankine body problem}
+    \includegraphics[width=\linewidth]{Plots/rankineSolutionSet.eps}
+    \caption{Solution space for the Rankine body problem - code: numericalSolutionSetRankine.m}
     \label{fig:rankineSolutions}
 \end{figure}
 
-Figure~\ref{fig:rankineSolutions} shows the solution set for the problem. It displays the same results as those found in (Escudier, Keller), with the same asymptote $kr_0 \to \sqrt{2}$ as $r_0 \to 0$. The results in the two figures come from \verb|rhatrstarmomentum.m| and \verb|numericalSolutionSetRankine.m| respectively
+Figure~\ref{fig:rankineSolutions} shows the solution set for the problem. It displays the same results as those found in (Escudier, Keller), with the same asymptote $kr_0 \to \sqrt{2}$ as $r_0 \to 0$.
 %%%
 %put the plot on the document 
 %summarise the papers that connect these and show relationships between them with this work (even just some paragraphs and plots)
 %
-
-%start on Burgers vortex
-%
-
-%%%
 
 \clearpage
 \section{Burgers Vortex}
@@ -685,17 +558,17 @@ Q-vortex without a Jet.
 Start with 
 \[w = W\]
 \[v = \frac{\Gamma}{2\pi r} \left(1 - e^{-r^2/\delta^2}\right)\]
-\[\frac{d^2\Psi}{dr^2} - \frac1r \odd \Psi r = r^2 \odd H\Psi - C \odd C\Psi \]
+\[\frac{d^2\psi}{dr^2} - \frac1r \odd \psi r = r^2 \odd H\psi - C \odd C\psi \]
 Solve from $r_*$ to $R$ numerically.
 
 Generate grid from $r_*$ to $R$.
 
 Boundary conditions as normal
-\[\Psi(R) = \frac12 WR^2\]
-\[\Psi(r_*) = 0\]
+\[\psi(R) = \frac12 WR^2\]
+\[\psi(r_*) = 0\]
 \[w(r_*) = 0\]
 And the standard upstream flow 
-\[\Psi(r)  =\frac12 Wr^2\]
+\[\psi(r)  =\frac12 Wr^2\]
 Non-dimensional parameter may be something like $\frac{\Gamma}{WR}$ (we can probably relate this to $kr_0$ for the rankine problem)
 
 
@@ -704,24 +577,24 @@ Eventually do the same thing as before with $s$ and $\Delta s$.
 \[s = \int_0^R \left(\rho w^2 + p\right) rdr = \int_0^{r_*} p(r_*) rdr + \int_{r_*}^R \left(\rho w^2 + p\right) rdr\]
 Use
 \[\frac1\rho \dd p r = \frac{v^2}{r} = \frac{\Gamma^2}{4\pi^2r^3+}\left(1-e^{-r^2/\delta^2}\right)^2\]
-\[\Psi = \frac12 W r^2 \implies r = \sqrt{\frac{2\Psi}{W}}\]
+\[\psi = \frac12 W r^2 \implies r = \sqrt{\frac{2\psi}{W}}\]
 \begin{align*}
     C &= rv = \frac{\Gamma}{2\pi} \left(1-e^{-r^2/\delta^2}\right)\\
-    \dd C\Psi &=\frac{\Gamma}{2\pi} \dd{}\Psi \left(1-e^{-r^2/\delta^2}\right)\\
-    &=\frac{-\Gamma}{2\pi} \dd{}\Psi \left(e^{-r^2/\delta^2}\right)\\
-    &=\frac{-\Gamma}{2\pi} \dd{}\Psi \left(e^{-2\Psi/W\delta^2}\right)\\
-    &=\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\Psi/W\delta^2}\right)\\
+    \dd C\psi &=\frac{\Gamma}{2\pi} \dd{}\psi \left(1-e^{-r^2/\delta^2}\right)\\
+    &=\frac{-\Gamma}{2\pi} \dd{}\psi \left(e^{-r^2/\delta^2}\right)\\
+    &=\frac{-\Gamma}{2\pi} \dd{}\psi \left(e^{-2\psi/W\delta^2}\right)\\
+    &=\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\psi/W\delta^2}\right)\\
     &=\frac{\Gamma}{W\pi\delta^2} e^{-r^2/\delta^2}
 \end{align*}
 \begin{align*}
-    \odd H\Psi &= \odd H r \odd r\Psi \\
-    &=\odd r\Psi \odd{}r\left(\frac12 \left(u^2+v^2 + w^2\right) + \frac{p}{\rho}\right)\\
+    \odd H\psi &= \odd H r \odd r\psi \\
+    &=\odd r\psi \odd{}r\left(\frac12 \left(u^2+v^2 + w^2\right) + \frac{p}{\rho}\right)\\
     &=\frac{1}{\sqrt{2W\psi}} \odd{}r\left(\frac12 v^2 + \int\frac{C^2}{r^3}dr \right)\\
     &=\frac{1}{Wr} \left(\frac12 \odd{v^2}r + \frac{v^2}{r} \right)\\
     &=\frac{1}{Wr} \left(\frac{\Gamma^2}{4r\pi^2} \left(\frac{-1}{r^2} +2e^{-r^2/\delta^2}\left(\frac{1}{r^2} + \frac{1}{\delta^2}\right) -e^{-2r^2/\delta^2} \left(\frac{1}{r^2} + \frac{2}{ \delta^2}\right)\right) +  \frac{\Gamma^2}{4r\pi^2}\left(\frac{1 - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}}{r^2}\right) \right)\\
     &=\frac{\Gamma^2}{4Wr^2 \pi^2} \left(2e^{-r^2/\delta^2}\left(\frac{1}{r^2} + \frac{1}{\delta^2}\right) -e^{-2r^2/\delta^2} \left(\frac{1}{r^2} + \frac{2}{ \delta^2}\right) +\frac{ - 2e^{-r^2/\delta^2} + e^{-2r^2/\delta^2}}{r^2}\right)\\
     &= \frac{\Gamma^2}{2Wr^2\delta^2\pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2}\right)\\
-    &= \frac{\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right)\\
+    &= \frac{\Gamma^2}{4\psi\delta^2\pi^2} \left(e^{-2\psi/W\delta^2} - e^{-4\psi/W\delta^2}\right)\\
 \end{align*}
 
 How I got the middle term:
@@ -734,95 +607,49 @@ How I got the middle term:
 
 
 % \begin{align*}
-%     \ddn\Psi r2 - \frac1r \dd\Psi r &=  r^2 \odd H\Psi - C \odd C\Psi\\
+%     \ddn\psi r2 - \frac1r \dd\psi r &=  r^2 \odd H\psi - C \odd C\psi\\
 %     &=\frac{\Gamma^2}{2W\delta^2\pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2}\right) - \frac{\Gamma}{2\pi} \left(1-e^{-r^2/\delta^2}\right)\frac{\Gamma}{W\pi\delta^2} e^{-r^2/\delta^2}\\
 %     &= \frac{\Gamma^2}{2W \delta^2 \pi^2} \left(e^{-r^2/\delta^2} - e^{-2r^2/\delta^2} - \left(e^{-r^2/\delta^2}-e^{-2r^2/\delta^2}\right)\right) \\
 %     &= 0
 % \end{align*}
 \begin{align*}
-    \ddn\Psi r2 - \frac1r \dd\Psi r &=  r^2 \odd H\Psi - C \odd C\Psi\\
-    &=\frac{r^2\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) - \left(\frac{\Gamma}{2\pi} \left(1-e^{-2\Psi/W\delta^2}\right)\right)\left(\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\Psi/W\delta^2}\right)\right)\\
-    &=\frac{r^2\Gamma^2}{4\Psi\delta^2\pi^2} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) - \frac{\Gamma^2}{2W\delta^2\pi^2}\left(1-e^{-2\Psi/W\delta^2}\right) \left(e^{-2\Psi/W\delta^2}\right)\\
-    &= \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\frac{r^2W}{2\Psi} \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) -\left(e^{-2\Psi/W\delta^2}-e^{-4\Psi/W\delta^2}\right)\right)\\
-    \ddn\Psi r2 - \frac1r \dd\Psi r &=  \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\left(\frac{r^2W}{2\Psi} - 1\right) \left(e^{-2\Psi/W\delta^2} - e^{-4\Psi/W\delta^2}\right) \right)\\
+    \ddn\psi r2 - \frac1r \dd\psi r &=  r^2 \odd H\psi - C \odd C\psi\\
+    &=\frac{r^2\Gamma^2}{4\psi\delta^2\pi^2} \left(e^{-2\psi/W\delta^2} - e^{-4\psi/W\delta^2}\right) - \left(\frac{\Gamma}{2\pi} \left(1-e^{-2\psi/W\delta^2}\right)\right)\left(\frac{\Gamma}{W\delta^2\pi} \left(e^{-2\psi/W\delta^2}\right)\right)\\
+    &=\frac{r^2\Gamma^2}{4\psi\delta^2\pi^2} \left(e^{-2\psi/W\delta^2} - e^{-4\psi/W\delta^2}\right) - \frac{\Gamma^2}{2W\delta^2\pi^2}\left(1-e^{-2\psi/W\delta^2}\right) \left(e^{-2\psi/W\delta^2}\right)\\
+    &= \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\frac{r^2W}{2\psi} \left(e^{-2\psi/W\delta^2} - e^{-4\psi/W\delta^2}\right) -\left(e^{-2\psi/W\delta^2}-e^{-4\psi/W\delta^2}\right)\right)\\
+    \ddn\psi r2 - \frac1r \dd\psi r &=  \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\left(\frac{r^2W}{2\psi} - 1\right) \left(e^{-2\psi/W\delta^2} - e^{-4\psi/W\delta^2}\right) \right)\\
 \end{align*}
 Giving the system
 \begin{align*}
-    \Psi_1 ' &= \Psi_2\\
-    \Psi_2' &= \frac1r \Psi_2 + \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\left(\frac{r^2W}{2\Psi_1} - 1\right) \left(e^{-2\Psi_1/W\delta^2} - e^{-4\Psi_1/W\delta^2}\right) \right)\\
+    \psi_1 ' &= \psi_2\\
+    \psi_2' &= \frac1r \psi_2 + \frac{\Gamma^2}{2W\delta^2\pi^2}\left(\left(\frac{r^2W}{2\psi_1} - 1\right) \left(e^{-2\psi_1/W\delta^2} - e^{-4\psi_1/W\delta^2}\right) \right)\\
 \end{align*}
 
-Take limit as $\Psi\to0$ in matlab and use that in some suff area.
-
-Could use bvp5c and break it into a system of first order odes.
-
-
-So if we change the boundaries - using a `Linear Lagrange interpolating polynomial'
-So that the end points are fixed.
-\[\eta = \frac{r-r_*}{R-r_*}\]
-\begin{align*}
-    r-r_* = \eta(R-r_*)\\
-    r = \eta(R-r_*) + r_*   
-\end{align*}
-
-
-Such that $\eta \in [0,1]$.
-In the function we can get $r$ from $\eta$ 
-
-For finite differences we can just use a newton iteration, or use something like fsolve.
+This system is solved in \verb|MATLAB| using \verb|fzero()|.
 
 
 
-I SHOULD PLOT DOWNSTREAM $v$ for all our equations also
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{Plots/burgerExampleSolution.eps}
+    \caption{Example solution for the Burger vortex - code: BurgerSolver.m}
+    \label{fig:burgerSol}
+\end{figure}
 
 
-
-To use the $r_*$ and $w$ parts, we can use $w = \frac1r\dd\Psi r $
-
-
-Try putting in the homogeneous solution to the solver to see if it works (i.e. the one with $v = \Omega r$ and $w=W$).
-
-We should expect that the Burgers vortex should be a more smooth version of the Rankine problem - so we should be able to compare the two.
-
-May want to find $v_{max} = r_0$ to compare to the previous problem.
-Should expect the circulation goes to $\Gamma / 2 \pi$ as $r\to \infty$.
+% So if we change the boundaries - using a `Linear Lagrange interpolating polynomial'
+% So that the end points are fixed.
+% \[\eta = \frac{r-r_*}{R-r_*}\]
+% \begin{align*}
+%     r-r_* = \eta(R-r_*)\\
+%     r = \eta(R-r_*) + r_*   
+% \end{align*}
 
 
+% Such that $\eta \in [0,1]$.
+% In the function we can get $r$ from $\eta$ 
 
-
-Of course we have to have
-\[\lim_{r\to 0} \frac1r \dd\Psi r < \infty\]
-So use l'hopital's rule
-\[\lim_{r\to 0} \frac1r \dd\Psi r = \ddn\Psi r2\]
-But we know $\psi = 0$ at $r=0$ ( so we can ignore this )
-
-
-
-So we will just use
-\[\ddn \Psi r2 |_i - \frac1r \dd\Psi r|_i = f(r_i,\Psi_i)\]
-With 
-\[\Psi_1 = 0\]
-And
-\[\Psi_n = \frac12 WR^2\]
-
-We will have 1 based indexing 
-Alternatively 
-get the derivatives at the mid points
-\[\dd\Psi r\pipe_{i+1/2} = \frac{\Psi_{i+1} - \Psi_i}{h_r}\]
-Where $h_r$ is the step.
-
-
-
-
-
-Alternatively
-
-
-Can rewrite the left hand side as
-
-\[r\left(\dd{}r \left(\frac1r \dd\Psi r\right)\right)\]
-And plug in the last thing
-\[\]
+% For finite differences we can just use a newton iteration, or use something like fsolve.
 
 
 
@@ -831,9 +658,78 @@ And plug in the last thing
 
 
 
+\section{Numerics}
+Begin by considering the ODE in $\psi(r)$:
+\[\oddn \psi r 2 - \frac1r \odd \psi r = r^2 \odd H\psi + C\odd C\psi\]
+finite difference - divide r as a grid of $N$ intervals, such that 
+\[r_i = \Delta r_i, \quad \Delta  = \frac RN\]
+\[\ddn \psi r 2 = \frac{\psi_{i+1} - 2 \psi_i + \psi_{i-1}}{\Delta ^2}\]
+\[\dd \psi r = \frac{\psi_{i+1} - \psi_{i-1}}{2\Delta }\]
+\[\psi_0 = 0, \quad \psi_N = \frac12 W R^2\]
+Which should work for the index $i$ until we reach the bifurcations/stagnations
 
-% Hence
-% \[\Psi(r) = ar^2 + b\]
+
+Should end up with a matrix equation
+%[A] \psi = r sol
+\[
+\begin{pmatrix}
+1 & 0&\hdots &0 & 0 \\
+&&\mathbf{A}&&\\
+0&0&\hdots & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+\psi_0\\
+\mathbf{\psi}\\
+\psi_N
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+\mathbf{f}\\
+\frac12 W R^2
+\end{pmatrix}
+\]
+A should be the finite difference version of 
+\[\ddn \psi r 2 - \frac1r \dd \psi r = 0\]
+I.e. for the $i^{th}$ row of $\mathbf{A}$
+\[A(i) =\frac{A(i+1) - 2*A(i) + A(i-1)}{\Delta ^2} - \frac{A(i+1) - A(i-1)}{2r(i)\Delta } \]
+\[A_{ij} =\begin{cases}
+1    & j=i=1\\
+1/\Delta^2 +1/(2r_i \Delta)& j=i-1\\
+2/\Delta^2    & j=i\\
+1/\Delta^2 -1/(2r_i \Delta)& j=i+1\\
+1   & j=i=N\\
+0   & otherwise
+\end{cases}\]
+
+For the full equation
+\[\ddn\psi z2 + \ddn\psi r2 - \frac1r \dd\psi r + \psi(\frac{4\Omega^2}{W^2} - \frac1{r^2}) = 0 \]
+\[\psi = \frac12 Wr^2 + rF \]
+\[F = \frac{\psi}{r} - \frac12 Wr\]
+Boundary conditions for $F$ relate to those for $\psi$.
+\[\psi(R) = \frac12 WR^2 \implies F(R) = 0\]
+\[\psi(r_*) = 0 \implies F(r_*) = \frac12 Wr_*^2\]
+
+
+
+
+
+when we look at the vortex breakdown problem, introduce a coordinate transformation
+\[\eta = \frac{r - r_*}{R-r_*}\]
+\[\eta = 0, r=r_*, \eta = 1 r=R\]
+\[\dd\psi r = \dd\psi \eta \dd\eta r = \frac{1}{R-r_*} \dd\psi \eta\]
+\[\ddn \psi r2 = \frac{1}{(R-r_*)^2} \ddn \psi \eta 2\]
+
+
+
+use the same conditions we have used anyway where $\psi(r_*) = w(r_*) = 0$
+%google potential flow
+Rankine body problem:
+At some point on the radius $r_0$, we get $v = K/r_0$ for some constant $K$ 
+find $K = \Omega r_0^2$?
+
+%then we do q vortex numerically (but not yet)
+
 
 
 
@@ -845,7 +741,7 @@ When we do finite differences, grab a computational variable (call it $\eta$ for
 So now we are computing in $0<\eta<1$.
 So try plugging it into the ODE:
 \[d\eta = \frac{dr}{R-r_*}\]
-\[\dd\Psi r = \dd\Psi\eta \dd\eta r = \frac{1}{R-r_*} \dd\Psi\eta\]
+\[\dd\psi r = \dd\psi\eta \dd\eta r = \frac{1}{R-r_*} \dd\psi\eta\]
 
 If we don't know $r_*$ the $\eta$ vector becomes
 \[\begin{pmatrix}
@@ -868,12 +764,12 @@ Try plotting $w(r_*)$ for various $r_*$ to help find guesses (require it to be $
 If using $\eta$, the ODE becomes
 $\psi(\eta = 0) = 0$ and $\psi(\eta=1) = \frac12 WR^2$
 
-\[\dd \Psi r = \frac{1}{R-r_*} \dd\Psi\eta \]
-\[\ddn\Psi r 2 = \frac{1}{(R-r_*)^2}\ddn\Psi\eta 2\]
+\[\dd \psi r = \frac{1}{R-r_*} \dd\psi\eta \]
+\[\ddn\psi r 2 = \frac{1}{(R-r_*)^2}\ddn\psi\eta 2\]
 \[r = \eta(R-r_*)) +r_*\]
 DE becomes
-\[\frac{1}{(R-r_*)^2}\ddn{\Psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*} \frac1{R-r_*}\dd\Psi \eta =0\]
-\[\frac{1}{R-r_*}\ddn{\Psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*}\dd\Psi \eta =0\]
+\[\frac{1}{(R-r_*)^2}\ddn{\psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*} \frac1{R-r_*}\dd\psi \eta =0\]
+\[\frac{1}{R-r_*}\ddn{\psi}\eta2  -\frac{1}{\eta(R-r_*)) +r_*}\dd\psi \eta =0\]
 
 
 
@@ -884,19 +780,19 @@ and then fsolve on that
 
 Send through the vector
 \[\begin{pmatrix}
-    \Psi_1\\
+    \psi_1\\
     \vdots\\
-    \Psi_N\\
+    \psi_N\\
     r_*
 \end{pmatrix}\]
 
 
 
 Might be worth looking at setting the RHS
-\[r^2 \odd H\Psi + C \odd C\Psi \]
-As a function $f(r,\Psi)$ and the settings
-\[f(r,\Psi) = \begin{cases}
-    \ldots, &\text{ if } 0 \leq \Psi \leq \frac12 WR^2\\
+\[r^2 \odd H\psi + C \odd C\psi \]
+As a function $f(r,\psi)$ and the settings
+\[f(r,\psi) = \begin{cases}
+    \ldots, &\text{ if } 0 \leq \psi \leq \frac12 WR^2\\
     0 & otherwise
 \end{cases}\]
 
@@ -943,84 +839,86 @@ As a function $f(r,\Psi)$ and the settings
 %% 
 
 
-\section{2D System}
-For the method - since we're stuck
-try using
-\[r\dd{}r \left(\frac1r \dd \Psi r\right) = r\frac{\frac1r \dd\Psi r|_{i+\frac12} - \frac1r \dd{\Psi}{r}|_{i-\frac12}}{\Delta r}\]
-Where $r_{i+1/2} = \frac{r_i + r_{i+2}}{\Delta r}$ and $\dd\Psi r |_{i+\frac12} = \frac{\Psi_{i+1} - \Psi_i}{\Delta r}$
+\section{Unsteady 2D System}
+So far, only a reduced version of the problem has been considered - one in an infinitely long channel, where $\psi$ has become steady in the $z$ direction.
 
-and using the rusak method, by letting $y = r^2/2$
-
-We may have to make our own solver, or use an available one ().
-
-Wang and rusak the dynamics of a swirling flow in a pipe and transitions to axisymmetric vortex breakdown
-
-do some research on numerical solutions of axisymmetric swirling flow 
+Here a numerical analysis of the two dimensional system is introduced where the flow is not assumed to be steady.
 
 
+\subsection{Alterations}
+A new form for the system is used which is easier to handle numerically in an updating system.
 
-Trent had a book with a means of numerically solving the system, which will work in 2D as well
-\[\ddn \Psi z 2 + \ddn \Psi r2 - \frac1r \dd \Psi r = - r \eta\]
-
-We are given an $\eta$. 
-If we let $\Psi_{i,j} = \Psi(r = r_i, z = z_j)$
-\[\ddn \Psi z2\pipe_{i,j} = \frac{\Psi_{i,j+1} - 2 \Psi_{i,j} + \Psi_{i,j-1}}{\Delta z^2}\]
-
-\[\ddn \Psi r2\pipe_{i,j} = \frac{\Psi_{i+1,j} - 2 \Psi_{i,j} + \Psi_{i-1,j}}{\Delta r^2}\]
-
-\[\dd \Psi r \pipe_{i,j} = \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\]
-
-\[\frac{\Psi_{i,j+1} - 2 \Psi_{i,j} + \Psi_{i,j-1}}{\Delta z^2} + \frac{\Psi_{i+1,j} - 2 \Psi_{i,j} + \Psi_{i-1,j}}{\Delta r^2} - \frac1{r_i} \left( \frac{\Psi_{i+1,j} - \Psi_{i-1,j}}{2 \Delta r}\right) = - r_i \eta_{i,j}\]
-Could write $r_{i,j}$ in case it changes in $j$.
-
-Of course to write this as a linear system, we have to get form $A\vec \Psi = b $
-So we would have to write the vector $\Psi$ as 
-\[\begin{pmatrix}
-    \Psi_{1,1}\\
-    \Psi_{2,1}\\
-    \vdots\\
-    \Psi_{m,1}\\
-    \Psi_{1,2}\\
-    \vdots\\
-    \Psi_{1,n}\\
-    \vdots\\
-    \Psi_{m,n}
-\end{pmatrix}\]
-
-So the index of $\Psi_{i,j}$ will be $i + m(j-1)$ let $v_{i+m(j-1)} = \Psi_{i,j}$, and also expanding $\eta$ in this fashion.
-Hence the vector $\vec v$ is
-\[\begin{pmatrix}
-    v_1\\
-    v_2\\
-    \vdots\\
-    v_{mn}
-\end{pmatrix}\]
-Then the system becomes, after an index shift:
+%%%IF WE ARE USING r AND NOT y
 \begin{align*}
-    \frac{v_{i+m(j+1)} - 2 v_{i+m(j)} + v_{i+m(j-1)}}{\Delta z^2} + \frac{v_{i+1+m(j)} - 2 v_{i+m(j)} + v_{i-1+m(j)}}{\Delta r^2}\\
-     - \frac1{r_i} \left( \frac{v_{i+1+m(j)} - v_{i-1+m(j)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j)}\\
+    \eta = -\frac1r \ddn \psi z2 - \dd{}r \left(\frac1r \dd\psi r\right)\\
+    \ddn \psi z2 + \ddn \psi r2 - \frac1r \dd \psi r = -r \eta
 \end{align*}
 
 \begin{align*}
-        v_{i-1+m(j)}\left(\frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}\right) + v_{i+m(j)} \left(-\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}\right) + v_{i+1+m(j)} \left(\frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}\right)\\
-        + v_{i+m(j-1)} \left(\frac{1}{\Delta z^2}\right) + v_{i+m(j+1)}\left(\frac{1}{\Delta z^2}\right) = -r_i \eta_{i+m(j)}
+    \dd vt = \frac1r J(v) + \frac1r \frac vr \dd\psi z\\
+    \dd \eta t = J(\frac{\eta}{r}) + 2 \frac vr \dd vz
 \end{align*}
-Ignoring the boundary conditions on $\Psi(0,z), \Psi(r,0), \Psi(R,z), \Psi(r,Z)$
-\[A_{a,b} = \begin{cases}
-    \frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}  & b = a - 1 \\
-    -\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}    & b = a \\
-    \frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}  & b = a + 1 \\
-    \frac{1}{\Delta z^2}                            & b = a - m \\
-    \frac{1}{\Delta z^2}                            & b = a + m 
-\end{cases}\]
+Where 
+\[J(x) := \dd \psi z \dd xr - \dd \psi r \dd xz \]
+Which are the governing equations from Lopez (1990) for $Re \to \infty$.
 
-See if I can construct $A$. especially with sparse.
-With boundaries $\Psi(r=0) = 0$, $\Psi(z=0) = f(r)$, $\Psi(r=R) = f(R)$ and $\Psi(z=Z) = ???$
-
-Wang, Rusak use $\dd\Psi z = 0$. And at the right boundary it might make sense to use a backwards difference so we don't have to deal with the $n+1$.
-So that $\Psi_{i,j}$ is stored in index 
+Time is scaled by $\Omega$ and pipe length by $1/R$
 
 
+The boundary conditions used are:\\
+
+At $z=0$, use $w$ to get two of these.
+\begin{align*}
+    \psi &= f(r)\\     
+    v &= g(r)\\
+    \eta &= - \dd wr = \frac{1}{r^2} \dd \psi r (r,0) - \frac1r \ddn \psi r2 (r,0)
+\end{align*} 
+
+at $r=0$, the trivial BCs.
+\begin{align*}
+    \psi= 0\\
+    v = 0\\
+    \eta = 0
+\end{align*}
+
+at $r= R$, the inlet conditions
+\begin{align*}
+    \psi &= f(R)\\
+    v &= g(R)\\
+    \eta &= - \dd wr\pipe_{r=R}  = -\dd{}{r}\left(\frac{1}{r} \dd \psi r\right)\pipe_{r=R}= \frac{1}{R^2} \psi'(R,z) - \frac1R \psi''(R,z)
+\end{align*}
+$v(R) = g(R)$ taken from (7.5.7) from bachelors book.
+% We require $u = 0$ on the wall, and $\dd uz = 0$ on the wall, meaning $\eta - \dd wr$
+
+
+at $z=Z$ (outlet)
+\begin{align*}
+    \dd\psi z = 0\\
+    \dd \eta z = 0\\
+    \dd vz = 0 
+\end{align*}
+
+
+
+
+For solving the problem numerically a time stepping scheme outlined in Lopez (1990) is used. The initial conditions and boundary conditions reflect those used by Zhang,Wang,Rusak (2019).
+These papers represent the pipe with a transformation of r, where $y := r^2/2$. 
+
+The time stepping scheme relies on time-stepping the azimuthal vorticity, velocity and the stream-function.
+
+The process used below is to start with an initial $\psi(r,z,t), \eta(r,z,t)$, and $v(r,z,t)$ such that
+\begin{align*}
+    \psi(r,z,0) &= \frac12 r^2 + \delta \phi_B(r) \sin \left(\frac{\pi z}{2Z}\right)\\
+    \eta(r,z,0) &= - \delta  r\left(\phi_{Byy}(y) - (\frac{\pi}{2Z})^2\frac{\phi_B(y)}{2y})\right)\sin(\frac{\pi z}{2*Z})\\
+    v(r,z,0) &= \frac{1}{r} \left((2\omega y) + (2\delta\omega\phi_B(y)*\sin\left(\frac{\pi z}{2Z}\right)\right)
+\end{align*}
+
+Where $\delta$ is the size of the initial perturbation, $\phi_B(r) = r J_1(r \omega_B)$, $\omega_B$ is Benjamin's critical swirl ratio for solid-body rotation, $\phi_{Byy} = -4 \omega_B^2 (\phi_B)/r^2$, $Z$ is the length of the pipe in the $z$ direction, and $\omega$ is the swirl ratio.
+
+
+
+
+\subsection{Finite Differences}
 Backward difference:
 \[f'(x) = \frac{f(x) - f(x-h)}{h} + \bigo(h)\]
 
@@ -1038,94 +936,87 @@ Central
 \[f''(x) = \frac{f(x+h) - 2 f(x) + f(x-h)}{h^2}\]
 
 
-for the time solver, precompute the LU factorisation of the matrix.
 
 
-The BCs for our system will be:
 
 
-at $z=0$, use $w$ to get two of these.
+
+
+
+
+% For the method - since we're stuck
+% try using
+% \[r\dd{}r \left(\frac1r \dd \psi r\right) = r\frac{\frac1r \dd\psi r|_{i+\frac12} - \frac1r \dd{\psi}{r}|_{i-\frac12}}{\Delta r}\]
+% Where $r_{i+1/2} = \frac{r_i + r_{i+2}}{\Delta r}$ and $\dd\psi r |_{i+\frac12} = \frac{\psi_{i+1} - \psi_i}{\Delta r}$
+
+and using the rusak method, by letting $y = r^2/2$
+
+
+do some research on numerical solutions of axisymmetric swirling flow 
+
+
+
+\subsection{Discretisation}
+%OH SHIT I THINK I"VE SWAPPED M AND N
+
+To discretise the system, discretise $r$ into $r_i$ such that $i=1,\ldots,m$ and $z$ to $z_j$ such that $j=1,\ldots,n$.
+Finite differences then give:
+
+\[\frac{\psi_{i,j+1} - 2 \psi_{i,j} + \psi_{i,j-1}}{\Delta z^2} + \frac{\psi_{i+1,j} - 2 \psi_{i,j} + \psi_{i-1,j}}{\Delta r^2} - \frac1{r_i} \left( \frac{\psi_{i+1,j} - \psi_{i-1,j}}{2 \Delta r}\right) = - r_i \eta_{i,j}\]
+Could write $r_{i,j}$ in case it changes in $j$.
+
+
+Of course to write this as a linear system, we have to get form $A\vec \psi = b $, or more precisely
+\[A\vec{\psi} = -\vec r\vec\eta\] 
+So we would have to write the vector $\vec \psi$ as 
+\[\vec \psi = \begin{pmatrix}
+    \psi_{1,1}\\
+    \psi_{2,1}\\
+    \vdots\\
+    \psi_{m,1}\\
+    \psi_{1,2}\\
+    \vdots\\
+    \psi_{1,n}\\
+    \vdots\\
+    \psi_{m,n}
+\end{pmatrix}\]
+
+The vector $\vec\eta$ will follow the same pattern, and the vector $\vec r$ will just be $[\vec r]_{i,j} = r_i$
+
+
+So the index of $\psi_{i,j}$ will be $i + m(j-1)$ let $x_{i+m(j-1)} = \psi_{i,j}$, and also expanding $\eta$ in this fashion.
+Hence the vector $\vec x$ is
+\[\begin{pmatrix}
+    x_1\\
+    x_2\\
+    \vdots\\
+    x_{mn}
+\end{pmatrix}\]
+Then the system becomes, after an index shift:
 \begin{align*}
-    \Psi &= f(r)\\     
-    v &= g(r)\\
-    \eta &= - \dd wr = \frac{1}{r^2} \dd \Psi r (r,0) - \frac1r \ddn \Psi r2 (r,0)
-\end{align*} 
-First order:
-
-
-at $r=0$, the trivial BCs.
-\begin{align*}
-    \Psi= 0\\
-    v = 0\\
-    \eta = 0
+    \frac{x_{i+m(j+1)} - 2 x_{i+m(j)} + x_{i+m(j-1)}}{\Delta z^2} + \frac{x_{i+1+m(j)} - 2 x_{i+m(j)} + x_{i-1+m(j)}}{\Delta r^2}\\
+     - \frac1{r_i} \left( \frac{x_{i+1+m(j)} - x_{i-1+m(j)}}{2 \Delta r}\right) = - r_i \eta_{i+m(j)}\\
 \end{align*}
 
-
-at $r= R$
 \begin{align*}
-    \Psi &= f(R)\\
-    v &= g(R)\\
-    \eta &= - \dd wr\pipe_{r=R}  = -\dd{}{r}\left(\frac{1}{r} \dd \Psi r\right)\pipe_{r=R}= \frac{1}{R^2} \Psi'(R,z) - \frac1R \Psi''(R,z)
+        x_{i-1+m(j)}\left(\frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}\right) + x_{i+m(j)} \left(-\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}\right) + x_{i+1+m(j)} \left(\frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}\right)\\
+        + x_{i+m(j-1)} \left(\frac{1}{\Delta z^2}\right) + x_{i+m(j+1)}\left(\frac{1}{\Delta z^2}\right) = -r_i \eta_{i+m(j)}
 \end{align*}
-$v(R) = g(R)$ taken from (7.5.7) from bachelors book.
-% We require $u = 0$ on the wall, and $\dd uz = 0$ on the wall, meaning $\eta - \dd wr$
-We don't actually need an $\eta$ condition here really?
-
-
-
-
-at $z=Z$ (outlet)
-\begin{align*}
-    \dd\Psi z = 0\\
-    \dd \eta z = 0\\
-    \dd vz = 0 
-\end{align*}
-The latter two we just assumed without any checking.
-
-These can be approximated by
-\begin{align*}
-    \Psi(Z) = \Psi(Z- \delta z)\\
-    \eta(Z) = \eta(Z -\delta z)\\
-    v(Z) = v(Z - \delta z)
-\end{align*}
-
-Use backwards difference on the edge of $r=R$ 
-\[\eta = - \dd wr =  \frac{1}{r^2} \dd\Psi r - \frac1r \ddn \Psi r 2\]
+Ignoring the boundary conditions on $\psi(0,z), \psi(r,0), \psi(R,z), \psi(r,Z)$
+\[A_{a,b} = \begin{cases}
+    \frac{1}{\Delta r^2} + \frac{1}{2\Delta r r_i}  & b = a - 1 \\
+    -\frac{2}{\Delta z^2} - \frac{2}{\Delta r^2}    & b = a \\
+    \frac{1}{\Delta r^2} - \frac{1}{2\Delta r r_i}  & b = a + 1 \\
+    \frac{1}{\Delta z^2}                            & b = a - m \\
+    \frac{1}{\Delta z^2}                            & b = a + m 
+\end{cases}\]
 
 
 \begin{align*}
-    \eta|_{r=R} &\approx \frac{1}{R^2}\left(\frac{\Psi_{nr,j} - \Psi_{nr-1,j}}{\Delta r}\right) - \frac{1}{R} \left(\frac{\Psi_{nr,j} - 2\Psi_{nr-1,j} + \Psi_{nr-2,j}}{\Delta r^2}\right) \\
-    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\Psi_{i+1,1} - \Psi_{i-1,1}}{2\Delta r}\right) - \frac{1}{r} \left(\frac{\Psi_{i+1,1} - 2 \Psi_{i,1} + \Psi_{i-1,1}}{\Delta r^2}\right)
+    \eta|_{r=R} &\approx \frac{1}{R^2}\left(\frac{\psi_{nr,j} - \psi_{nr-1,j}}{\Delta r}\right) - \frac{1}{R} \left(\frac{\psi_{nr,j} - 2\psi_{nr-1,j} + \psi_{nr-2,j}}{\Delta r^2}\right) \\
+    \eta|_{z=0} &\approx  \frac{1}{r^2} \left(\frac{\psi_{i+1,1} - \psi_{i-1,1}}{2\Delta r}\right) - \frac{1}{r} \left(\frac{\psi_{i+1,1} - 2 \psi_{i,1} + \psi_{i-1,1}}{\Delta r^2}\right)
 \end{align*}
 
-
-
-
-For rotating flow $f(r) = \frac12 W r^2$ and $g(r) = \Omega r$
-
-
-Way to solve based on this paper:
-%write the solution method here
-
-We use the stream function-vorticity formulation
-\[\ddn \Psi z2 + \ddn \Psi r2 - \frac1r \dd \Psi r = -r \eta\]
-
-
-Process: start with (3),(4) then (5) including BCs for psi. now obtain BCs of eta.
-
-Try and get code working - read new paper for BCs and algorithms, etc.
-
-Either rewrite the leapfrog method
-
-Or write to work with ODE45 or something
-
-
-
-Research applications.
-
-f18 vortex breakdown - occurs in aerodynamic flows - why its a problem (interacts with tail of jets)
-
-vortical flows used in combustion devices
 
 
 
@@ -1235,15 +1126,15 @@ We are trying to reproduce the code used in this paper.
 
 
 % This simply means obtaining a new $A$, $B$ and $k$.
-% \[\Psi(r) = \frac12 W r^2 + r(A J_1(kr) + BY_1(kr))\]
+% \[\psi(r) = \frac12 W r^2 + r(A J_1(kr) + BY_1(kr))\]
 % \[w(r) = W + k(A J_0(kr) + B Y_0(kr))\]
 % Such that
-% \[w(r^\dagger) = 0,\qquad \Psi(0) = 0,\quad and \quad \Psi(r^\dagger) = 0  \]
+% \[w(r^\dagger) = 0,\qquad \psi(0) = 0,\quad and \quad \psi(r^\dagger) = 0  \]
  
-% To enforce $\Psi(0) = 0$ note that $\lim_{r\to 0} \frac{Y_1(kr)}{r} = -\infty$. Hence it is necessary to set $B = 0$. 
-% \[\Psi(r) = \frac12 Wr^2 + rAJ_1(kr), \quad w (r) = W + kAJ_0(kr)\]
+% To enforce $\psi(0) = 0$ note that $\lim_{r\to 0} \frac{Y_1(kr)}{r} = -\infty$. Hence it is necessary to set $B = 0$. 
+% \[\psi(r) = \frac12 Wr^2 + rAJ_1(kr), \quad w (r) = W + kAJ_0(kr)\]
 % And to enforce 
-% $\Psi(r^\dagger) = 0$
+% $\psi(r^\dagger) = 0$
 % \[\implies Ar^\dagger J_1(kr^\dagger) = -\frac12 Wr^{\dagger2}\]
 % \[A = \frac{-Wr^{\dagger}}{2J_1(kr^\dagger)}\]
 % And obtain $k$ using
@@ -1251,20 +1142,29 @@ We are trying to reproduce the code used in this paper.
 % \[k AJ_0(kr) = -W\]
 
 
-% \[\Psi(r^\dagger) = \Psi(R) = \frac12 WR^2\]
+% \[\psi(r^\dagger) = \psi(R) = \frac12 WR^2\]
 
 
 
+
+
+\clearpage
+
+\section{Andrew's Notes}
 
 
 %look at euler equations to derive the detadt and dvdt equations (potentially)
 %cylindrical euler equations
 %better to just reference it though
+When breakdown is present, require
+\[C = \frac{u_x \delta t}{\delta x} + \frac{u_y \delta t}{\delta y} \leq C_max = 0.05\]
+Otherwise $0.2$.
+
 
 The system is
 \begin{align*}
     \psi(x,y,0) &= y + \delta \phi_B(y) \sin (\pi x / 2L)\\
-    \eta(x,y,0) &= -\sqrt{2y} \delta \left[\phi_B{yy}(y) - (\pi/2L)^2 \phi_B(y)/2y\right]\sin \pi x/2L)\\
+    \eta(x,y,0) &= -\sqrt{2y} \delta \left[\phi_B{yy}(y) - (\pi/2L)^2 \phi_B(y)/2y\right]\sin \pi x/2L\\
     v(x,y,0) &= \frac{1}{\sqrt{2y}} \left(2 \omega y + 2 \delta \omega \phi_B(y) \sin(\pi x/2L)\right)
 \end{align*}
 With BCs:
@@ -1322,8 +1222,66 @@ The current issue is I am not obtaining psi in the post processing.
 %-variable radius
 
 
+I SHOULD PLOT DOWNSTREAM $v$ for all our equations also
 
 
+
+To use the $r_*$ and $w$ parts, we can use $w = \frac1r\dd\psi r $
+
+
+Try putting in the homogeneous solution to the solver to see if it works (i.e. the one with $v = \Omega r$ and $w=W$).
+
+We should expect that the Burgers vortex should be a more smooth version of the Rankine problem - so we should be able to compare the two.
+
+May want to find $v_{max} = r_0$ to compare to the previous problem.
+Should expect the circulation goes to $\Gamma / 2 \pi$ as $r\to \infty$.
+
+
+
+
+Of course we have to have
+\[\lim_{r\to 0} \frac1r \dd\psi r < \infty\]
+So use l'hopital's rule
+\[\lim_{r\to 0} \frac1r \dd\psi r = \ddn\psi r2\]
+But we know $\psi = 0$ at $r=0$ ( so we can ignore this )
+
+
+
+So we will just use
+\[\ddn \psi r2 |_i - \frac1r \dd\psi r|_i = f(r_i,\psi_i)\]
+With 
+\[\psi_1 = 0\]
+And
+\[\psi_n = \frac12 WR^2\]
+
+We will have 1 based indexing 
+Alternatively 
+get the derivatives at the mid points
+\[\dd\psi r\pipe_{i+1/2} = \frac{\psi_{i+1} - \psi_i}{h_r}\]
+Where $h_r$ is the step.
+
+
+
+
+
+Alternatively
+
+
+Can rewrite the left hand side as
+
+\[r\left(\dd{}r \left(\frac1r \dd\psi r\right)\right)\]
+
+
+
+
+
+Process: start with (3),(4) then (5) including BCs for psi. now obtain BCs of eta.
+
+Research applications.
+
+f18 vortex breakdown - occurs in aerodynamic flows - why its a problem (interacts with tail of jets)
+
+vortical flows used in combustion devices
 
 
 \clearpage

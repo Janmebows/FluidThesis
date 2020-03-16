@@ -1,12 +1,8 @@
-
-
-
-%%
 close all
 R = 1;
 W = 1;
-G = 1;
-d = 1;
+G = 5.9;
+d = 0.6;
 rstarguess = 0.5;
 
 %Make plots less repulsive

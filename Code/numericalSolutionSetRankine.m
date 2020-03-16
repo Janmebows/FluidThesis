@@ -23,7 +23,7 @@ workingVals=[];
 while(r0 > 0)%&& isreal(sol))
     if(exitflag > 0 && isreal(sol))
         workingVals = [workingVals ;sol,r0];
-        fval
+        fval;
     end
     
     r0=r0-step;
