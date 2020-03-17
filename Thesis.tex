@@ -902,6 +902,21 @@ at $z=Z$ (outlet)
 
 
 For solving the problem numerically the stepping equations outlined in Lopez (1990) are altered to work inside the \verb|Matlab| \verb|ode45()| ODE solver. The initial conditions and boundary conditions reflect those used by Zhang et al (2019).
+
+
+The (modified) Lopez solver:
+\begin{enumerate}
+    \item unpack eta(t) v(t) (except the boundary values) from an in matrix
+    \item get the inner values of psi(t) from eta, v
+    \item  use psi(t) to obtain the BCs of eta(t), v(t)
+    \item use all 3 to obtain detadt(t), dvdt(t) on the inner points
+    \item pack detadt, dvdt (except the boundary values) into an out matrix
+\end{enumerate}
+
+
+
+
+
 These papers represent the pipe with a transformation of r, where $y := r^2/2$. 
 
 The time stepping scheme relies on time-stepping the azimuthal vorticity, velocity and the stream-function, $\psi(r,z,t), \eta(r,z,t)$, and $v(r,z,t)$ respectively. Their initial values are:
