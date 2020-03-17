@@ -5,7 +5,9 @@ clear all
 %%%%%%%%%%%
 
 omega = 1.9;
+%omega = 1.95;
 delta = -1.111;
+%delta = 2.5;
 
 
 nPtsR = 40;
@@ -98,46 +100,67 @@ end
 
 
 %%plotting 
+%%
+psicontours = linspace(0.01,0.49,25);
 
-contours = linspace(0.01,0.49,25);
-
-figure 
 for i = 1:floor(length(t)/100):length(t)
-    figure(1)
-    contour(zmat',rmat',psi(:,:,i)',contours)
-    %contour(zmat',rmat',eta(:,:,i)')
-    %contour(zmat,rmat,psi',50)
-    %contourf(zmat,rmat,psi,20)
-    %caxis([0,1])
+    fig1 = figure(1);
+    contour(zmat',rmat',psi(:,:,i)',psicontours)
     colorbar
     xlabel("z")
     ylabel("r")
-    zlabel("psi")
-    title("t = "+ t(i))
+    title("\psi(t), t = "+ t(i))
     drawnow
-    %Frame(i) = getframe(gcf);
-    figure(2)
+    %Frame1(i) = getframe(figure(1));
+    fig2=figure(2);
     contour(zmat',rmat',eta(:,:,i)')
     colorbar
+    xlabel("z")
+    ylabel("r")
+    title("\eta(t), t = "+ t(i))
     drawnow
     
     
-    figure(3)
+    %Frame2(i) = getframe(figure(2));
+    
+    
+    fig3 =figure(3);
     contour(zmat',rmat',v(:,:,i)')
     colorbar
+    xlabel("z")
+    ylabel("r")
+    zlabel("v")
+    title("v(t), t = "+ t(i))
     drawnow
+    %Frame3(i) = getframe(figure(3));
     
-    pause(0.0001)
+    %pause(0.0001)
 
     
 end
 %%
 %%%save to file
-%  vwriter = VideoWriter('contourseta.mp4','MPEG-4');
-%  open(vwriter)
-%  writeVideo(vwriter,Frame);
-%  close(vwriter)
-%  
+% names = ["contourspsi.mp4","contourseta.mp4","contoursv.mp4"];
+% 
+% vwriter = VideoWriter("contourspsi.mp4",'MPEG-4');
+% open(vwriter)
+% writeVideo(vwriter,Frame1);
+% close(vwriter)
+% 
+% vwriter = VideoWriter("contourseta.mp4",'MPEG-4');
+% open(vwriter)
+% writeVideo(vwriter,Frame2);
+% close(vwriter)
+% 
+% vwriter = VideoWriter("contoursv.mp4",'MPEG-4');
+% open(vwriter)
+% writeVideo(vwriter,Frame3);
+% close(vwriter)
+% 
+%   
+%   
+  
+  
  function psi = PsiFromEta(eta, params)
 
 rmat = params.rmat;
@@ -224,7 +247,6 @@ v(2:end-1,2:end-1) = in(:,:,2);
     out(:,:,2) = dvdt(2:end-1,2:end-1);
     out = out(:);
 
-
 end
 
 
@@ -256,7 +278,8 @@ z = params.z;
 R = params.R;
 VInit = params.VInit;
     %r=0
-    v(1,:) = VInit(0,z);
+    %Limit of VInit(r-> 0,z) = 0
+    v(1,:) = 0; %VInit(0,z);
     %r=R
     v(end,:) = VInit(R,z);
     %z=0

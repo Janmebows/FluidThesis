@@ -901,19 +901,17 @@ at $z=Z$ (outlet)
 
 
 
-For solving the problem numerically a time stepping scheme outlined in Lopez (1990) is used. The initial conditions and boundary conditions reflect those used by Zhang,Wang,Rusak (2019).
+For solving the problem numerically the stepping equations outlined in Lopez (1990) are altered to work inside the \verb|Matlab| \verb|ode45()| ODE solver. The initial conditions and boundary conditions reflect those used by Zhang et al (2019).
 These papers represent the pipe with a transformation of r, where $y := r^2/2$. 
 
-The time stepping scheme relies on time-stepping the azimuthal vorticity, velocity and the stream-function.
-
-The process used below is to start with an initial $\psi(r,z,t), \eta(r,z,t)$, and $v(r,z,t)$ such that
+The time stepping scheme relies on time-stepping the azimuthal vorticity, velocity and the stream-function, $\psi(r,z,t), \eta(r,z,t)$, and $v(r,z,t)$ respectively. Their initial values are:
 \begin{align*}
     \psi(r,z,0) &= \frac12 r^2 + \delta \phi_B(r) \sin \left(\frac{\pi z}{2Z}\right)\\
     \eta(r,z,0) &= - \delta  r\left(\phi_{Byy}(y) - (\frac{\pi}{2Z})^2\frac{\phi_B(y)}{2y})\right)\sin(\frac{\pi z}{2*Z})\\
-    v(r,z,0) &= \frac{1}{r} \left((2\omega y) + (2\delta\omega\phi_B(y)*\sin\left(\frac{\pi z}{2Z}\right)\right)
+    v(r,z,0) &= \frac{1}{r} \left((2\omega y) + 2\delta\omega\phi_B(y)\sin\left(\frac{\pi z}{2Z}\right)\right)
 \end{align*}
 
-Where $\delta$ is the size of the initial perturbation, $\phi_B(r) = r J_1(r \omega_B)$, $\omega_B$ is Benjamin's critical swirl ratio for solid-body rotation, $\phi_{Byy} = -4 \omega_B^2 (\phi_B)/r^2$, $Z$ is the length of the pipe in the $z$ direction, and $\omega$ is the swirl ratio.
+Where $\delta$ is the size of the initial perturbation, $\phi_B(r) = r J_1(r \omega_B)$, $\omega_B$ is Benjamin's critical swirl ratio for solid-body rotation, $\phi_{Byy} = -4 \omega_B^2 (\phi_B)/r^2$ (Rusak et al 2019), $Z$ is the length of the pipe in the $z$ direction, and $\omega$ is the swirl ratio.
 
 
 
@@ -1037,7 +1035,7 @@ A bit limited however for the relevant area - truly just gives an introduction t
 We re-derived the SL equation
 
 \subsection{Simulations of axisymmetric, inviscid swirling flows in circular pipes with various geometries}
-Wang, Rusak paper.
+Zhang, Wang, Rusak paper.
 Looks at a computational method for solving the problem, with the extra condition of allowing the pipes to have varying geometry.
 
 
@@ -1312,5 +1310,9 @@ Drazin, Riley
 The Structure of Vortex Breakdown, 
 Leibovich
 
+
+
+Simulations of axisymmetric, inviscid swirling flows in circular pipes with various geometries
+Zhang, Rusak, Wang (2019)
 
 \end{document}
